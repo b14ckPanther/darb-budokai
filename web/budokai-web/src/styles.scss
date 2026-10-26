@@ -1,0 +1,37 @@
+// Global styles. Brand colour and font tokens come from brand/exports/tokens.css
+// (wired in angular.json). The full design system arrives in Phase 2.
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist.latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Zen Antique';
+  src: url('/fonts/ZenAntique-Regular.latin.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--ivory);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
