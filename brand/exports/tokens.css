@@ -1,0 +1,17 @@
+/* Generated from src/tokens.json by scripts/build.mjs. Edit the JSON, not this file. */
+:root {
+  --night: #03110C; /* Darb night: base surface */
+  --forest: #0E3527; /* Darb forest: raised surfaces */
+  --gold: #D9A54C; /* Darb gold: rims, seals, stars */
+  --gold-light: #FBE7BD; /* Gold highlights and star cores */
+  --gold-deep: #6D4C17; /* Gold in shadow */
+  --ki: #FF8A1F; /* Ki orange: the tournament sunset, aura and orb energy */
+  --ki-hot: #FFD27A; /* Hot core of ki */
+  --stone: #B9AE98; /* Tournament ring stone */
+  --ivory: #FBF7EC; /* Text on night */
+  --ink: #0B2219; /* Text on ivory */
+  --muted: #8FA399; /* Secondary text on night */
+  --font-seal: 'Yuji Boku', 'Hiragino Mincho ProN', serif;
+  --font-display: 'Zen Antique', 'Hiragino Mincho ProN', serif;
+  --font-ui: 'Geist', system-ui, sans-serif;
+}

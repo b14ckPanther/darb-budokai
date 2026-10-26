@@ -1,0 +1,264 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Budokai directions</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{ "imports": {
+  "three": "../node_modules/three/build/three.module.js",
+  "three/addons/": "../node_modules/three/examples/jsm/",
+  "opentype": "../node_modules/opentype.js/dist/opentype.module.js" } }</script>
+</head><body><canvas id="c"></canvas>
+<script type="module">
+// Four Darb Budokai brand directions, all procedural and original.
+// ?d=arena | stars | seal | ascension   ?size=1024
+import * as THREE from 'three'
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
+import opentype from 'opentype'
+
+const q = new URLSearchParams(location.search)
+const D = q.get('d') || 'arena'
+const S = +q.get('size') || 1024
+const T = await (await fetch('../src/tokens.json')).json()
+const C = Object.fromEntries(Object.entries(T.color).map(([k, v]) => [k, new THREE.Color(v.hex)]))
+
+const canvas = document.getElementById('c')
+canvas.style.width = canvas.style.height = S + 'px'
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true })
+renderer.setSize(S, S, false)
+renderer.toneMapping = THREE.ACESFilmicToneMapping
+renderer.toneMappingExposure = 1.0
+renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
+const scene = new THREE.Scene()
+const pmrem = new THREE.PMREMGenerator(renderer)
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+scene.environmentIntensity = 0.55
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 200)
+
+// seeded random so every render is identical
+let seed = 7
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
+
+// sky: Darb night above, the tournament's ki-orange sunset glowing at the horizon
+function sky(horizonY = -0.15, glow = 1) {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(60, 48, 24), new THREE.ShaderMaterial({
+    side: THREE.BackSide, depthWrite: false,
+    uniforms: { uTop: { value: C.night }, uMid: { value: C.forest }, uHot: { value: C.ki }, uY: { value: horizonY }, uG: { value: glow } },
+    vertexShader: 'varying vec3 vD; void main(){ vD = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.); }',
+    fragmentShader: `uniform vec3 uTop; uniform vec3 uMid; uniform vec3 uHot; uniform float uY; uniform float uG; varying vec3 vD;
+      float h(vec3 p){ return fract(sin(dot(p, vec3(12.9898,78.233,45.164))) * 43758.5453); }
+      void main(){ float y = vD.y;
+        vec3 c = mix(uMid * .55, uTop * .5, smoothstep(uY, .7, y));
+        c += uHot * exp(-pow((y - uY) * 7., 2.)) * .55 * uG;
+        c += uHot * .12 * exp(-abs(y - uY) * 2.5) * uG;
+        float star = step(.9985, h(floor(vD * 420.))) * smoothstep(uY + .1, .6, y);
+        c += vec3(1., .93, .8) * star * .7;
+        gl_FragColor = vec4(c, 1.); }` }))
+  scene.add(m)
+}
+
+// stone with grain and fine pits, via a canvas texture (procedural, seeded)
+function stoneTexture(base, tiles = 1) {
+  const n = 512, cv = document.createElement('canvas'); cv.width = cv.height = n
+  const g = cv.getContext('2d')
+  g.fillStyle = '#' + base.getHexString(); g.fillRect(0, 0, n, n)
+  for (let i = 0; i < 9000; i++) {
+    const v = rnd(); g.fillStyle = `rgba(${v < .5 ? '0,0,0' : '255,250,240'},${rnd() * .07})`
+    g.fillRect(rnd() * n, rnd() * n, 1 + rnd() * 3, 1 + rnd() * 3)
+  }
+  if (tiles > 1) { g.strokeStyle = 'rgba(30,22,14,.55)'; g.lineWidth = 3
+    for (let i = 1; i < tiles; i++) { const p = (i / tiles) * n; g.beginPath(); g.moveTo(p, 0); g.lineTo(p, n); g.moveTo(0, p); g.lineTo(n, p); g.stroke() } }
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8
+  return t
+}
+
+const gold = () => new THREE.MeshPhysicalMaterial({ color: C.gold, metalness: 1, roughness: 0.22, clearcoat: 0.5, clearcoatRoughness: 0.15 })
+const kiLight = (intensity = 3) => { const l = new THREE.PointLight(C.ki, intensity, 12, 1.6); return l }
+
+// the ring: a square stone stage of tiles, a gold rim, stairs at the front
+function ring(size = 3.2, h = 0.42) {
+  const g = new THREE.Group()
+  const mat = new THREE.MeshStandardMaterial({ map: stoneTexture(C.stone, 6), roughness: 0.85 })
+  const side = new THREE.MeshStandardMaterial({ map: stoneTexture(C.stone.clone().multiplyScalar(.75), 1), roughness: 0.9 })
+  const top = new THREE.Mesh(new RoundedBoxGeometry(size, h, size, 4, 0.04), [side, side, mat, side, side, side])
+  top.castShadow = top.receiveShadow = true; g.add(top)
+  const rim = new THREE.Mesh(new THREE.BoxGeometry(size + 0.06, 0.05, size + 0.06), gold())
+  rim.position.y = h / 2 - 0.03; g.add(rim)
+  for (let i = 0; i < 3; i++) {
+    const st = new THREE.Mesh(new RoundedBoxGeometry(size * 0.3, h / 3, 0.2, 2, 0.02), side)
+    st.position.set(0, -h / 2 + (h / 3) * (i + 0.5) - h / 3 * 0, size / 2 + 0.15 + (2 - i) * 0.3 - 0.3); st.position.y = -h / 2 + (h / 3) * (2 - i) + h / 6 - h / 3 * 0
+    st.position.y = -h / 2 + h / 6 + (h / 3) * i; st.position.z = size / 2 + 0.1 + (2 - i) * 0.19
+    st.castShadow = st.receiveShadow = true; g.add(st)
+  }
+  return g
+}
+
+// a glowing orb with seven gold points arranged like the seven stars of the Big Dipper (七星)
+function orb(r = 0.6) {
+  const g = new THREE.Group()
+  // amber glass: bright core falling to a deep rim, plus a glossy clear shell for highlights
+  const body = new THREE.Mesh(new THREE.SphereGeometry(r, 96, 64), new THREE.ShaderMaterial({
+    uniforms: { uHot: { value: C.kiHot }, uKi: { value: C.ki }, uDeep: { value: C.goldDeep } },
+    vertexShader: 'varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position,1.); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }',
+    fragmentShader: `uniform vec3 uHot; uniform vec3 uKi; uniform vec3 uDeep; varying vec3 vN; varying vec3 vV;
+      void main(){ float mu = clamp(dot(vN, vV), 0., 1.);
+        vec3 deep = vec3(.32, .045, .005), mid = uKi * vec3(1., .62, .3), hot = uHot * vec3(1., .78, .42);
+        vec3 c = mix(deep, mid, smoothstep(0., .62, mu));
+        c = mix(c, hot, smoothstep(.8, 1., mu) * .5);
+        c += mid * pow(1. - mu, 5.) * .3;
+        gl_FragColor = vec4(c, 1.); }` }))
+  g.add(body)
+  const shell = new THREE.Mesh(new THREE.SphereGeometry(r * 1.004, 96, 64), new THREE.MeshPhysicalMaterial({
+    color: 0xffffff, transparent: true, opacity: 0.04, roughness: 0.02, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 0.9 }))
+  g.add(shell)
+  const dipper = [[-0.62, 0.3], [-0.34, 0.22], [-0.1, 0.1], [0.12, 0.0], [0.18, -0.32], [0.52, -0.4], [0.58, -0.06]]
+  const starMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 0.97, 0.88).multiplyScalar(3.2) })
+  const pts = []
+  for (const [x, y] of dipper) {
+    const z = Math.sqrt(Math.max(0, 1 - x * x - y * y)) * r * 0.98
+    const s = new THREE.Mesh(new THREE.OctahedronGeometry(r * 0.06, 0), starMat)
+    s.position.set(x * r, y * r, z); g.add(s); pts.push(s.position.clone())
+  }
+  const line = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0), 160, r * 0.008, 6), new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 0.95, 0.82).multiplyScalar(1.6) }))
+  g.add(line)
+  return g
+}
+
+async function sealGlyph(char, size = 2.2, depth = 0.35) {
+  const font = opentype.parse(await (await fetch('../fonts/YujiBoku-Regular.ttf')).arrayBuffer())
+  const path = font.getPath(char, 0, 0, 1000)
+  const shapes = []
+  let shape = null, hole = false
+  const cmds = path.commands
+  // build shapes from contours; contours with clockwise winding opposite to the first become holes
+  const contours = []; let cur = []
+  for (const c of cmds) { if (c.type === 'M') { if (cur.length) contours.push(cur); cur = [c] } else cur.push(c) }
+  if (cur.length) contours.push(cur)
+  const area = (pts) => pts.reduce((a, p, i) => { const q2 = pts[(i + 1) % pts.length]; return a + (p.x * q2.y - q2.x * p.y) }, 0)
+  const paths = contours.map((cs) => {
+    const p = new THREE.Path(); const pts = []
+    for (const c of cs) {
+      if (c.type === 'M') { p.moveTo(c.x, -c.y); pts.push({ x: c.x, y: -c.y }) }
+      else if (c.type === 'L') { p.lineTo(c.x, -c.y); pts.push({ x: c.x, y: -c.y }) }
+      else if (c.type === 'Q') { p.quadraticCurveTo(c.x1, -c.y1, c.x, -c.y); pts.push({ x: c.x, y: -c.y }) }
+      else if (c.type === 'C') { p.bezierCurveTo(c.x1, -c.y1, c.x2, -c.y2, c.x, -c.y); pts.push({ x: c.x, y: -c.y }) }
+    }
+    return { p, a: area(pts) }
+  })
+  const outerSign = Math.sign(paths.reduce((m, x) => (Math.abs(x.a) > Math.abs(m.a) ? x : m)).a)
+  for (const { p, a } of paths) {
+    if (Math.sign(a) === outerSign) { shape = new THREE.Shape(p.getPoints(12)); shapes.push(shape) }
+    else if (shape) shape.holes.push(new THREE.Path(p.getPoints(12)))
+  }
+  const geo = new THREE.ExtrudeGeometry(shapes, { depth: depth * 1000 / size, bevelEnabled: true, bevelThickness: 18, bevelSize: 10, bevelSegments: 5, curveSegments: 8 })
+  geo.computeBoundingBox(); const bb = geo.boundingBox
+  geo.translate(-(bb.min.x + bb.max.x) / 2, -(bb.min.y + bb.max.y) / 2, 0)
+  geo.scale(size / 1000, size / 1000, size / 1000)
+  return geo
+}
+
+// cracks radiating from a point, as thin glowing ki fissures
+function cracks(n = 9, len = 2.2, y = 0.001) {
+  const g = new THREE.Group()
+  const mat = new THREE.MeshBasicMaterial({ color: C.ki.clone().multiplyScalar(3) })
+  for (let i = 0; i < n; i++) {
+    let a = (i / n) * Math.PI * 2 + rnd() * 0.5, x = 0, z = 0
+    const pts = [new THREE.Vector3(0, y, 0)]
+    const L = len * (0.6 + rnd() * 0.5)
+    for (let s = 0; s < 7; s++) { a += (rnd() - 0.5) * 0.7; const d = L / 7; x += Math.cos(a) * d; z += Math.sin(a) * d; pts.push(new THREE.Vector3(x, y, z)) }
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 60, 0.018 * (1.2 - i / n * 0.4), 6), mat))
+  }
+  return g
+}
+
+// ki aura: twisting flame ribbons rising around a point
+function aura(r = 0.9, h = 2.6, n = 14) {
+  const g = new THREE.Group()
+  for (let i = 0; i < n; i++) {
+    const a0 = (i / n) * Math.PI * 2, pts = []
+    const rr = r * (0.75 + rnd() * 0.5), tw = 1.2 + rnd() * 1.4, hh = h * (0.6 + rnd() * 0.5)
+    for (let s = 0; s <= 24; s++) {
+      const t = s / 24, a = a0 + t * tw, rad = rr * (1 - t * 0.55) * (1 + Math.sin(t * 9 + i) * 0.04)
+      pts.push(new THREE.Vector3(Math.cos(a) * rad, t * hh, Math.sin(a) * rad))
+    }
+    const hot = i % 3 === 0
+    const mat = new THREE.MeshBasicMaterial({ color: (hot ? C.kiHot : C.ki).clone().multiplyScalar(hot ? 0.9 : 0.6), transparent: true, opacity: 0.32, blending: THREE.AdditiveBlending, depthWrite: false })
+    const tube = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, 0.03 + rnd() * 0.03, 6)
+    g.add(new THREE.Mesh(tube, mat))
+  }
+  const sparks = new THREE.BufferGeometry(); const P = []
+  for (let i = 0; i < 260; i++) { const a = rnd() * Math.PI * 2, t = rnd(); P.push(Math.cos(a) * r * (1.1 - t * 0.6), t * h * 1.15, Math.sin(a) * r * (1.1 - t * 0.6)) }
+  sparks.setAttribute('position', new THREE.Float32BufferAttribute(P, 3))
+  g.add(new THREE.Points(sparks, new THREE.PointsMaterial({ color: C.kiHot.clone().multiplyScalar(1.4), size: 0.03, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false })))
+  return g
+}
+
+function keyLights(intensity = 1.6) {
+  const key = new THREE.DirectionalLight(C.goldLight, intensity); key.position.set(-4, 7, 5); key.castShadow = true
+  key.shadow.mapSize.set(2048, 2048); key.shadow.camera.left = key.shadow.camera.bottom = -5; key.shadow.camera.right = key.shadow.camera.top = 5; key.shadow.bias = -0.0005
+  scene.add(key)
+  const rim = new THREE.DirectionalLight(C.ki, intensity * 0.6); rim.position.set(5, 2, -6); scene.add(rim)
+  scene.add(new THREE.HemisphereLight(C.forest, C.night, 0.4))
+}
+
+let bloom = [0.55, 0.5, 0.85]
+
+if (D === 'arena') {
+  // A. The tournament ring at sunset, one ki orb waiting at its centre
+  sky(0.02, 0.9)
+  keyLights(1.5)
+  scene.fog = new THREE.Fog(C.night, 9, 40)
+  const r = ring(2.6, 0.36); scene.add(r)
+  const o = orb(0.42); o.position.set(0, 0.68, 0); scene.add(o)
+  const l = kiLight(4); l.position.set(0, 0.75, 0); scene.add(l)
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(55, 96), new THREE.MeshStandardMaterial({ color: C.night, roughness: 1 }))
+  ground.rotation.x = -Math.PI / 2; ground.position.y = -0.21; ground.receiveShadow = true; scene.add(ground)
+  camera.position.set(5.4, 3.3, 6.6); camera.lookAt(0, 0.3, 0)
+} else if (D === 'stars') {
+  // B. One orb, seven stars: your life's seven stats as a constellation
+  sky(-0.6, 0.5)
+  keyLights(1.0)
+  const o = orb(1.05); o.position.y = 0.15; scene.add(o)
+  const l = kiLight(3); l.position.set(0, 0.15, 0); scene.add(l)
+  const ped = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.55, 0.32, 64), new THREE.MeshStandardMaterial({ map: stoneTexture(C.stone.clone().multiplyScalar(.8)), roughness: 0.85 }))
+  ped.position.y = -1.05; ped.castShadow = ped.receiveShadow = true; scene.add(ped)
+  const band = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.025, 12, 96), gold()); band.rotation.x = Math.PI / 2; band.position.y = -0.9; scene.add(band)
+  camera.position.set(0.6, 0.35, 5.6); camera.lookAt(0, -0.05, 0)
+  bloom = [0.55, 0.55, 0.88]
+} else if (D === 'seal') {
+  // C. 武 (bu, martial) in gold, slammed into a stone slab that cracks with ki
+  sky(-0.2, 0.6)
+  keyLights(1.8)
+  const slab = new THREE.Mesh(new RoundedBoxGeometry(3.4, 0.5, 3.4, 4, 0.05), new THREE.MeshStandardMaterial({ map: stoneTexture(C.stone.clone().multiplyScalar(.7)), roughness: 0.9 }))
+  slab.position.y = -0.25; slab.castShadow = slab.receiveShadow = true; scene.add(slab)
+  const cr = cracks(11, 1.9, 0.004); scene.add(cr)
+  const geo = await sealGlyph('武', 2.1, 0.32)
+  const glyph = new THREE.Mesh(geo, gold()); glyph.rotation.x = -Math.PI / 2; glyph.position.y = 0.02; glyph.castShadow = true; scene.add(glyph)
+  const l = kiLight(5); l.position.set(0, 0.25, 0); scene.add(l)
+  camera.position.set(0.9, 6.4, 5.0); camera.lookAt(0, -0.1, 0.1)
+  bloom = [0.6, 0.45, 0.82]
+} else if (D === 'ascension') {
+  // D. Powering up: an orb rises from the ring inside a column of ki
+  sky(-0.25, 0.7)
+  keyLights(1.1)
+  const r = ring(2.6, 0.36); r.position.y = -1.1; scene.add(r)
+  const cr = cracks(10, 1.15, -0.92 + 0.004); scene.add(cr)
+  const a = aura(0.7, 2.6, 16); a.position.y = -0.92; scene.add(a)
+  const o = orb(0.42); o.position.y = 0.55; scene.add(o)
+  const l = kiLight(4); l.position.set(0, 0.2, 0); scene.add(l)
+  camera.position.set(3.2, 1.2, 6.8); camera.lookAt(0, 0.0, 0)
+  bloom = [0.5, 0.5, 0.9]
+}
+
+camera.updateProjectionMatrix()
+const composer = new EffectComposer(renderer)
+composer.setSize(S, S)
+composer.addPass(new RenderPass(scene, camera))
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(S, S), ...bloom))
+composer.addPass(new OutputPass())
+for (let i = 0; i < 3; i++) composer.render()
+window.__ready = true
+</script></body></html>
