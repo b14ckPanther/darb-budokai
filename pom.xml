@@ -20,6 +20,7 @@
 
     <modules>
         <module>libs/budokai-test-support</module>
+        <module>services/character-service</module>
     </modules>
 
     <properties>
