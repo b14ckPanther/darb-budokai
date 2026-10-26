@@ -1,0 +1,32 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# Java / Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+*.class
+hs_err_pid*
+
+# Node / Angular
+node_modules/
+.angular/
+dist/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+
+# Secrets and local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Agent local overrides
+.claude/settings.local.json
