@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Rejects commit messages that carry attribution text. Nour is the only author.
+# Enabled with: git config core.hooksPath .githooks
+set -euo pipefail
+
+msg_file="${1:?usage: commit-msg <message-file>}"
+pattern='co-authored|claude|anthropic|generated with'
+
+# Ignore git's comment lines (the commit template), check everything else.
+if grep -v '^#' "$msg_file" | grep -qiE "$pattern"; then
+  echo "commit-msg: rejected. The message matches /$pattern/ (case-insensitive)." >&2
+  echo "commit-msg: no attribution text in commits; refer to the agent manual by that name." >&2
+  exit 1
+fi
