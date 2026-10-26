@@ -41,6 +41,27 @@ git -C "$REPO" config core.hooksPath "$ROOT/.githooks"
 expect fail "git commit with attribution is refused" git -C "$REPO" commit -q --allow-empty -m "Co-Authored-By: x"
 expect ok   "git commit with a clean message passes" git -C "$REPO" commit -q --allow-empty -m "Add scratch commit"
 
+# --- author and attribution check over a commit range (CI guard) -------------
+AUTHORS="$ROOT/tools/dev/check-commits.sh"
+H="$SCRATCH/history"
+git init -q -b main "$H"
+nour() { git -C "$H" -c user.name="Nour Alden Mousa" -c user.email="nmcryptoinvest@gmail.com" "$@"; }
+nour commit -q --allow-empty -m "Base commit"
+base="$(git -C "$H" rev-parse HEAD)"
+nour commit -q --allow-empty -m "Add a clean step"
+expect ok   "commit check passes Nour-only clean history"   bash -c "cd '$H' && '$AUTHORS' '$base..HEAD'"
+git -C "$H" -c user.name="Someone Else" -c user.email="else@example.com" commit -q --allow-empty -m "Add a step"
+expect fail "commit check rejects another author"           bash -c "cd '$H' && '$AUTHORS' '$base..HEAD'"
+git -C "$H" reset -q --hard HEAD~1
+GIT_COMMITTER_NAME="Bot" GIT_COMMITTER_EMAIL="bot@example.com" nour commit -q --allow-empty -m "Add a bot-committed step"
+expect fail "commit check rejects another committer"        bash -c "cd '$H' && '$AUTHORS' '$base..HEAD'"
+git -C "$H" reset -q --hard HEAD~1
+nour commit -q --allow-empty --no-verify -m $'Add a step\n\nCo-Authored-By: x <x@y.z>'
+expect fail "commit check rejects attribution in a message" bash -c "cd '$H' && '$AUTHORS' '$base..HEAD'"
+git -C "$H" reset -q --hard HEAD~1
+nour commit -q --allow-empty -m $'Add a step with an emoji \xf0\x9f\x94\xa5'
+expect fail "commit check rejects emoji in a message"       bash -c "cd '$H' && '$AUTHORS' '$base..HEAD'"
+
 # --- no-emoji check --------------------------------------------------------
 printf 'Quest complete \xf0\x9f\x94\xa5\n' > "$SCRATCH/fire.txt"          # U+1F525
 printf 'Sun \xe2\x98\x80 rises\n'          > "$SCRATCH/sun.txt"           # U+2600
