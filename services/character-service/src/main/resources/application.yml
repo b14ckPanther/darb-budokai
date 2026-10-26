@@ -3,7 +3,7 @@ spring:
   application:
     name: character-service
   datasource:
-    url: ${CHARACTER_DB_URL:jdbc:postgresql://localhost:5432/character_db}
+    url: ${CHARACTER_DB_URL:jdbc:postgresql://localhost:54320/character_db}
     username: ${CHARACTER_DB_USER:character_svc}
     password: ${CHARACTER_DB_PASSWORD:}
   jpa:
