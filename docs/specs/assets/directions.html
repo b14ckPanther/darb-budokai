@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Budokai directions</title>
+    <!-- Phase 1 swatch page. Colours and font stacks come from the brand tokens file, never copied here. -->
+    <link rel="stylesheet" href="../../../brand/exports/tokens.css" />
+    <style>
+      @font-face {
+        font-family: 'Geist';
+        src: url('../../../web/budokai-web/public/fonts/Geist.latin.woff2') format('woff2');
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: 'Zen Antique';
+        src: url('../../../web/budokai-web/public/fonts/ZenAntique-Regular.latin.woff2') format('woff2');
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--night);
+        color: var(--ivory);
+        font: 400 1rem/1.5 var(--font-ui);
+        -webkit-font-smoothing: antialiased;
+      }
+      header {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 3rem 1rem 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 1.25rem;
+        align-items: flex-start;
+      }
+      header img { width: 3.5rem; height: auto; }
+      h1 { margin: 0; font: 400 clamp(1.75rem, 5vw, 2.75rem)/1.1 var(--font-display); color: var(--gold-light); }
+      header p { margin: 0.25rem 0 0; color: var(--muted); max-width: 46rem; }
+      main {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 0 1rem 4rem;
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+      }
+      article {
+        border-radius: 1.25rem;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--gold) 22%, transparent);
+        display: flex;
+        flex-direction: column;
+      }
+      .scene { aspect-ratio: 4 / 3; display: block; width: 100%; }
+      .body { padding: 1.25rem 1.25rem 1.5rem; display: grid; gap: 0.75rem; flex: 1; }
+      h2 { margin: 0; font: 400 1.6rem/1.15 var(--font-display); }
+      .line { margin: 0; font-size: 1.05rem; }
+      .words { margin: 0; color: inherit; opacity: 0.86; font-size: 0.95rem; }
+      .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+      .chips li { width: 2.25rem; height: 2.25rem; border-radius: 0.6rem; box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 18%, transparent); }
+      .hud { display: flex; gap: 0.75rem; align-items: center; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+      .bar { flex: 1; height: 0.4rem; border-radius: 1rem; overflow: hidden; }
+      .bar span { display: block; height: 100%; width: 62%; }
+      .verdict { margin: 0; font-size: 0.85rem; padding-top: 0.75rem; border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent); }
+
+      /* A. Seal Stone */
+      .seal { background: var(--night); color: var(--ivory); }
+      .seal h2 { color: var(--gold-light); }
+      .seal .bar { background: var(--forest); }
+      .seal .bar span { background: var(--gold); }
+      /* B. Gold Orrery */
+      .orrery { background: radial-gradient(40rem 30rem at 50% 0%, var(--forest), var(--night) 75%); color: var(--ivory); }
+      .orrery h2 { color: var(--gold); }
+      .orrery .bar { background: color-mix(in srgb, var(--gold) 14%, var(--night)); }
+      .orrery .bar span { background: linear-gradient(90deg, var(--gold-deep), var(--gold-light)); }
+      /* C. Ink and Ki */
+      .ink { background: var(--ivory); color: var(--ink); }
+      .ink h2 { color: var(--ink); }
+      .ink .bar { background: color-mix(in srgb, var(--ink) 12%, var(--ivory)); }
+      .ink .bar span { background: var(--ink); }
+    </style>
+  </head>
+  <body>
+    <header>
+      <img src="../../../brand/exports/svg/mark-gold.svg" alt="" />
+      <div>
+        <h1>Three ways to draw the world</h1>
+        <p>
+          All three keep the approved seal brand: night, forest, gold and ivory, ki orange only as light,
+          Zen Antique for headings and Geist for everything you read. They differ in what the map is made of.
+        </p>
+      </div>
+    </header>
+    <main>
+      <article class="seal" aria-labelledby="a">
+        <svg class="scene" viewBox="0 0 400 300" role="img" aria-label="Dark stone terrain with gold contour lines and one glowing region">
+          <rect width="400" height="300" fill="var(--night)" />
+          <g fill="none" stroke="var(--gold-deep)" stroke-width="1">
+            <path d="M-10 230 C80 200 140 250 220 215 S360 180 410 205" />
+            <path d="M-10 205 C70 175 150 220 225 188 S350 160 410 178" />
+            <path d="M-10 180 C90 150 150 190 230 160 S340 135 410 150" />
+            <path d="M40 150 C100 120 170 150 230 128 S320 110 380 122" />
+            <path d="M90 122 C140 96 190 118 235 100 S300 88 340 96" />
+            <path d="M150 96 C185 78 215 92 240 80 S280 72 300 76" />
+          </g>
+          <g stroke="var(--forest)" stroke-width="1" opacity="0.9">
+            <path d="M0 60 H400 M0 120 H400 M0 180 H400 M0 240 H400 M80 0 V300 M160 0 V300 M240 0 V300 M320 0 V300" />
+          </g>
+          <circle cx="232" cy="118" r="46" fill="var(--ki)" opacity="0.16" />
+          <circle cx="232" cy="118" r="18" fill="var(--ki-hot)" opacity="0.35" />
+          <path d="M232 118 l14 -22 l6 10 l18 -14" stroke="var(--ki)" stroke-width="2" fill="none" />
+          <rect x="20" y="20" width="360" height="260" fill="none" stroke="var(--gold)" stroke-opacity="0.35" />
+          <rect x="250" y="210" width="130" height="70" fill="var(--stone)" opacity="0.08" />
+        </svg>
+        <div class="body">
+          <h2 id="a">A. Seal Stone</h2>
+          <p class="line">The arena floor at night, tile by tile, and light only where you fought today.</p>
+          <p class="words">
+            Dark tiled stone carved into relief, gold contour lines like an engraved survey, forest panels.
+            Ki orange glows only from cracks where real events landed. Neglect is pale stone dust settling
+            over a region. Chrome is gold hairlines and generous dark space.
+          </p>
+          <ul class="chips" aria-label="Palette: night, forest, gold, gold light, ki, stone">
+            <li style="background: var(--night)"></li>
+            <li style="background: var(--forest)"></li>
+            <li style="background: var(--gold)"></li>
+            <li style="background: var(--gold-light)"></li>
+            <li style="background: var(--ki)"></li>
+            <li style="background: var(--stone)"></li>
+          </ul>
+          <div class="hud"><span>Level 7</span><div class="bar"><span></span></div><span>412 / 660 XP</span></div>
+          <p class="verdict">Recommended. It is the brand mark grown into a map: the seal struck into stone, cracked with ki.</p>
+        </div>
+      </article>
+
+      <article class="orrery" aria-labelledby="b">
+        <svg class="scene" viewBox="0 0 400 300" role="img" aria-label="Floating stone rings linked by thin gold rails">
+          <g fill="none" stroke="var(--gold)">
+            <ellipse cx="200" cy="160" rx="170" ry="60" stroke-opacity="0.35" />
+            <ellipse cx="200" cy="160" rx="110" ry="38" stroke-opacity="0.55" />
+            <ellipse cx="200" cy="160" rx="50" ry="17" stroke-opacity="0.8" />
+          </g>
+          <g fill="var(--forest)" stroke="var(--gold-deep)">
+            <ellipse cx="80" cy="140" rx="34" ry="12" />
+            <ellipse cx="310" cy="190" rx="30" ry="10" />
+            <ellipse cx="250" cy="110" rx="24" ry="8" />
+          </g>
+          <ellipse cx="200" cy="160" rx="22" ry="8" fill="var(--gold-light)" opacity="0.9" />
+          <circle cx="310" cy="185" r="20" fill="var(--ki)" opacity="0.22" />
+          <g stroke="var(--gold-light)" stroke-opacity="0.5">
+            <path d="M80 140 L200 160 L310 190 M200 160 L250 110" />
+          </g>
+        </svg>
+        <div class="body">
+          <h2 id="b">B. Gold Orrery</h2>
+          <p class="line">A tournament instrument: regions are stone plates turning on gold rails.</p>
+          <p class="words">
+            The four regions float as tiered plates around a central ring, connected by fine gold rails.
+            The day's encounters orbit slowly. Precise and elegant, but it reads as a device more than a place,
+            and it can drift toward a sci-fi dashboard.
+          </p>
+          <ul class="chips" aria-label="Palette: night, forest, gold deep, gold, gold light, ki">
+            <li style="background: var(--night)"></li>
+            <li style="background: var(--forest)"></li>
+            <li style="background: var(--gold-deep)"></li>
+            <li style="background: var(--gold)"></li>
+            <li style="background: var(--gold-light)"></li>
+            <li style="background: var(--ki)"></li>
+          </ul>
+          <div class="hud"><span>Level 7</span><div class="bar"><span></span></div><span>412 / 660 XP</span></div>
+          <p class="verdict">Strong for the skill tree (a constellation of rings), weaker as the everyday map.</p>
+        </div>
+      </article>
+
+      <article class="ink" aria-labelledby="c">
+        <svg class="scene" viewBox="0 0 400 300" role="img" aria-label="Ink wash mountains on ivory paper with one orange sun">
+          <rect width="400" height="300" fill="var(--ivory)" />
+          <circle cx="300" cy="90" r="30" fill="var(--ki)" opacity="0.85" />
+          <path d="M0 220 L70 140 L120 190 L190 100 L260 200 L320 150 L400 210 V300 H0 Z" fill="var(--ink)" opacity="0.18" />
+          <path d="M0 250 L60 200 L140 240 L210 170 L290 245 L350 215 L400 240 V300 H0 Z" fill="var(--ink)" opacity="0.45" />
+          <path d="M0 275 L90 245 L170 270 L250 235 L330 275 L400 260 V300 H0 Z" fill="var(--forest)" />
+          <g stroke="var(--stone)" stroke-width="1" opacity="0.7">
+            <path d="M40 120 h60 M30 132 h90 M60 144 h50" />
+          </g>
+        </svg>
+        <div class="body">
+          <h2 id="c">C. Ink and Ki</h2>
+          <p class="line">An ink-wash landscape on ivory paper where the weather is your state.</p>
+          <p class="words">
+            Monochrome forest ink on ivory, one ki-orange sun. Stamina is clear sky, neglect is rain and mist.
+            Calm and beautiful in daylight, but status relies on weather and shape, colour range is narrow,
+            and gold loses its meaning on light paper.
+          </p>
+          <ul class="chips" aria-label="Palette: ivory, stone, ink, forest, ki">
+            <li style="background: var(--ivory)"></li>
+            <li style="background: var(--stone)"></li>
+            <li style="background: var(--ink)"></li>
+            <li style="background: var(--forest)"></li>
+            <li style="background: var(--ki)"></li>
+          </ul>
+          <div class="hud"><span>Level 7</span><div class="bar"><span></span></div><span>412 / 660 XP</span></div>
+          <p class="verdict">Kept as the source of a possible daylight theme later, not the main world.</p>
+        </div>
+      </article>
+    </main>
+  </body>
+</html>
