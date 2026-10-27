@@ -79,11 +79,11 @@ Needs Docker, JDK 21 and Node 22.
 ```bash
 git config core.hooksPath .githooks                          # attribution guard
 tools/dev/gen-keys.sh                                        # local .env and JWT keys (git-ignored)
-docker compose -f deploy/compose/compose.yml up -d           # Postgres, Kafka, RabbitMQ
+docker compose --env-file .env -f deploy/compose/compose.yml up -d           # Postgres, Kafka, RabbitMQ
 ./mvnw -q install -DskipTests                                # once, so services can resolve shared libs
 ./mvnw -pl services/character-service spring-boot:run        # http://localhost:8081/actuator/health
 npm --prefix web/budokai-web ci && npm --prefix web/budokai-web start   # http://localhost:4200
-docker compose -f deploy/compose/compose.yml down            # stop (volumes kept)
+docker compose --env-file .env -f deploy/compose/compose.yml down            # stop (volumes kept)
 ```
 
 ## Tests and quality

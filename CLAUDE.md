@@ -152,10 +152,10 @@ Exact paths are created in Phase 0. Until then, these are the targets.
 
 ```bash
 # Infra (Postgres, Kafka, RabbitMQ, Kafka UI)
-docker compose -f deploy/compose/compose.yml up -d
-docker compose -f deploy/compose/compose.yml down          # keep volumes
-docker compose -f deploy/compose/compose.yml --profile apps up --build   # all services in containers
-docker compose -f deploy/compose/compose.yml -f deploy/compose/compose.observability.yml up -d  # + Grafana LGTM
+docker compose --env-file .env -f deploy/compose/compose.yml up -d
+docker compose --env-file .env -f deploy/compose/compose.yml down          # keep volumes
+docker compose --env-file .env -f deploy/compose/compose.yml --profile apps up --build   # all services in containers
+docker compose --env-file .env -f deploy/compose/compose.yml -f deploy/compose/compose.observability.yml up -d  # + Grafana LGTM
 
 # Java (from repo root)
 ./mvnw -q verify                                   # all modules: unit + integration (Testcontainers) + ArchUnit + Spotless check

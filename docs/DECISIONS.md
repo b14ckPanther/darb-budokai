@@ -161,7 +161,7 @@ Template:
 
 ## ADR-022: One Postgres server locally, one logical database and role per service
 - Status: Proposed
-- Decision: `init.sql` creates `<service>_db` and `<service>_svc` per service with no cross grants. Separate instances later in Darb Genki.
+- Decision: `init.sh` (ADR-031) creates `<service>_db` and `<service>_svc` per service with no cross grants. Separate instances later in Darb Genki.
 - Cost if wrong: low.
 
 ## ADR-023: Rules engine is declarative YAML with a restricted predicate language
