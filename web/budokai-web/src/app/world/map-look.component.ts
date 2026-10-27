@@ -74,15 +74,30 @@ export class MapLookComponent {
         this.unsupported.set(true);
         return;
       }
+      let destroyed = false;
+      destroyRef.onDestroy(() => (destroyed = true));
       this.zone.runOutsideAngular(async () => {
         const { MapLookScene } = await import('./engine/map-look-scene');
+        // The component may be gone by the time the chunk arrives: create nothing then.
+        if (destroyed) return;
+        const host = this.host.nativeElement as HTMLElement;
         const s = new MapLookScene(this.canvas().nativeElement);
+        let onScreen = true;
+        const sync = () => s.setVisible(onScreen && document.visibilityState !== 'hidden');
         const ro = new ResizeObserver(([e]) =>
           s.resize(e.contentRect.width, e.contentRect.height, devicePixelRatio),
         );
-        ro.observe(this.host.nativeElement);
+        const io = new IntersectionObserver(([e]) => {
+          onScreen = e.isIntersecting;
+          sync();
+        });
+        ro.observe(host);
+        io.observe(host);
+        document.addEventListener('visibilitychange', sync);
         destroyRef.onDestroy(() => {
           ro.disconnect();
+          io.disconnect();
+          document.removeEventListener('visibilitychange', sync);
           s.dispose();
         });
         this.scene.set(s);

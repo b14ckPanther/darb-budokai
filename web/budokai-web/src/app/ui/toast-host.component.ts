@@ -7,7 +7,15 @@ import { ToastService } from './toast.service';
   selector: 'bk-toast-host',
   imports: [IconComponent],
   template: `
-    <div class="stack" role="status" aria-live="polite">
+    <div
+      class="stack"
+      role="status"
+      aria-live="polite"
+      (pointerenter)="svc.hold(true)"
+      (pointerleave)="svc.hold(false)"
+      (focusin)="svc.hold(true)"
+      (focusout)="svc.hold(false)"
+    >
       @for (t of svc.toasts(); track t.id) {
         <div class="toast">
           <bk-icon [name]="t.icon" />

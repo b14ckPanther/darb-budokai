@@ -12,6 +12,7 @@ import { ICONS, IconName } from '../design/icons.generated';
     [attr.aria-hidden]="label() ? null : 'true'"
     [attr.role]="label() ? 'img' : null"
     [attr.aria-label]="label() ?? null"
+    fill="none"
     focusable="false"
     [innerHTML]="body()"
   ></svg>`,

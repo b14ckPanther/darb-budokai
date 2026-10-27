@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { COPY } from '../copy/copy.generated';
+import { TOKENS } from '../design/tokens.generated';
 import { ButtonComponent } from './button.component';
 import { DialogComponent } from './dialog.component';
 import { EvidenceBadgeComponent } from './evidence-badge.component';
@@ -43,6 +44,28 @@ describe('bk-icon', () => {
     expect(deco.innerHTML).toContain('path');
     expect(named.getAttribute('role')).toBe('img');
     expect(named.getAttribute('aria-label')).toBe('Vigor');
+  });
+});
+
+describe('sigils', () => {
+  @Component({
+    imports: [IconComponent],
+    template: `<bk-icon name="rarity-common" /><bk-icon name="attested" />`,
+  })
+  class Host {}
+
+  it('draw unfilled unless a shape asks for fill (stroke-only shapes stay hollow)', async () => {
+    const el = (await mount(Host)).nativeElement as HTMLElement;
+    for (const svg of Array.from(el.querySelectorAll('svg'))) {
+      expect(svg.getAttribute('fill')).toBe('none');
+      for (const shape of Array.from(svg.querySelectorAll('path, circle, rect, ellipse'))) {
+        expect(
+          shape.hasAttribute('fill') ||
+            shape.hasAttribute('stroke') ||
+            shape.closest('[fill]') !== svg,
+        ).toBe(true);
+      }
+    }
   });
 });
 
@@ -260,6 +283,21 @@ describe('bk-dialog', () => {
 
 describe('toasts', () => {
   afterEach(() => jest.useRealTimers());
+
+  it('hold while hovered or focused, so a toast never vanishes under the pointer', async () => {
+    const f = await mount(ToastHostComponent);
+    jest.useFakeTimers();
+    const svc = TestBed.inject(ToastService);
+    svc.show('Spell learned', 'check');
+    f.detectChanges();
+    const region = f.nativeElement.querySelector('.stack') as HTMLElement;
+    region.dispatchEvent(new Event('pointerenter'));
+    jest.advanceTimersByTime(TOKENS.motion.duration.toast * 2);
+    expect(svc.toasts()).toHaveLength(1);
+    region.dispatchEvent(new Event('pointerleave'));
+    jest.advanceTimersByTime(TOKENS.motion.duration.toast + 1);
+    expect(svc.toasts()).toHaveLength(0);
+  });
 
   it('announce politely and dismiss by button or after the token duration', async () => {
     const f = await mount(ToastHostComponent);

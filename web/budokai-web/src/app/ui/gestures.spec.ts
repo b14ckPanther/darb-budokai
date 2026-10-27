@@ -1,4 +1,4 @@
-import { collapseProgress, sheetRelease, swipeRelease } from './gestures';
+import { collapseProgress, releaseVelocity, sheetRelease, swipeRelease } from './gestures';
 import { TOKENS } from '../design/tokens.generated';
 
 const g = TOKENS.gesture;
@@ -62,5 +62,18 @@ describe('large title collapse', () => {
     expect(collapseProgress(g['title-collapse-offset'] / 2)).toBeCloseTo(0.5);
     expect(collapseProgress(g['title-collapse-offset'] * 3)).toBe(1);
     expect(collapseProgress(-20)).toBe(0);
+  });
+});
+
+describe('release velocity', () => {
+  it('averages over the configured window, not the last move', () => {
+    const samples = [
+      { t: 0, y: 0 },
+      { t: 40, y: 8 },
+      { t: 58, y: 12 },
+      { t: 60, y: 15 },
+    ];
+    expect(releaseVelocity(samples)).toBeCloseTo(15 / 60, 3);
+    expect(releaseVelocity([{ t: 0, y: 0 }])).toBe(0);
   });
 });

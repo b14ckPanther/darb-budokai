@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { IconName } from '../design/icons.generated';
 import { TOKENS } from '../design/tokens.generated';
-import { swipeRelease } from './gestures';
+import { beyondSlop, swipeRelease } from './gestures';
 import { IconComponent } from './icon.component';
 
 export interface SwipeAction {
@@ -31,7 +31,7 @@ const REVEAL = TOKENS.gesture['swipe-reveal'];
   template: `
     <div class="actions" [style.inline-size.px]="actionsWidth()">
       @for (a of actions(); track a.id) {
-        <button type="button" [class]="'act tone-' + a.tone" (click)="fire(a.id)">
+        <button type="button" [class]="'act tone-' + a.tone" (click)="action.emit(a.id)">
           <bk-icon [name]="a.icon" />
           <span>{{ a.label }}</span>
         </button>
@@ -44,7 +44,7 @@ const REVEAL = TOKENS.gesture['swipe-reveal'];
       (pointerdown)="onDown($event)"
       (pointermove)="onMove($event)"
       (pointerup)="onUp($event)"
-      (pointercancel)="onUp($event)"
+      (pointercancel)="onCancel()"
     >
       <div class="title">{{ title() }}</div>
       <div class="meta"><ng-content /></div>
@@ -75,9 +75,16 @@ export class SwipeRowComponent {
 
   constructor(private readonly host: ElementRef<HTMLElement>) {}
 
-  fire(id: string): void {
+  /** A swipe past the commit point fires the first action and closes the row. A tapped or
+   * keyboard-pressed action leaves the row as it is, so focus never lands on a hidden button. */
+  private commit(id: string): void {
     this.isOpen.set(false);
     this.action.emit(id);
+  }
+
+  onCancel(): void {
+    this.startX = this.startY = 0;
+    this.dragging.set(false);
   }
 
   onFocusIn(e: FocusEvent): void {
@@ -99,7 +106,7 @@ export class SwipeRowComponent {
     if (this.startX === 0 && this.startY === 0) return;
     const dx = e.clientX - this.startX;
     const dy = e.clientY - this.startY;
-    if (this.horizontal === null && Math.abs(dx) + Math.abs(dy) > 6) {
+    if (this.horizontal === null && beyondSlop(dx, dy)) {
       this.horizontal = Math.abs(dx) > Math.abs(dy);
       if (this.horizontal) (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
     }
@@ -116,7 +123,7 @@ export class SwipeRowComponent {
     const width = (e.currentTarget as HTMLElement).offsetWidth;
     const outcome = swipeRelease(this.dx(), width);
     this.dragging.set(false);
-    if (outcome === 'commit') this.fire(this.actions()[0].id);
+    if (outcome === 'commit') this.commit(this.actions()[0].id);
     else this.isOpen.set(outcome === 'open');
   }
 }

@@ -489,6 +489,9 @@ export const TOKENS = {
     "maxFlashesPerSecond": 3
   },
   "gesture": {
+    "drag-slop": 6,
+    "sheet-flick-min": 24,
+    "velocity-window": 60,
     "sheet-detents": {
       "medium": 0.52,
       "large": 0.92

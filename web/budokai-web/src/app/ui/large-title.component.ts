@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { collapseProgress } from './gestures';
 
 /**
@@ -73,10 +74,12 @@ import { collapseProgress } from './gestures';
 })
 export class LargeTitleComponent {
   readonly title = input.required<string>();
-  private readonly scrollY = signal(0);
+  private readonly win = inject(DOCUMENT).defaultView;
+  // Seeded from the current position so a restored scroll shows the right bar at once.
+  private readonly scrollY = signal(this.win?.scrollY ?? 0);
   readonly progress = computed(() => collapseProgress(this.scrollY()));
 
   onScroll(): void {
-    this.scrollY.set(window.scrollY);
+    this.scrollY.set(this.win?.scrollY ?? 0);
   }
 }

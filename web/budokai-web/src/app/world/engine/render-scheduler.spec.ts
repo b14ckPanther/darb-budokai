@@ -65,4 +65,21 @@ describe('RenderScheduler (render on demand)', () => {
     clock.tick();
     expect(times).toHaveLength(2);
   });
+
+  it('pauses while hidden and draws one fresh frame on resume', () => {
+    const clock = fakeClock();
+    const render = jest.fn(() => true);
+    const s = new RenderScheduler(clock.raf, clock.cancel, render);
+    s.requestRender();
+    clock.tick();
+    s.setPaused(true);
+    clock.tick();
+    clock.tick();
+    s.requestRender();
+    clock.tick();
+    expect(render).toHaveBeenCalledTimes(1);
+    s.setPaused(false);
+    clock.tick();
+    expect(render).toHaveBeenCalledTimes(2);
+  });
 });

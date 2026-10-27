@@ -6,6 +6,7 @@
 export class RenderScheduler {
   private handle: number | null = null;
   private disposed = false;
+  private paused = false;
 
   constructor(
     private readonly raf: (cb: (t: number) => void) => number,
@@ -14,8 +15,18 @@ export class RenderScheduler {
   ) {}
 
   requestRender(): void {
-    if (this.disposed || this.handle !== null) return;
+    if (this.disposed || this.paused || this.handle !== null) return;
     this.handle = this.raf((t) => this.frame(t));
+  }
+
+  /** Off screen or in a hidden tab: draw nothing. Resuming draws one fresh frame. */
+  setPaused(paused: boolean): void {
+    this.paused = paused;
+    if (paused && this.handle !== null) {
+      this.cancel(this.handle);
+      this.handle = null;
+    }
+    if (!paused) this.requestRender();
   }
 
   dispose(): void {

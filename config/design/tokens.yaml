@@ -133,6 +133,12 @@ motion:
   max-flashes-per-second: 3
 
 gesture:
+  # Pointer travel (px) before a press becomes a drag; below it a tap stays a tap.
+  drag-slop: 6
+  # A flick dismisses only after at least this much downward travel (px).
+  sheet-flick-min: 24
+  # Release velocity is averaged over this window (ms).
+  velocity-window: 60
   sheet-detents: { medium: 0.52, large: 0.92 }
   sheet-dismiss-fraction: 0.28
   sheet-dismiss-velocity: 0.9

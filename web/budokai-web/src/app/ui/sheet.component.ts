@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   computed,
   effect,
@@ -13,12 +14,18 @@ import {
 } from '@angular/core';
 import { COPY } from '../copy/copy.generated';
 import { TOKENS } from '../design/tokens.generated';
-import { Detent, sheetRelease } from './gestures';
+import { Detent, beyondSlop, releaseVelocity, sheetRelease } from './gestures';
 import { IconComponent } from './icon.component';
 
 let nextId = 0;
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled]):not([type=hidden])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(', ');
 
 /**
  * Bottom sheet with medium and large detents, drag-to-dismiss and a spring settle, like a
@@ -47,7 +54,7 @@ const FOCUSABLE =
           (pointerdown)="onDown($event)"
           (pointermove)="onMove($event)"
           (pointerup)="onUp($event)"
-          (pointercancel)="onUp($event)"
+          (pointercancel)="onCancel()"
         >
           <button
             type="button"
@@ -74,6 +81,7 @@ const FOCUSABLE =
 })
 export class SheetComponent {
   private readonly doc = inject(DOCUMENT);
+  private readonly host = inject(ElementRef<HTMLElement>);
   readonly open = model(false);
   readonly detent = model<Detent>('medium');
   readonly title = input.required<string>();
@@ -85,11 +93,9 @@ export class SheetComponent {
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private opener: HTMLElement | null = null;
   private restoreInert: (() => void) | null = null;
-  private readonly host = inject(ElementRef<HTMLElement>);
+  private pressed = false;
   private startY = 0;
-  private lastY = 0;
-  private lastT = 0;
-  private velocity = 0;
+  private samples: { t: number; y: number }[] = [];
 
   constructor() {
     effect(() => {
@@ -102,14 +108,10 @@ export class SheetComponent {
       }
     });
     effect(() => {
-      if (!this.open()) {
-        this.doc.body.style.overflow = '';
-        this.restoreInert?.();
-        this.restoreInert = null;
-        this.opener?.focus?.();
-        this.opener = null;
-      }
+      if (!this.open()) this.restorePage(true);
     });
+    // Removed while open (route change, @if): never leave the page inert or locked.
+    inject(DestroyRef).onDestroy(() => this.restorePage(false));
   }
 
   close(): void {
@@ -128,16 +130,16 @@ export class SheetComponent {
       return;
     }
     if (e.key !== 'Tab') return;
-    const items = Array.from(
-      this.panel()?.nativeElement.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [],
-    );
+    const panel = this.panel()?.nativeElement;
+    const items = Array.from(panel?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []);
     if (!items.length) return;
     const first = items[0];
     const last = items[items.length - 1];
-    if (e.shiftKey && this.doc.activeElement === first) {
+    const active = this.doc.activeElement;
+    if (e.shiftKey && (active === first || active === panel)) {
       e.preventDefault();
       last.focus();
-    } else if (!e.shiftKey && this.doc.activeElement === last) {
+    } else if (!e.shiftKey && active === last) {
       e.preventDefault();
       first.focus();
     }
@@ -145,33 +147,55 @@ export class SheetComponent {
 
   onDown(e: PointerEvent): void {
     if ((e.target as HTMLElement).closest('button.close')) return;
-    this.dragging.set(true);
-    this.startY = this.lastY = e.clientY;
-    this.lastT = e.timeStamp;
-    this.velocity = 0;
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+    this.pressed = true;
+    this.startY = e.clientY;
+    this.samples = [{ t: e.timeStamp, y: e.clientY }];
   }
 
   onMove(e: PointerEvent): void {
-    if (!this.dragging()) return;
-    const dt = e.timeStamp - this.lastT;
-    if (dt > 0) this.velocity = (e.clientY - this.lastY) / dt;
-    this.lastY = e.clientY;
-    this.lastT = e.timeStamp;
+    if (!this.pressed) return;
     const dy = e.clientY - this.startY;
+    // Capture only once the press is a real drag, so a tap still clicks the handle button.
+    if (!this.dragging()) {
+      if (!beyondSlop(0, dy)) return;
+      this.dragging.set(true);
+      (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+    }
+    this.samples.push({ t: e.timeStamp, y: e.clientY });
     // Rubber-band upward drags so the sheet never leaves the screen edge.
     this.dragY.set(dy < 0 ? dy / 4 : dy);
   }
 
   onUp(e: PointerEvent): void {
+    this.pressed = false;
     if (!this.dragging()) return;
     this.dragging.set(false);
+    this.samples.push({ t: e.timeStamp, y: e.clientY });
     const dragPx = e.clientY - this.startY;
-    const height = this.doc.defaultView?.innerHeight ?? 800;
-    const outcome = sheetRelease({ from: this.detent(), dragPx, velocity: this.velocity, height });
+    const height = this.doc.defaultView?.innerHeight ?? 0;
+    const outcome = sheetRelease({
+      from: this.detent(),
+      dragPx,
+      velocity: releaseVelocity(this.samples),
+      height,
+    });
     this.dragY.set(0);
     if (outcome === 'dismiss') this.close();
     else this.detent.set(outcome);
+  }
+
+  onCancel(): void {
+    this.pressed = false;
+    this.dragging.set(false);
+    this.dragY.set(0);
+  }
+
+  private restorePage(returnFocus: boolean): void {
+    this.doc.body.style.overflow = '';
+    this.restoreInert?.();
+    this.restoreInert = null;
+    if (returnFocus) this.opener?.focus?.();
+    this.opener = null;
   }
 }
 

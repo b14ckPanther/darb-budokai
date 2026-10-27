@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { COPY } from '../src/app/copy/copy.generated';
+import { TOKENS } from '../src/app/design/tokens.generated';
 
 const D = COPY.design;
 
@@ -137,4 +138,23 @@ test('the map look test renders WebGL at three light levels', async ({ page }) =
   }
   expect(lum[0]).toBeGreaterThan(5);
   expect(lum[2]).toBeGreaterThan(lum[0]);
+});
+
+test('a real tap on the sheet handle expands it (a tap is not a drag)', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/design');
+  await page.getByRole('button', { name: D.samples['open-sheet'] }).click();
+  const handle = page.getByRole('button', { name: COPY.ui['sheet-expand'] });
+  await expect(handle).toHaveAttribute('aria-expanded', 'false');
+  // Let the sheet's rise spring settle before aiming at the handle.
+  await page.waitForTimeout(TOKENS.motion.springs.snappy.durationMs + 100);
+  const box = (await handle.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.up();
+  await expect(page.getByRole('button', { name: COPY.ui['sheet-collapse'] })).toHaveAttribute(
+    'aria-expanded',
+    'true',
+  );
+  await expect(page.getByRole('dialog')).toHaveCount(1);
 });

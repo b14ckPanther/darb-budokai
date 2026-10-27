@@ -226,6 +226,11 @@ export class MapLookScene {
     this.scheduler.requestRender();
   }
 
+  /** Pause drawing while the canvas is off screen or the tab is hidden. */
+  setVisible(visible: boolean): void {
+    this.scheduler.setPaused(!visible);
+  }
+
   resize(width: number, height: number, dpr: number): void {
     if (!width || !height) return;
     const ratio = Math.min(dpr, M['dpr-cap']);
