@@ -5,12 +5,16 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-COMPOSE=(docker compose -f "$ROOT/deploy/compose/compose.yml" --profile tools)
+COMPOSE=(docker compose --env-file "$ROOT/.env" -f "$ROOT/deploy/compose/compose.yml" --profile tools)
 TIMEOUT_SECONDS="${SMOKE_TIMEOUT_SECONDS:-180}"
 
 [[ -f "$ROOT/deploy/compose/compose.yml" ]] || { echo "FAIL  deploy/compose/compose.yml is missing"; exit 1; }
 [[ -f "$ROOT/.env" ]] || { echo "FAIL  .env is missing; run tools/dev/gen-keys.sh"; exit 1; }
-set -a; source "$ROOT/.env"; set +a
+# Read values for the checks below without exporting them, so Compose must get them from --env-file.
+envval() { grep -E "^$1=" "$ROOT/.env" | tail -1 | cut -d= -f2-; }
+CHARACTER_DB_USER="$(envval CHARACTER_DB_USER)"
+CHARACTER_DB_PASSWORD="$(envval CHARACTER_DB_PASSWORD)"
+POSTGRES_PORT="$(envval POSTGRES_PORT)"
 
 cleanup() { "${COMPOSE[@]}" down >/dev/null 2>&1 || true; }
 trap cleanup EXIT
@@ -29,8 +33,17 @@ done
 check_named "character_svc can connect to character_db" \
   "${COMPOSE[@]}" exec -T -e PGPASSWORD="$CHARACTER_DB_PASSWORD" postgres \
   psql -h localhost -U "$CHARACTER_DB_USER" -d character_db -tAc 'select 1'
-check_named "character_svc cannot connect to the postgres admin db" \
-  bash -c "! ${COMPOSE[*]} exec -T -e PGPASSWORD=\"$CHARACTER_DB_PASSWORD\" postgres psql -h localhost -U \"$CHARACTER_DB_USER\" -d postgres -tAc 'select 1'"
+denied="$("${COMPOSE[@]}" exec -T -e PGPASSWORD="$CHARACTER_DB_PASSWORD" postgres \
+  psql -h localhost -U "$CHARACTER_DB_USER" -d postgres -tAc 'select 1' 2>&1 || true)"
+check_named "character_svc is denied the postgres admin db" grep -q 'does not have CONNECT privilege' <<<"$denied"
+check_named "postgres is published on POSTGRES_PORT from .env" \
+  bash -c "${COMPOSE[*]} port postgres 5432 | grep -q ':$POSTGRES_PORT\$'"
+check_named "kafka keeps its log on the data volume" \
+  "${COMPOSE[@]}" exec -T kafka test -f /var/lib/kafka/data/meta.properties
+check_named "rabbitmq does not receive Postgres secrets" \
+  bash -c "! ${COMPOSE[*]} exec -T rabbitmq printenv POSTGRES_PASSWORD"
+check_named "postgres does not receive RabbitMQ secrets" \
+  bash -c "! ${COMPOSE[*]} exec -T postgres printenv RABBITMQ_DEFAULT_PASS"
 check_named "kafka lists topics" \
   "${COMPOSE[@]}" exec -T kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 check_named "rabbitmq answers diagnostics" \
