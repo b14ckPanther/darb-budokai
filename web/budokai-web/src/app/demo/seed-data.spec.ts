@@ -44,7 +44,9 @@ describe('demo seed data', () => {
   });
 
   it('the replay schema rejects a script with a missing source (honesty: every line has a rule)', () => {
-    const v = ajv().getSchema('https://github.com/b14ckPanther/darb-budokai/contracts/replay/v1.schema.json')!;
+    const v = ajv().getSchema(
+      'https://github.com/b14ckPanther/darb-budokai/contracts/replay/v1.schema.json',
+    )!;
     const day = parse(readFileSync(join(seedDir, 'replays.yaml'), 'utf8')).days[0];
     const broken = JSON.parse(JSON.stringify(day));
     delete broken.encounters[0].source;

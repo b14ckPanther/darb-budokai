@@ -1,0 +1,7 @@
+@use 'tokens.generated' as t;
+
+@media (min-width: t.$desktop-from) {
+  :host {
+    --gutter: var(--space-10);
+  }
+}

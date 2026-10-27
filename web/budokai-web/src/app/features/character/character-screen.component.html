@@ -1,0 +1,140 @@
+<bk-screen [title]="copy.title">
+  <nav barAction class="links" [attr.aria-label]="copy.title">
+    <a bk-button variant="quiet" icon="rulebook" routerLink="/rulebook">{{
+      copy['rulebook-link']
+    }}</a>
+  </nav>
+
+  <section class="hero" aria-labelledby="hero-name">
+    <div class="plate">
+      <img src="brand/mark-on-night.svg" [alt]="portrait()" width="112" height="112" />
+    </div>
+    <div class="hero-text">
+      <h2 id="hero-name">{{ c().name }}</h2>
+      <p class="title"><bk-icon name="title" />{{ c().title }}</p>
+      <p class="level">
+        {{ level() }}, <span [class.exhausted]="c().status === 'exhausted'">{{ status() }}</span>
+      </p>
+      <bk-meter
+        [label]="copy.xp"
+        [value]="c().xp - c().xpLevelStart"
+        [max]="c().xpNext - c().xpLevelStart"
+        [valueText]="xp()"
+        tone="xp"
+      />
+      <bk-meter
+        [label]="copy.stamina"
+        [value]="c().stamina"
+        [max]="c().staminaMax"
+        [valueText]="stamina()"
+        tone="stamina"
+      />
+    </div>
+  </section>
+
+  <div class="links-row">
+    <a bk-button variant="secondary" icon="stats" routerLink="/character/skills">{{
+      copy['skills-link']
+    }}</a>
+    <a bk-button variant="secondary" icon="integrations" routerLink="/integrations">{{
+      copy['integrations-link']
+    }}</a>
+  </div>
+
+  <section aria-labelledby="stats-h">
+    <h2 id="stats-h" class="h">{{ copy.stats }}</h2>
+    <ul class="stats">
+      @for (s of store.stats(); track s.id) {
+        <li class="stat">
+          <bk-stat-dial [stat]="s.id" [rank]="s.rank" [progress]="s.progress" />
+          <p class="rank-xp">{{ rankXp(s) }}</p>
+          <h3 class="week-h">{{ copy['this-week'] }}</h3>
+          <ul class="week">
+            @for (w of s.week; track w.source) {
+              <li>
+                <span class="src">{{ w.source }}</span>
+                <span class="amt">{{ plus(w.amount) }}</span>
+                @if (w.replay) {
+                  <a
+                    class="in-log"
+                    routerLink="/log"
+                    [queryParams]="{ date: replayDate(w.replay) }"
+                    >{{ copy['in-log'] }}</a
+                  >
+                }
+              </li>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="equip-h">
+    <h2 id="equip-h" class="h">{{ copy.equipment }}</h2>
+    <ul class="slots">
+      @for (e of store.equipment(); track e.slot) {
+        <li class="slot" [class.empty]="!e.item">
+          <span class="slot-name">{{ e.label }}</span>
+          @if (e.item; as i) {
+            <span class="slot-item">{{ i.name }}</span>
+            <bk-rarity [rarity]="i.rarity" />
+            <span class="mod">{{ i.modifier }}</span>
+          } @else {
+            <span class="slot-item muted">{{ copy['empty-slot'] }}</span>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="inv-h">
+    <h2 id="inv-h" class="h">{{ copy.inventory }}</h2>
+    <ul class="inventory">
+      @for (i of store.inventory(); track i.id) {
+        <li class="item">
+          <div class="item-head">
+            <span class="item-name">{{ i.name }}</span>
+            <bk-rarity [rarity]="i.rarity" />
+          </div>
+          <span class="mod">{{ i.modifier }}</span>
+          <span class="from">{{ dropped(i) }}</span>
+          @if (equippedIds().has(i.id)) {
+            <span class="equipped"><bk-icon name="check" />{{ copy.equipped }}</span>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+
+  <div class="honours">
+    <section aria-labelledby="titles-h">
+      <h2 id="titles-h" class="h">{{ copy.titles }}</h2>
+      <ul class="list">
+        @for (t of store.titles(); track t.id) {
+          <li>
+            <bk-icon name="title" />
+            <span class="list-text"
+              ><span>{{ t.name }}</span
+              ><span class="muted">{{ t.reason }}, {{ earned(t.earned) }}</span></span
+            >
+          </li>
+        }
+      </ul>
+    </section>
+    <section aria-labelledby="deeds-h">
+      <h2 id="deeds-h" class="h">{{ copy.deeds }}</h2>
+      <ul class="list">
+        @for (d of store.deeds(); track d.id) {
+          <li>
+            <bk-icon name="deed" />
+            <span class="list-text"
+              ><span>{{ d.name }}</span
+              ><span class="muted">{{ earned(d.earned) }}</span></span
+            >
+          </li>
+        }
+      </ul>
+    </section>
+  </div>
+</bk-screen>

@@ -47,6 +47,8 @@ export interface TokenModel {
   gesture: Dict<unknown>;
   layers: Dict<number>;
   map: Dict<unknown>;
+  /** Feature sections (world, battlelog, skilltree, ...) pass through unchanged. */
+  [section: string]: unknown;
 }
 
 const HEADER =
@@ -132,8 +134,25 @@ export function resolveTokens(brand: Brand, design: Dict): TokenModel {
     gesture: design['gesture'] as Dict,
     layers: design['layers'] as Dict<number>,
     map: design['map'] as Dict,
+    ...Object.fromEntries(Object.entries(design).filter(([k]) => !KNOWN.has(k))),
   };
 }
+
+const KNOWN = new Set([
+  'version',
+  'themes',
+  'contrast',
+  'type',
+  'space',
+  'radius',
+  'elevation',
+  'layout',
+  'material',
+  'motion',
+  'gesture',
+  'layers',
+  'map',
+]);
 
 function round(n: number): number {
   return Math.round(n * 10000) / 10000;

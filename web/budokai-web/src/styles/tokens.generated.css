@@ -27,6 +27,11 @@
   --color-map-stone: #051811;
   --color-map-stone-lit: #1F4132;
   --color-map-dust: #323A30;
+  --color-map-tint-springs: #39584A;
+  --color-map-tint-forge: #49431D;
+  --color-map-tint-archive: #485E4D;
+  --color-map-tint-citadel: #5F6236;
+  --color-map-tint-wilds: #1C2720;
   --font-display: 'Zen Antique', 'Hiragino Mincho ProN', serif;
   --font-ui: 'Geist', system-ui, sans-serif;
   --font-seal: 'Yuji Boku', serif;

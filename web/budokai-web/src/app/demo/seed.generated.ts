@@ -1186,6 +1186,7 @@ export const DEMO_SEED = {
       {
         "id": "p1",
         "title": "Three Recall sessions this week",
+        "region": "archive",
         "objective": "count",
         "target": 3,
         "day": "2026-10-27"
@@ -1193,6 +1194,7 @@ export const DEMO_SEED = {
       {
         "id": "p2",
         "title": "Finish the Cobalt Reach home task",
+        "region": "citadel-road",
         "objective": "event",
         "target": 1,
         "day": "2026-10-29"

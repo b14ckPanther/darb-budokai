@@ -1,9 +1,9 @@
 export interface Region {
   id: string;
-  stat: string | null;
+  stat?: string | null;
   centre: readonly [number, number] | readonly number[];
   radius: number;
-  tint: string;
+  tint?: string;
   locked?: boolean;
 }
 
@@ -39,7 +39,7 @@ export function validateMap(
   for (const r of map.regions) {
     if (ids.has(r.id)) errors.push(`region ${r.id}: duplicate id`);
     ids.add(r.id);
-    if (!tints.includes(r.tint)) errors.push(`region ${r.id}: unknown tint ${r.tint}`);
+    if (!r.tint || !tints.includes(r.tint)) errors.push(`region ${r.id}: unknown tint ${r.tint}`);
   }
   for (const m of map.markers)
     if (!ids.has(m.region)) errors.push(`marker ${m.id}: unknown region ${m.region}`);

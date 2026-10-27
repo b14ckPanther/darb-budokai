@@ -8,7 +8,6 @@ import { EvidenceBadgeComponent, EvidenceTier } from '../ui/evidence-badge.compo
 import { IconComponent } from '../ui/icon.component';
 import { LargeTitleComponent } from '../ui/large-title.component';
 import { MeterComponent } from '../ui/meter.component';
-import { NavComponent, NavItem } from '../ui/nav.component';
 import { Rarity, RarityComponent } from '../ui/rarity.component';
 import { SegmentedComponent } from '../ui/segmented.component';
 import { SheetComponent } from '../ui/sheet.component';
@@ -36,7 +35,6 @@ const SEED = DEMO_SEED.showcase;
     LargeTitleComponent,
     MapLookComponent,
     MeterComponent,
-    NavComponent,
     RarityComponent,
     SegmentedComponent,
     SheetComponent,
@@ -54,14 +52,6 @@ export class DesignPageComponent {
   readonly seed = SEED;
   readonly motion = inject(MotionService);
   private readonly toasts = inject(ToastService);
-
-  readonly nav: NavItem[] = [
-    { path: '/map', label: COPY.nav.map, icon: 'map' },
-    { path: '/quests', label: COPY.nav.quests, icon: 'quests' },
-    { path: '/spellbook', label: COPY.nav.spellbook, icon: 'spellbook' },
-    { path: '/character', label: COPY.nav.character, icon: 'character' },
-    { path: '/log', label: COPY.nav.log, icon: 'log' },
-  ];
 
   readonly motionOptions = (['system', 'reduced', 'full'] as const).map((v) => ({
     value: v,

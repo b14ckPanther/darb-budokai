@@ -1,4 +1,5 @@
-/** Production build. The /design style page is dev and demo only (PLAN Phase 2). */
+/** Production build: no style page, no demo data (the backend arrives in Phase 6). */
 export const environment = {
   designPage: false,
+  demo: false,
 };

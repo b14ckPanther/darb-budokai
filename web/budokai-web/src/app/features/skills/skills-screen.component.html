@@ -1,0 +1,34 @@
+<bk-screen [title]="k.title" [lede]="k.lede">
+  <a barAction bk-button variant="quiet" icon="back" routerLink="/character">{{ back }}</a>
+  @if (webgl) {
+    <canvas #sky class="sky" role="img" [attr.aria-label]="k['canvas-label']"></canvas>
+  }
+  <div class="groups">
+    @for (g of groups(); track g.stat) {
+      <section class="group" [attr.aria-labelledby]="'g-' + g.stat">
+        <h2 [id]="'g-' + g.stat"><bk-icon [name]="g.stat" />{{ g.name }}</h2>
+        <ol>
+          @for (n of g.nodes; track n.id) {
+            <li class="node" [attr.data-node]="n.id" [class]="'node s-' + n.state">
+              <span class="mark"><bk-icon [name]="icon(n.state)" /></span>
+              <div class="text">
+                <div class="row">
+                  <h3>{{ n.name }}</h3>
+                  <span class="state">{{ k.states[n.state] }}</span>
+                </div>
+                <p class="req">{{ n.requirement }}</p>
+                <p class="effect">{{ n.effect }}</p>
+                <p class="meta">
+                  {{ n.progressText }}
+                  @if (n.needs) {
+                    <span>, {{ n.needs }}</span>
+                  }
+                </p>
+              </div>
+            </li>
+          }
+        </ol>
+      </section>
+    }
+  </div>
+</bk-screen>

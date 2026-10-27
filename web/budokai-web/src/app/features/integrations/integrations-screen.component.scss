@@ -1,0 +1,128 @@
+@use 'tokens.generated' as t;
+
+ul,
+dl,
+dd {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.producers {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.producer {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  &.off {
+    background: transparent;
+    border-style: dashed;
+  }
+  > * {
+    justify-self: stretch;
+  }
+  > button {
+    justify-self: start;
+  }
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  h2 {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--type-title-2-family);
+    font-size: var(--type-title-2-size);
+    color: var(--color-text-heading);
+    --icon-size: 1.25rem;
+  }
+}
+
+.status {
+  font-size: var(--type-footnote-size);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  &.st-connected {
+    color: var(--color-text-gold);
+  }
+}
+
+.kind {
+  margin: 0;
+  font-size: var(--type-subhead-size);
+  color: var(--color-text);
+  &.cosmetic {
+    color: var(--color-stone);
+  }
+}
+
+dl {
+  display: grid;
+  gap: var(--space-2);
+}
+
+dt {
+  font-size: var(--type-footnote-size);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.scopes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+code {
+  font-family: var(--font-ui);
+  font-size: var(--type-footnote-size);
+  padding: 0.1rem var(--space-2);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+.muted {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--type-footnote-size);
+  color: var(--color-text-secondary);
+  --icon-size: 1rem;
+}
+
+h3 {
+  margin: var(--space-2) 0 0;
+  font-size: var(--type-subhead-size);
+  font-weight: 600;
+  color: var(--color-danger);
+}
+
+.rejected li {
+  display: flex;
+  gap: var(--space-2);
+  font-size: var(--type-subhead-size);
+  color: var(--color-text);
+  --icon-size: 1rem;
+  bk-icon {
+    color: var(--color-danger);
+  }
+}
+
+@media (min-width: t.$desktop-from) {
+  .producers {
+    grid-template-columns: 1fr 1fr;
+  }
+}

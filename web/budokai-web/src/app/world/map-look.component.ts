@@ -15,7 +15,11 @@ import {
 import { COPY } from '../copy/copy.generated';
 import { format } from '../copy/format';
 import { MotionService } from '../design/motion/motion.service';
-import type { LightLevel, MapLookScene } from './engine/map-look-scene';
+import { webglAvailable } from './webgl';
+import { TOKENS } from '../design/tokens.generated';
+import type { WorldScene } from './engine/world-scene';
+
+export type LightLevel = keyof typeof TOKENS.map.levels;
 
 /** Canvas host for the map look test. Three.js runs outside Angular's zone and is lazy-loaded. */
 @Component({
@@ -65,7 +69,7 @@ export class MapLookComponent {
   private readonly motion = inject(MotionService);
   private readonly zone = inject(NgZone);
   private readonly host = inject(ElementRef<HTMLElement>);
-  private readonly scene = signal<MapLookScene | null>(null);
+  private readonly scene = signal<WorldScene | null>(null);
 
   constructor() {
     const destroyRef = inject(DestroyRef);
@@ -77,11 +81,11 @@ export class MapLookComponent {
       let destroyed = false;
       destroyRef.onDestroy(() => (destroyed = true));
       this.zone.runOutsideAngular(async () => {
-        const { MapLookScene } = await import('./engine/map-look-scene');
+        const { WorldScene } = await import('./engine/world-scene');
         // The component may be gone by the time the chunk arrives: create nothing then.
         if (destroyed) return;
         const host = this.host.nativeElement as HTMLElement;
-        const s = new MapLookScene(this.canvas().nativeElement);
+        const s = new WorldScene(this.canvas().nativeElement);
         let onScreen = true;
         const sync = () => s.setVisible(onScreen && document.visibilityState !== 'hidden');
         const ro = new ResizeObserver(([e]) =>
@@ -103,16 +107,7 @@ export class MapLookComponent {
         this.scene.set(s);
       });
     });
-    effect(() => this.scene()?.setLevel(this.level()));
+    effect(() => this.scene()?.setGlobal(TOKENS.map.levels[this.level()]));
     effect(() => this.scene()?.setAnimate(!this.motion.reduced()));
-  }
-}
-
-function webglAvailable(): boolean {
-  try {
-    const c = document.createElement('canvas');
-    return !!(c.getContext('webgl2') ?? c.getContext('webgl'));
-  } catch {
-    return false;
   }
 }

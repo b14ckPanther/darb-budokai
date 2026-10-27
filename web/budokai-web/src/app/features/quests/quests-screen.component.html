@@ -1,0 +1,196 @@
+<bk-screen [title]="q.title">
+  <button barAction bk-button variant="quiet" icon="add" type="button" (click)="newHabit()">
+    {{ q['new-habit'] }}
+  </button>
+
+  <div class="tabs">
+    <bk-segmented
+      [label]="q.tabs.label"
+      [options]="tabs"
+      [value]="tab()"
+      (valueChange)="setTab($event)"
+    />
+  </div>
+
+  @switch (tab()) {
+    @case ('today') {
+      <p class="summary">{{ todayText() }}</p>
+      <ul class="group">
+        @for (h of store.activeHabits(); track h.id) {
+          <li>
+            <bk-swipe-row [title]="h.title" [actions]="actions(h)" (action)="onAction(h, $event)">
+              <span>{{ regionName(h.region) }}</span>
+              <bk-evidence [tier]="h.evidence" />
+              <span [class.done]="h.progress >= h.target">{{ progress(h) }}</span>
+              <span>{{ streak(h.streak) }}</span>
+            </bk-swipe-row>
+          </li>
+        }
+      </ul>
+      <p class="note"><bk-icon name="info" />{{ q['evidence-note'] }}</p>
+      @if (store.pausedHabits().length) {
+        <h2 class="h">{{ q.paused }}</h2>
+        <ul class="group plain">
+          @for (h of store.pausedHabits(); track h.id) {
+            <li class="row">
+              <span class="row-title">{{ h.title }}</span>
+              <button bk-button variant="quiet" icon="refresh" type="button" (click)="resume(h)">
+                {{ q.resume }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    }
+    @case ('main') {
+      <ul class="cards">
+        @for (m of store.main(); track m.id) {
+          <li class="card" [class.fallen]="m.stage === 'rejected'">
+            <div class="card-head">
+              <h2>{{ m.company }}</h2>
+              <span class="stage">{{ stage(m.stage) }}</span>
+            </div>
+            <p class="role">{{ m.role }}</p>
+            <ol class="journey" [attr.aria-label]="stage(m.stage)">
+              @for (s of m.history; track s.stage) {
+                <li>
+                  <span class="dot" aria-hidden="true"></span>{{ stage(s.stage) }}, {{ s.date }}
+                </li>
+              }
+            </ol>
+            <p class="muted">{{ applied(m.appliedOn) }}. {{ m.next }}</p>
+            @if (m.stage === 'rejected') {
+              <p class="fallen-note">{{ q['fallen-note'] }}</p>
+            }
+          </li>
+        }
+      </ul>
+    }
+    @case ('raids') {
+      <ul class="cards">
+        @for (b of store.bosses(); track b.id) {
+          <li class="card">
+            <div class="card-head">
+              <h2><bk-icon name="boss" />{{ b.title }}</h2>
+              <span class="stage">{{ q['boss-status'][b.status] }}</span>
+            </div>
+            <p class="role">{{ b.review }}</p>
+            <bk-meter
+              [label]="q['boss-status'][b.status]"
+              [value]="b.hp"
+              [max]="b.maxHp"
+              [valueText]="hp(b)"
+              tone="stamina"
+            />
+            <p class="muted">{{ findings(b) }}</p>
+            <ul class="findings">
+              @for (f of b.findings; track f.id) {
+                <li [class.resolved]="f.resolved">
+                  <bk-icon [name]="f.resolved ? 'check' : 'target'" />{{ q.severity[f.severity] }},
+                  {{ f.tag }}
+                </li>
+              }
+            </ul>
+          </li>
+        }
+        @for (r of store.raids(); track r.id) {
+          <li class="card">
+            <div class="card-head">
+              <h2><bk-icon name="raid" />{{ r.company }}</h2>
+              <span class="stage">{{ q['raid-status'][r.status] }}</span>
+            </div>
+            <p class="muted">{{ stage(r.stage) }}, {{ r.date }}</p>
+          </li>
+        }
+      </ul>
+    }
+    @case ('proposed') {
+      <p class="note"><bk-icon name="info" />{{ q['proposed-note'] }}</p>
+      @if (store.proposed().length) {
+        <ul class="group plain">
+          @for (p of store.proposed(); track p.id) {
+            <li class="row proposal">
+              <span class="row-text">
+                <span class="row-title">{{ p.title }}</span>
+                <span class="muted">{{ regionName(p.region) }}, {{ p.day }}</span>
+              </span>
+              <span class="row-actions">
+                <button bk-button variant="primary" icon="check" type="button" (click)="accept(p)">
+                  {{ q.accept }}
+                </button>
+                <button bk-button variant="quiet" type="button" (click)="dismiss(p)">
+                  {{ q.dismiss }}
+                </button>
+              </span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="muted">{{ q['empty-proposed'] }}</p>
+      }
+    }
+    @case ('history') {
+      <ul class="group plain">
+        @for (h of store.history(); track h.date) {
+          <li class="row">
+            <span class="row-title">{{ h.date }}</span>
+            <span class="muted">{{ historyRow(h) }}</span>
+          </li>
+        }
+      </ul>
+    }
+  }
+</bk-screen>
+
+<bk-sheet [(open)]="editorOpen" [title]="draft().id ? q['edit-habit'] : q['new-habit']">
+  <form class="form" (submit)="save($event)" novalidate>
+    <label>
+      <span>{{ q['habit-form'].title }}</span>
+      <input
+        name="title"
+        type="text"
+        autocomplete="off"
+        [value]="draft().title"
+        [attr.aria-invalid]="error() === q['habit-form']['error-title']"
+        aria-describedby="habit-error habit-hint"
+        (input)="patch('title', $any($event.target).value)"
+      />
+      <small id="habit-hint">{{ q['habit-form']['title-hint'] }}</small>
+    </label>
+    <label>
+      <span>{{ q['habit-form'].region }}</span>
+      <select
+        name="region"
+        [value]="draft().region"
+        (change)="patch('region', $any($event.target).value)"
+      >
+        @for (r of regionOptions; track r.id) {
+          <option [value]="r.id" [selected]="r.id === draft().region">{{ r.name }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      <span>{{ q['habit-form'].objective }}</span>
+      <select name="objective" (change)="patch('objective', $any($event.target).value)">
+        @for (o of objectiveOptions; track o.id) {
+          <option [value]="o.id" [selected]="o.id === draft().objective">{{ o.name }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      <span>{{ q['habit-form'].target }}</span>
+      <input
+        name="target"
+        type="number"
+        min="1"
+        inputmode="numeric"
+        [value]="draft().target"
+        (input)="patch('target', $any($event.target).value)"
+      />
+    </label>
+    <p id="habit-error" class="error" role="alert">{{ error() ?? '' }}</p>
+    <button bk-button variant="primary" icon="check" type="submit">
+      {{ q['habit-form'].save }}
+    </button>
+  </form>
+</bk-sheet>

@@ -4,7 +4,6 @@ import { MapLookComponent } from './map-look.component';
 
 describe('bk-map-look', () => {
   it('falls back to a text description when WebGL is unavailable', async () => {
-    const spy = jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
     await TestBed.configureTestingModule({ imports: [MapLookComponent] }).compileComponents();
     const f = TestBed.createComponent(MapLookComponent);
     f.componentRef.setInput('level', 'quiet');
@@ -15,6 +14,5 @@ describe('bk-map-look', () => {
       COPY.design.samples['level-quiet'],
     );
     expect(el.querySelector('canvas')?.hidden).toBe(true);
-    spy.mockRestore();
   });
 });

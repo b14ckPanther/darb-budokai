@@ -28,7 +28,12 @@ export const TOKENS = {
       "scrim": "#03110C",
       "map-stone": "#051811",
       "map-stone-lit": "#1F4132",
-      "map-dust": "#323A30"
+      "map-dust": "#323A30",
+      "map-tint-springs": "#39584A",
+      "map-tint-forge": "#49431D",
+      "map-tint-archive": "#485E4D",
+      "map-tint-citadel": "#5F6236",
+      "map-tint-wilds": "#1C2720"
     }
   },
   "contrast": [
@@ -568,6 +573,35 @@ export const TOKENS = {
         "fog": 0.016,
         "ember": 2
       }
+    }
+  },
+  "world": {
+    "focus-zoom": 0.55,
+    "camera-stiffness": 3.2,
+    "settle-epsilon": 0.002,
+    "idle-drift-deg-per-s": 1.2,
+    "marker-height": 0.9,
+    "marker-size": 0.55,
+    "region-tint-strength": 0.45,
+    "fog-strength": 0.75,
+    "max-regions": 8,
+    "phone-canvas-ratio": 0.62
+  },
+  "battlelog": {
+    "speeds": [
+      0.5,
+      1,
+      2,
+      4
+    ],
+    "caption-fade-ms": 320
+  },
+  "skilltree": {
+    "orbit-deg-per-s": 4,
+    "node-size": {
+      "locked": 0.35,
+      "available": 0.6,
+      "unlocked": 0.8
     }
   }
 } as const;

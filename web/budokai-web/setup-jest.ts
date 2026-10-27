@@ -23,3 +23,6 @@ if (!window.matchMedia) {
     }),
   });
 }
+
+// jsdom has no WebGL: report "no context" quietly, as a browser without WebGL would.
+Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', { configurable: true, value: () => null });

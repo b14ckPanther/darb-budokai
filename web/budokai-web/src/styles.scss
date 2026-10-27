@@ -101,3 +101,27 @@ html[data-motion='reduced'] *::after {
   transition-duration: 1ms !important;
   scroll-behavior: auto !important;
 }
+
+// Route changes cross-fade and rise on the gentle spring (View Transitions); off under reduced motion.
+::view-transition-old(root) {
+  animation: var(--dur-fast) var(--ease-out) both route-out;
+}
+::view-transition-new(root) {
+  animation: var(--spring-gentle-dur) var(--spring-gentle) both route-in;
+}
+html[data-motion='reduced']::view-transition-group(*),
+html[data-motion='reduced']::view-transition-old(*),
+html[data-motion='reduced']::view-transition-new(*) {
+  animation: none !important;
+}
+@keyframes route-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes route-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

@@ -1,0 +1,20 @@
+<a class="skip" href="#content">{{ copy['skip-link'] }}</a>
+@if (hasData) {
+  <bk-nav [label]="copy['nav-label']" [items]="nav" />
+  <div class="frame">
+    @if (demo) {
+      <p class="demo" role="note" [attr.title]="copy['demo-note']">
+        <strong>{{ copy['demo-banner'] }}</strong>
+        <span>{{ copy['demo-note'] }}</span>
+      </p>
+    }
+    <main id="content" tabindex="-1"><router-outlet /></main>
+  </div>
+} @else {
+  <main id="content" class="no-data">
+    <img src="brand/mark-on-night.svg" alt="" width="96" height="96" />
+    <h1>{{ copy['no-data-title'] }}</h1>
+    <p>{{ copy['no-data-body'] }}</p>
+  </main>
+}
+<bk-toast-host />

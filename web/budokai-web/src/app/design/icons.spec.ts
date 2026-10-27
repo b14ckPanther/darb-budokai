@@ -53,6 +53,7 @@ describe('icon registry (ADR-033)', () => {
       'ui/icon.component.ts',
       'ui/stat-dial.component.ts',
       'design/design-page.component.html',
+      'world/flat-map.component.ts',
     ];
     const offenders = sources
       .filter((s) => !s.path.endsWith('.spec.ts') && !allowed.includes(s.path))

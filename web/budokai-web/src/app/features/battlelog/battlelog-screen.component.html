@@ -1,0 +1,181 @@
+<div class="log">
+  <header class="head">
+    <h1>{{ b.title }}</h1>
+    @if (dayOptions().length > 1) {
+      <bk-segmented
+        [label]="b.days"
+        [options]="dayOptions()"
+        [value]="store.date()"
+        (valueChange)="selectDay($event)"
+      />
+    }
+  </header>
+
+  <div class="stage" [class.quiet]="player().phase === 'quiet'">
+    @if (webgl) {
+      <bk-world-canvas
+        class="world"
+        [label]="label()"
+        [regions]="regions()"
+        [focus]="focus()"
+        [pulse]="pulse()"
+      />
+    } @else {
+      <bk-flat-map class="world" [label]="label()" [regions]="regions()" />
+    }
+
+    <div class="overlay">
+      @switch (player().phase) {
+        @case ('quiet') {
+          <div class="caption quiet-card" aria-live="polite">
+            <p class="reading">{{ b.quiet }}</p>
+            <p class="event">{{ b['quiet-note'] }}</p>
+          </div>
+        }
+        @case ('summary') {
+          <section class="caption end" aria-live="polite" aria-labelledby="end-title">
+            <h2 id="end-title" class="reading">{{ b['end-title'] }}</h2>
+            <ul class="totals">
+              @for (t of totals(); track t) {
+                <li>{{ t }}</li>
+              }
+            </ul>
+            <button
+              bk-button
+              variant="primary"
+              icon="refresh"
+              type="button"
+              (click)="store.dispatch({ type: 'play' })"
+            >
+              {{ b.replay }}
+            </button>
+          </section>
+        }
+        @default {
+          <!-- A one-item list keyed by encounter id, so each new encounter enters afresh. -->
+          @for (e of current(); track e.id) {
+            <div class="caption" aria-live="polite" [attr.data-kind]="e.kind">
+              <p class="event">
+                <span class="time">{{ time(e.at) }}</span
+                >{{ e.event }}
+              </p>
+              <p class="reading">{{ e.reading }}</p>
+              @if (e.deltas.length) {
+                <ul class="deltas">
+                  @for (d of e.deltas; track $index) {
+                    <li>
+                      <bk-count [value]="d.amount" [text]="delta(d)" [format]="deltaFmt(d.kind)" />
+                      <span>{{ d.label }}</span>
+                    </li>
+                  }
+                </ul>
+              }
+              @for (l of e.loot ?? []; track l.itemId) {
+                <p class="loot">
+                  <bk-icon name="loot" />{{ lootText(l.name)
+                  }}<bk-rarity [rarity]="rarity(l.rarity)" />
+                </p>
+              }
+            </div>
+          }
+        }
+      }
+    </div>
+  </div>
+
+  <div class="controls" role="group" [attr.aria-label]="b.title">
+    <div class="transport">
+      <button
+        type="button"
+        class="ctl"
+        [disabled]="player().phase === 'quiet'"
+        (click)="store.dispatch({ type: 'prev' })"
+      >
+        <bk-icon name="previous" [label]="b.previous" />
+      </button>
+      <button
+        type="button"
+        class="ctl play"
+        [disabled]="player().phase === 'quiet'"
+        (click)="store.dispatch({ type: 'toggle' })"
+      >
+        <bk-icon
+          [name]="player().playing ? 'pause' : 'play'"
+          [label]="player().playing ? b.pause : b.play"
+        />
+      </button>
+      <button
+        type="button"
+        class="ctl"
+        [disabled]="player().phase === 'quiet'"
+        (click)="store.dispatch({ type: 'next' })"
+      >
+        <bk-icon name="next" [label]="b.next" />
+      </button>
+      <span class="pos">{{ position() }}</span>
+      <button
+        bk-button
+        variant="quiet"
+        type="button"
+        [disabled]="player().phase === 'quiet'"
+        (click)="store.dispatch({ type: 'summary' })"
+      >
+        {{ b.summary }}
+      </button>
+    </div>
+    <div class="scrub">
+      <div class="ticks" aria-hidden="true">
+        @for (s of store.timeline().starts; track $index) {
+          <span [style.left.%]="startPct(s)"></span>
+        }
+      </div>
+      <input
+        type="range"
+        min="0"
+        [max]="store.timeline().totalMs"
+        step="100"
+        [value]="store.position()"
+        [attr.aria-label]="b.scrubber"
+        [attr.aria-valuetext]="position() || b['end-title']"
+        [disabled]="player().phase === 'quiet'"
+        (input)="seek($event)"
+      />
+    </div>
+    <div class="speed">
+      <span class="speed-label">{{ b.speed }}</span>
+      <bk-segmented
+        [label]="b.speed"
+        [options]="speeds"
+        [value]="'' + player().speed"
+        (valueChange)="setSpeed($event)"
+      />
+    </div>
+    <p class="kbd-note">{{ b.keyboard }}</p>
+  </div>
+
+  @if (day()?.encounters?.length) {
+    <section class="full" aria-labelledby="full-h">
+      <h2 id="full-h">{{ b['full-log'] }}</h2>
+      <ol>
+        @for (e of day()!.encounters; track e.id; let i = $index) {
+          <li [class.current]="player().phase === 'encounter' && player().index === i">
+            <button type="button" class="line" (click)="store.dispatch({ type: 'seek', index: i })">
+              <span class="time">{{ time(e.at) }}</span>
+              <span class="line-body">
+                <span class="line-reading">{{ e.reading }}</span>
+                <span class="line-event">{{ e.event }}</span>
+                <span class="line-deltas">
+                  @for (d of e.deltas; track $index) {
+                    <span>{{ delta(d) }} {{ d.label }}</span>
+                  }
+                </span>
+                <span class="line-source">{{ sourceText(e.source) }}</span>
+              </span>
+              <bk-evidence [tier]="tier(e.source.evidence)" />
+            </button>
+          </li>
+        }
+      </ol>
+    </section>
+  }
+</div>

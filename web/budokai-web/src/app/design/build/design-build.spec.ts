@@ -29,6 +29,11 @@ describe('design token pipeline', () => {
     expect(model.themes['dark']['hairline']).toMatch(/^#[0-9A-F]{6}$/);
   });
 
+  it('passes feature sections through unchanged', () => {
+    expect(model['world']).toEqual(design.world);
+    expect(model['battlelog']).toEqual(design.battlelog);
+  });
+
   it('fails loudly on an unknown brand colour', () => {
     const bad = { ...design, themes: { dark: { bg: 'brand:nope' } } };
     expect(() => resolveTokens(brand, bad)).toThrow(/nope/);

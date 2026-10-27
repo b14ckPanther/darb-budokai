@@ -1,6 +1,4 @@
-<bk-nav [label]="page.title" [items]="nav" />
-
-<main class="page">
+<div class="page">
   <bk-large-title [title]="page.title">
     <span barAction class="demo">{{ ui['demo-banner'] }}</span>
   </bk-large-title>
@@ -242,7 +240,7 @@
       }
     </div>
   </section>
-</main>
+</div>
 
 <bk-sheet [(open)]="sheetOpen" [title]="quests[0].title">
   <p class="t-body">{{ sample['sheet-body'] }}</p>

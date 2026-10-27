@@ -341,12 +341,6 @@ h3 {
   :host {
     --gutter: var(--space-10);
   }
-  .page {
-    margin-left: calc(
-      var(--rail-width) +
-        max(0px, (100vw - var(--rail-width) - var(--content-max) - 2 * var(--gutter)) / 2)
-    );
-  }
   .split {
     grid-template-columns: 1fr 1fr;
   }

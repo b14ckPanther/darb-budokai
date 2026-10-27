@@ -1,0 +1,153 @@
+<h1 class="visually-hidden">{{ copy.title }}</h1>
+<div class="stage" [style.--canvas-ratio]="canvasRatio">
+  @if (webgl) {
+    <bk-world-canvas
+      class="world"
+      [label]="label()"
+      [regions]="sceneRegions()"
+      [markers]="sceneMarkers()"
+      [selected]="map.selected()"
+      [focus]="focus()"
+      [drift]="!sheetOpen()"
+      (picked)="onPick($event)"
+    />
+  } @else {
+    <bk-flat-map
+      class="world"
+      [label]="label()"
+      [regions]="sceneRegions()"
+      [markers]="sceneMarkers()"
+      [selected]="map.selected()"
+    />
+    <p class="fallback-note">{{ copy.fallback }}</p>
+  }
+
+  <section class="hud" [attr.aria-label]="hero.character().name">
+    <div class="who">
+      <img src="brand/mark-gold.svg" alt="" width="40" height="40" />
+      <div>
+        <p class="name">{{ hero.character().name }}</p>
+        <p class="level">{{ levelText() }}, {{ hero.character().title }}</p>
+      </div>
+    </div>
+    <bk-meter
+      [label]="charCopy.xp"
+      [value]="hero.character().xp - hero.character().xpLevelStart"
+      [max]="hero.character().xpNext - hero.character().xpLevelStart"
+      [valueText]="xpText()"
+      tone="xp"
+    />
+    <bk-meter
+      [label]="charCopy.stamina"
+      [value]="hero.character().stamina"
+      [max]="hero.character().staminaMax"
+      [valueText]="staminaText()"
+      tone="stamina"
+    />
+    <div class="hud-foot">
+      <span class="today"><bk-icon name="quests" />{{ todayText() }}</span>
+      <a bk-button variant="primary" icon="play" routerLink="/log">{{ copy['battle-log'] }}</a>
+    </div>
+  </section>
+</div>
+
+<section class="places" aria-labelledby="places-title">
+  <h2 id="places-title">{{ copy.places }}</h2>
+  <ul class="regions">
+    @for (r of map.regions(); track r.id) {
+      <li>
+        <button
+          type="button"
+          class="place"
+          [attr.aria-label]="regionLabel(r.name)"
+          (click)="open(r.id)"
+        >
+          <span class="swatch" [style.background]="r.tint" aria-hidden="true"></span>
+          <span class="place-text">
+            <span class="place-name">{{ r.name }}</span>
+            <span class="place-meta">
+              @if (r.locked) {
+                <bk-icon name="locked" />{{ copy.locked }}
+              } @else {
+                {{ copy.light }} {{ pct(r.light) }}, {{ copy.fog }} {{ pct(r.fog) }}
+              }
+            </span>
+          </span>
+          <bk-icon name="forward" />
+        </button>
+      </li>
+    }
+  </ul>
+  <ul class="markers">
+    @for (m of map.markers(); track m.id) {
+      <li>
+        <button type="button" class="place" (click)="open(m.id)">
+          <bk-icon [name]="markerIcon(m.kind)" class="kind" />
+          <span class="place-text">
+            <span class="place-name">{{ m.label }}</span>
+            <span class="place-meta">{{ m.kindLabel }}, {{ m.regionName }}</span>
+          </span>
+          <bk-icon name="forward" />
+        </button>
+      </li>
+    }
+  </ul>
+</section>
+
+<bk-sheet [open]="sheetOpen()" (openChange)="onSheet($event)" [title]="sheetTitle()">
+  @if (map.selectedRegion(); as r) {
+    <p class="about">{{ r.about }}</p>
+    @if (r.locked) {
+      <p class="locked"><bk-icon name="locked" />{{ copy.locked }}</p>
+    } @else {
+      <div class="meters">
+        <bk-meter
+          [label]="copy.light"
+          [value]="r.light * 100"
+          [max]="100"
+          [valueText]="pct(r.light)"
+          tone="stamina"
+        />
+        <bk-meter
+          [label]="copy.fog"
+          [value]="r.fog * 100"
+          [max]="100"
+          [valueText]="pct(r.fog)"
+          tone="xp"
+        />
+      </div>
+    }
+    <h3>{{ copy.recent }}</h3>
+    @if (r.encounters.length) {
+      <ul class="lines">
+        @for (e of r.encounters; track e.id) {
+          <li>
+            <span class="reading">{{ e.reading }}</span>
+            <span class="event">{{ e.event }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="muted">{{ copy['nothing-here'] }}</p>
+    }
+    @if (r.habits.length) {
+      <h3>{{ copy['quests-here'] }}</h3>
+      <ul class="lines">
+        @for (h of r.habits; track h.id) {
+          <li class="habit">
+            <span class="reading">{{ h.title }}</span>
+            <bk-evidence [tier]="h.evidence" />
+          </li>
+        }
+      </ul>
+    }
+  }
+  @if (map.selectedMarker(); as m) {
+    <p class="about">
+      <bk-icon [name]="markerIcon(m.kind)" />{{ m.kindLabel }}, {{ m.regionName }}
+    </p>
+    <a bk-button variant="secondary" icon="quests" routerLink="/quests">{{
+      copy['quests-here']
+    }}</a>
+  }
+</bk-sheet>

@@ -1,0 +1,66 @@
+<div class="review">
+  <header class="bar">
+    <a bk-button variant="quiet" icon="back" routerLink="/spellbook">{{ s.back }}</a>
+    <span class="pos" aria-live="polite">{{ position() }}</span>
+  </header>
+  <h1 class="title">{{ title() }}</h1>
+
+  @if (card(); as c) {
+    <article
+      class="card"
+      [class.revealed]="session()?.revealed"
+      [class.unlearned]="c.state === 'unlearned'"
+    >
+      <p class="state">
+        <bk-icon [name]="c.state === 'mastered' ? 'ember' : 'lore'" />{{ s.states[c.state] }}
+      </p>
+      <p class="q">{{ c.q }}</p>
+      @if (session()?.revealed) {
+        <div class="answer">
+          <p class="a">{{ c.a }}</p>
+          <p class="tags">
+            @for (t of c.tags; track t) {
+              <span>{{ t }}</span>
+            }
+          </p>
+        </div>
+      }
+    </article>
+
+    @if (!session()?.revealed) {
+      <div class="actions">
+        <button bk-button variant="primary" icon="reveal" type="button" (click)="reveal()">
+          {{ s.reveal }}
+        </button>
+        <span class="hint"
+          ><kbd>{{ s['reveal-hint'] }}</kbd></span
+        >
+      </div>
+    } @else {
+      <ul class="grades" [attr.aria-label]="s['grade-hint']">
+        @for (g of store.preview(); track g.grade; let i = $index) {
+          <li>
+            <button
+              type="button"
+              class="grade"
+              [class]="'grade g-' + g.grade"
+              [attr.aria-label]="label(g.grade) + ', ' + nextLabel(g.interval)"
+              (click)="grade(g.grade)"
+            >
+              <span class="name">{{ label(g.grade) }}</span>
+              <span class="next">{{ next(g.interval) }}</span>
+              <kbd aria-hidden="true">{{ keyFor(i) }}</kbd>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  } @else {
+    <section class="done">
+      <bk-icon name="check" />
+      <h2>{{ s['session-done'] }}</h2>
+      <p>{{ summary() }}</p>
+      <a bk-button variant="primary" routerLink="/spellbook">{{ s.back }}</a>
+    </section>
+  }
+</div>
