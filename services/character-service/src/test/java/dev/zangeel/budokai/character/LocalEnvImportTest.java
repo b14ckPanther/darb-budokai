@@ -42,6 +42,6 @@ class LocalEnvImportTest {
         }
     }
 
-    @org.springframework.boot.SpringBootConfiguration
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     static class Empty {}
 }
