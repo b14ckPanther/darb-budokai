@@ -1,0 +1,20 @@
+{
+  "description": "Shared SM-2 cases. The client preview (Phase 3) and spellbook-service (Phase 8) must both pass them. The interval uses the easiness before the review; easiness is then updated and clamped.",
+  "params": {
+    "initialEasiness": 2.5,
+    "minEasiness": 1.3,
+    "firstIntervalDays": 1,
+    "secondIntervalDays": 6,
+    "passGrade": 3
+  },
+  "today": "2026-10-26",
+  "cases": [
+    { "name": "new card, good", "before": { "reps": 0, "interval": 0, "ef": 2.5 }, "quality": 4, "after": { "reps": 1, "interval": 1, "ef": 2.5, "due": "2026-10-27" } },
+    { "name": "second pass, easy", "before": { "reps": 1, "interval": 1, "ef": 2.5 }, "quality": 5, "after": { "reps": 2, "interval": 6, "ef": 2.6, "due": "2026-11-01" } },
+    { "name": "third pass, good", "before": { "reps": 2, "interval": 6, "ef": 2.6 }, "quality": 4, "after": { "reps": 3, "interval": 16, "ef": 2.6, "due": "2026-11-11" } },
+    { "name": "fourth pass, hard", "before": { "reps": 3, "interval": 16, "ef": 2.6 }, "quality": 3, "after": { "reps": 4, "interval": 42, "ef": 2.46, "due": "2026-12-07" } },
+    { "name": "fail resets", "before": { "reps": 4, "interval": 42, "ef": 2.5 }, "quality": 1, "after": { "reps": 0, "interval": 1, "ef": 1.96, "due": "2026-10-27" } },
+    { "name": "easiness never below the minimum", "before": { "reps": 2, "interval": 6, "ef": 1.4 }, "quality": 1, "after": { "reps": 0, "interval": 1, "ef": 1.3, "due": "2026-10-27" } },
+    { "name": "blackout", "before": { "reps": 5, "interval": 30, "ef": 2.5 }, "quality": 0, "after": { "reps": 0, "interval": 1, "ef": 1.7, "due": "2026-10-27" } }
+  ]
+}
