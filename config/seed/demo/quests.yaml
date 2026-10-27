@@ -1,0 +1,124 @@
+# Demo Quest Log. Habits are neutral examples (Phase 1 Q3); companies are invented.
+habits:
+  - id: h1
+    title: Stretch for ten minutes
+    region: springs
+    objective: checkin
+    target: 1
+    evidence: self_reported
+    streak: 8
+    status: active
+    progress: 1
+  - id: h2
+    title: Review twenty Spring Security cards
+    region: archive
+    objective: count
+    target: 20
+    unit: cards
+    evidence: verified
+    streak: 2
+    status: active
+    progress: 14
+  - id: h3
+    title: Walk outside before noon
+    region: springs
+    objective: checkin
+    target: 1
+    evidence: attested
+    streak: 4
+    status: active
+    progress: 0
+  - id: h4
+    title: Thirty good-posture minutes
+    region: springs
+    objective: duration
+    target: 30
+    unit: minutes
+    evidence: verified
+    streak: 11
+    status: active
+    progress: 30
+  - id: h5
+    title: One code kata
+    region: forge
+    objective: checkin
+    target: 1
+    evidence: attested
+    streak: 0
+    status: active
+    progress: 0
+  - id: h6
+    title: Read one chapter
+    region: archive
+    objective: checkin
+    target: 1
+    evidence: self_reported
+    streak: 0
+    status: paused
+    progress: 0
+main:
+  - id: mq1
+    company: Lumen Harbor
+    role: Junior Java Developer
+    stage: applied
+    appliedOn: '2026-10-24'
+    next: Waiting for a reply
+    history:
+      - { stage: applied, date: '2026-10-24' }
+  - id: mq2
+    company: Tessellate Works
+    role: Full-stack Developer (Angular, Spring)
+    stage: hr_call
+    appliedOn: '2026-10-17'
+    next: Tech interview being scheduled
+    history:
+      - { stage: applied, date: '2026-10-17' }
+      - { stage: hr_call, date: '2026-10-22' }
+  - id: mq3
+    company: Cobalt Reach
+    role: Backend Developer (Kafka)
+    stage: home_task
+    appliedOn: '2026-10-13'
+    next: Home task due 2026-10-29
+    history:
+      - { stage: applied, date: '2026-10-13' }
+      - { stage: hr_call, date: '2026-10-16' }
+      - { stage: tech_interview, date: '2026-10-24' }
+      - { stage: home_task, date: '2026-10-26' }
+  - id: mq4
+    company: Orchard Grid
+    role: Junior Software Engineer
+    stage: rejected
+    appliedOn: '2026-10-14'
+    next: Closed
+    history:
+      - { stage: applied, date: '2026-10-14' }
+      - { stage: hr_call, date: '2026-10-18' }
+      - { stage: rejected, date: '2026-10-23' }
+raids:
+  - { id: r1, quest: mq3, stage: tech_interview, status: cleared, date: '2026-10-24' }
+  - { id: r2, quest: mq2, stage: tech_interview, status: open, date: '2026-10-30' }
+bosses:
+  - id: b1
+    title: The cache refactor
+    review: PR 128, the cache layer rewrite
+    tier: major
+    maxHp: 86
+    hp: 0
+    status: defeated
+    findings:
+      - { id: f1, severity: critical, tag: concurrency, resolved: true }
+      - { id: f2, severity: major, tag: jpa, resolved: true }
+      - { id: f3, severity: major, tag: concurrency, resolved: true }
+      - { id: f4, severity: minor, tag: naming, resolved: true }
+      - { id: f5, severity: nit, tag: style, resolved: false }
+proposed:
+  - { id: p1, title: Three Recall sessions this week, objective: count, target: 3, day: '2026-10-27' }
+  - { id: p2, title: Finish the Cobalt Reach home task, objective: event, target: 1, day: '2026-10-29' }
+history:
+  - { date: '2026-10-20', completed: 5, failed: 0 }
+  - { date: '2026-10-21', completed: 5, failed: 0 }
+  - { date: '2026-10-22', completed: 4, failed: 1 }
+  - { date: '2026-10-23', completed: 4, failed: 1 }
+  - { date: '2026-10-24', completed: 3, failed: 2 }
+  - { date: '2026-10-25', completed: 4, failed: 1 }

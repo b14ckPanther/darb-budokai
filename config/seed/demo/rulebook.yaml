@@ -1,0 +1,61 @@
+# Demo rulebook as the Rulebook screen shows it, plus the two rule blocks the prototype computes
+# on the client (SM-2 preview and map light and fog). Phase 4 replaces this with config/rulebook/v1.
+version: 1.0.0
+sm2:
+  initialEasiness: 2.5
+  minEasiness: 1.3
+  firstIntervalDays: 1
+  secondIntervalDays: 6
+  passGrade: 3
+  grades: { again: 1, hard: 3, good: 4, easy: 5 }
+spells:
+  masteryIntervalDays: 21
+  fadeAfterDays: 7
+map:
+  lightWindowDays: 7
+  lightDecay: 0.7
+  lightFullAt: 7
+  fogPerMissedDay: 0.3
+  fogLiftPerActiveDay: 0.1
+  fogMax: 1
+tables:
+  - id: stamina
+    columns: [Event, Effect, Daily cap]
+    rows:
+      - [Good posture minute, Stamina +0.5, '40']
+      - [Bad posture minute beyond 20 in a row, Stamina -0.2, none]
+      - [Day without recovery, Stamina -15, none]
+      - [Missed daily quest, Stamina -6, none]
+  - id: evidence
+    columns: [Tier, Reward multiplier, Daily cap]
+    rows:
+      - [Verified, '1.0', none]
+      - [Attested, '0.6', 10 check-ins]
+      - [Self-reported, '0.25', 4 check-ins]
+      - [Simulated, '1.0, simulated user only', none]
+  - id: curves
+    columns: [Curve, Type, Parameters]
+    rows:
+      - [Level, power, 'base 120, exponent 1.45, max level 60']
+      - [Stat rank, power, 'base 40, exponent 1.30, max rank 30']
+  - id: bosses
+    columns: [Finding severity, Boss HP]
+    rows:
+      - [Critical, '40']
+      - [Major, '20']
+      - [Minor, '5']
+      - [Nit, '1']
+  - id: loot
+    columns: [Table, Common, Rare, Epic, Legendary]
+    rows:
+      - [Daily quest, 90%, 10%, 0%, 0%]
+      - [Boss, 55%, 35%, 10%, 0%]
+      - [Raid, 40%, 40%, 20%, 0%]
+      - [Final boss (offer), 0%, 0%, 0%, 100%]
+  - id: limits
+    columns: [Rule, Value]
+    rows:
+      - [Events older than this award nothing, 72 hours]
+      - [Recall reviews that count toward XP each day, '50']
+      - [Largest modifier any item may give, 10%]
+      - [Rewards for opening the app, none]

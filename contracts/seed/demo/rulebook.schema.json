@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/rulebook.schema.json",
+  "title": "Demo rulebook",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "sm2": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "initialEasiness": {
+          "type": "number"
+        },
+        "minEasiness": {
+          "type": "number"
+        },
+        "firstIntervalDays": {
+          "type": "integer"
+        },
+        "secondIntervalDays": {
+          "type": "integer"
+        },
+        "passGrade": {
+          "type": "integer"
+        },
+        "grades": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "again": {
+              "type": "integer"
+            },
+            "hard": {
+              "type": "integer"
+            },
+            "good": {
+              "type": "integer"
+            },
+            "easy": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "again",
+            "hard",
+            "good",
+            "easy"
+          ]
+        }
+      },
+      "required": [
+        "initialEasiness",
+        "minEasiness",
+        "firstIntervalDays",
+        "secondIntervalDays",
+        "passGrade",
+        "grades"
+      ]
+    },
+    "spells": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "masteryIntervalDays": {
+          "type": "integer"
+        },
+        "fadeAfterDays": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "masteryIntervalDays",
+        "fadeAfterDays"
+      ]
+    },
+    "map": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lightWindowDays": {
+          "type": "integer"
+        },
+        "lightDecay": {
+          "type": "number"
+        },
+        "lightFullAt": {
+          "type": "number"
+        },
+        "fogPerMissedDay": {
+          "type": "number"
+        },
+        "fogLiftPerActiveDay": {
+          "type": "number"
+        },
+        "fogMax": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "lightWindowDays",
+        "lightDecay",
+        "lightFullAt",
+        "fogPerMissedDay",
+        "fogLiftPerActiveDay",
+        "fogMax"
+      ]
+    },
+    "tables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "columns",
+          "rows"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "version",
+    "sm2",
+    "spells",
+    "map",
+    "tables"
+  ]
+}

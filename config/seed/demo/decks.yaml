@@ -1,0 +1,416 @@
+# Three demo decks (40 cards) with their SM-2 state on 2026-10-26. Spell state (unlearned, learned,
+# mastered, fading) is derived on the client from these values and the sm2 rules in rulebook.yaml.
+decks:
+- id: spring-security
+  name: Spring Security
+  school: Wards
+  cards:
+  - id: sp01
+    q: What does SecurityFilterChain replace in Spring Security 6?
+    a: WebSecurityConfigurerAdapter. You declare a SecurityFilterChain bean instead of extending the adapter.
+    tags:
+    - config
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: sp02
+    q: Which filter loads the SecurityContext for a request?
+    a: SecurityContextHolderFilter, which reads it from the SecurityContextRepository.
+    tags:
+    - filters
+    sm2:
+      reps: 5
+      interval: 34
+      ef: 2.6
+      due: '2026-11-07'
+  - id: sp03
+    q: Which password encoder should you start from?
+    a: DelegatingPasswordEncoder from PasswordEncoderFactories.createDelegatingPasswordEncoder(); it defaults to
+      bcrypt.
+    tags:
+    - passwords
+    sm2:
+      reps: 3
+      interval: 6
+      ef: 2.52
+      due: '2026-10-27'
+  - id: sp04
+    q: How do you let only admins call a method?
+    a: '@PreAuthorize("hasRole(''ADMIN'')") with @EnableMethodSecurity on a configuration class.'
+    tags:
+    - methods
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: sp05
+    q: What does oauth2ResourceServer().jwt() configure?
+    a: A bearer token filter that validates JWTs with a JwtDecoder, usually built from a JWKS URI.
+    tags:
+    - jwt
+    sm2:
+      reps: 3
+      interval: 9
+      ef: 2.22
+      due: '2026-10-18'
+  - id: sp06
+    q: Why is CSRF protection usually off for a stateless JWT API?
+    a: No session cookie carries the credentials, so a forged cross-site request has nothing to ride on.
+    tags:
+    - csrf
+    sm2:
+      reps: 5
+      interval: 22
+      ef: 2.6
+      due: '2026-11-05'
+  - id: sp07
+    q: What does hasRole('ADMIN') check against?
+    a: A GrantedAuthority named ROLE_ADMIN; hasAuthority checks the exact string.
+    tags:
+    - roles
+    sm2:
+      reps: 1
+      interval: 1
+      ef: 2.44
+      due: '2026-10-25'
+  - id: sp08
+    q: Where is the current user kept during a request?
+    a: In the SecurityContext held by SecurityContextHolder, thread-local by default.
+    tags:
+    - context
+    sm2:
+      reps: 3
+      interval: 9
+      ef: 2.22
+      due: '2026-10-16'
+  - id: sp09
+    q: What does @Transactional do with a checked exception by default?
+    a: It commits. Only unchecked exceptions and errors roll back unless rollbackFor says otherwise.
+    tags:
+    - transactions
+    sm2:
+      reps: 5
+      interval: 27
+      ef: 2.6
+      due: '2026-11-06'
+  - id: sp10
+    q: How do you map JWT scopes to authorities with your own prefix?
+    a: A JwtAuthenticationConverter with a JwtGrantedAuthoritiesConverter whose authority prefix is set.
+    tags:
+    - jwt
+    sm2:
+      reps: 2
+      interval: 3
+      ef: 2.48
+      due: '2026-10-26'
+  - id: sp11
+    q: In which order are authorizeHttpRequests matchers tried?
+    a: First match wins, so specific matchers go before general ones like anyRequest().
+    tags:
+    - config
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: sp12
+    q: What does SessionCreationPolicy.STATELESS change?
+    a: Spring Security never creates an HttpSession and never uses one to load the context.
+    tags:
+    - sessions
+    sm2:
+      reps: 5
+      interval: 34
+      ef: 2.6
+      due: '2026-11-07'
+  - id: sp13
+    q: Which header carries a bearer token?
+    a: 'Authorization: Bearer followed by the token.'
+    tags:
+    - jwt
+    sm2:
+      reps: 3
+      interval: 6
+      ef: 2.52
+      due: '2026-10-27'
+  - id: sp14
+    q: How do you make a filter run only once per request?
+    a: Extend OncePerRequestFilter.
+    tags:
+    - filters
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: sp15
+    q: Which annotation turns on @PreAuthorize in Spring Security 6?
+    a: '@EnableMethodSecurity.'
+    tags:
+    - methods
+    sm2:
+      reps: 3
+      interval: 9
+      ef: 2.22
+      due: '2026-10-18'
+- id: kafka
+  name: Kafka
+  school: Currents
+  cards:
+  - id: ka01
+    q: What does Kafka keep in order?
+    a: Records within one partition, so records with the same key stay in order.
+    tags:
+    - ordering
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: ka02
+    q: What does acks=all mean for a producer?
+    a: The leader waits for every in-sync replica to write the record before acknowledging.
+    tags:
+    - producer
+    sm2:
+      reps: 3
+      interval: 9
+      ef: 2.22
+      due: '2026-10-18'
+  - id: ka03
+    q: What makes a producer idempotent?
+    a: 'enable.idempotence=true: the broker drops duplicate retries using the producer id and sequence numbers.'
+    tags:
+    - producer
+    sm2:
+      reps: 5
+      interval: 22
+      ef: 2.6
+      due: '2026-11-05'
+  - id: ka04
+    q: What is a consumer group?
+    a: Consumers sharing a group id split a topic's partitions so each partition is read by one member.
+    tags:
+    - consumer
+    sm2:
+      reps: 1
+      interval: 1
+      ef: 2.44
+      due: '2026-10-25'
+  - id: ka05
+    q: What triggers a rebalance?
+    a: A member joining, leaving or missing heartbeats, or the topic's partitions changing.
+    tags:
+    - consumer
+    sm2:
+      reps: 3
+      interval: 9
+      ef: 2.22
+      due: '2026-10-16'
+  - id: ka06
+    q: Why commit offsets after processing, not before?
+    a: Committing first can lose a record if processing then fails; committing after gives at-least-once delivery.
+    tags:
+    - offsets
+    sm2:
+      reps: 5
+      interval: 27
+      ef: 2.6
+      due: '2026-11-06'
+  - id: ka07
+    q: What is KRaft?
+    a: Kafka's built-in Raft quorum for metadata, replacing ZooKeeper.
+    tags:
+    - ops
+    sm2:
+      reps: 2
+      interval: 3
+      ef: 2.48
+      due: '2026-10-26'
+  - id: ka08
+    q: What is a dead letter topic for?
+    a: Records that keep failing are parked there so the partition can move on.
+    tags:
+    - errors
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: ka09
+    q: What does the transactional outbox solve?
+    a: Saving to the database and publishing an event atomically, by publishing from an outbox table.
+    tags:
+    - outbox
+    sm2:
+      reps: 5
+      interval: 34
+      ef: 2.6
+      due: '2026-11-07'
+  - id: ka10
+    q: What is log compaction?
+    a: Kafka keeps at least the latest record per key and drops older records with the same key.
+    tags:
+    - topics
+    sm2:
+      reps: 3
+      interval: 6
+      ef: 2.52
+      due: '2026-10-27'
+  - id: ka11
+    q: What is consumer lag?
+    a: The distance between the newest offset and the group's committed offset.
+    tags:
+    - consumer
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: ka12
+    q: Why key records by user id?
+    a: All of one user's events go to one partition, so they are processed in order.
+    tags:
+    - ordering
+    sm2:
+      reps: 3
+      interval: 9
+      ef: 2.22
+      due: '2026-10-18'
+  - id: ka13
+    q: What does max.poll.interval.ms guard against?
+    a: 'A consumer stuck between polls: past the limit it is considered dead and its partitions move.'
+    tags:
+    - consumer
+    sm2:
+      reps: 5
+      interval: 22
+      ef: 2.6
+      due: '2026-11-05'
+  - id: ka14
+    q: What is an idempotent consumer?
+    a: One that records processed event ids so a redelivered event changes nothing.
+    tags:
+    - errors
+    sm2:
+      reps: 1
+      interval: 1
+      ef: 2.44
+      due: '2026-10-25'
+- id: angular-signals
+  name: Angular signals
+  school: Glyphs
+  cards:
+  - id: an01
+    q: What does computed() return?
+    a: A read-only signal derived from other signals, recomputed lazily when they change.
+    tags:
+    - signals
+    sm2:
+      reps: 1
+      interval: 1
+      ef: 2.44
+      due: '2026-10-25'
+  - id: an02
+    q: When should you use effect()?
+    a: For side effects that sync signals to the outside world, such as the DOM, storage or a canvas.
+    tags:
+    - signals
+    sm2:
+      reps: 3
+      interval: 9
+      ef: 2.22
+      due: '2026-10-16'
+  - id: an03
+    q: What does input.required() give a component?
+    a: A signal input that must be bound; reading it before binding throws.
+    tags:
+    - inputs
+    sm2:
+      reps: 5
+      interval: 27
+      ef: 2.6
+      due: '2026-11-06'
+  - id: an04
+    q: What does model() create?
+    a: A two-way bindable signal input with a matching change output.
+    tags:
+    - inputs
+    sm2:
+      reps: 2
+      interval: 3
+      ef: 2.48
+      due: '2026-10-26'
+  - id: an05
+    q: Why use OnPush change detection?
+    a: The component is checked only when an input, an event or a signal it reads changes.
+    tags:
+    - change-detection
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: an06
+    q: What replaces *ngIf in the new control flow?
+    a: The @if block, with @else and an optional as alias.
+    tags:
+    - templates
+    sm2:
+      reps: 5
+      interval: 34
+      ef: 2.6
+      due: '2026-11-07'
+  - id: an07
+    q: What must every @for block have?
+    a: A track expression, so Angular can keep the DOM nodes of unchanged items.
+    tags:
+    - templates
+    sm2:
+      reps: 3
+      interval: 6
+      ef: 2.52
+      due: '2026-10-27'
+  - id: an08
+    q: How do you read a signal in a template?
+    a: 'Call it like a function: count().'
+    tags:
+    - signals
+    sm2:
+      reps: 0
+      interval: 0
+      ef: 2.5
+      due: '2026-10-26'
+  - id: an09
+    q: What does viewChild() return?
+    a: A signal of the queried element or component.
+    tags:
+    - queries
+    sm2:
+      reps: 3
+      interval: 9
+      ef: 2.22
+      due: '2026-10-18'
+  - id: an10
+    q: What does toSignal() do?
+    a: Subscribes to an observable and exposes its latest value as a signal.
+    tags:
+    - rxjs
+    sm2:
+      reps: 5
+      interval: 22
+      ef: 2.6
+      due: '2026-11-05'
+  - id: an11
+    q: How do you run code outside Angular's zone?
+    a: Inject NgZone and call runOutsideAngular, for example around a Three.js render loop.
+    tags:
+    - zones
+    sm2:
+      reps: 1
+      interval: 1
+      ef: 2.44
+      due: '2026-10-25'

@@ -1,0 +1,15 @@
+# World map for the demo, in the map.yaml shape the rulebook will use (GAME_DESIGN section 10).
+# Positions are world units on the arena patch; the patch size comes from config/design/tokens.yaml.
+regions:
+  - { id: springs, stat: vigor, centre: [-10, 7], radius: 7.5, tint: map-tint-springs }
+  - { id: forge, stat: craft, centre: [9, 8], radius: 7.5, tint: map-tint-forge }
+  - { id: archive, stat: lore, centre: [-9, -8], radius: 7, tint: map-tint-archive }
+  - { id: citadel-road, stat: resolve, centre: [9, -8], radius: 8, tint: map-tint-citadel }
+  - { id: wilds, stat: null, centre: [0, 0], radius: 4.5, tint: map-tint-wilds, locked: true }
+markers:
+  - { id: m-q1, kind: main-quest, region: citadel-road, at: [4, -3.5], ref: mq1 }
+  - { id: m-q2, kind: main-quest, region: citadel-road, at: [7, -6], ref: mq2 }
+  - { id: m-q3, kind: main-quest, region: citadel-road, at: [11.5, -10.5], ref: mq3 }
+  - { id: m-raid, kind: raid, region: citadel-road, at: [13.5, -12.5], ref: r1 }
+  - { id: m-boss, kind: boss, region: forge, at: [10, 9], ref: b1 }
+  - { id: m-portal, kind: portal, region: wilds, at: [-1, 3.5], ref: kinton }

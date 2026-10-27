@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/replay/v1.schema.json",
+  "title": "Battle log replay script v1",
+  "description": "One compiled day: an ordered list of encounters the web client plays on the world map. Same timeline and rulebook version give a byte-identical script (GAME_DESIGN section 6).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "date", "rulebookVersion", "encounters", "summary"],
+  "properties": {
+    "version": { "const": 1 },
+    "date": { "type": "string", "format": "date" },
+    "rulebookVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "encounters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "at", "region", "kind", "event", "reading", "deltas", "durationMs", "source"],
+        "properties": {
+          "id": { "type": "string" },
+          "at": { "type": "string", "format": "date-time" },
+          "region": { "type": "string" },
+          "kind": { "enum": ["training", "study", "spell", "boss", "raid", "main-quest", "daily", "portal", "fog"] },
+          "event": { "type": "string", "description": "The real event, in plain words." },
+          "reading": { "type": "string", "description": "What the game made of it." },
+          "deltas": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "amount"],
+              "properties": {
+                "kind": { "enum": ["xp", "stat-xp", "stamina", "boss-hp", "fog", "progress"] },
+                "stat": { "enum": ["vigor", "craft", "lore", "resolve"] },
+                "amount": { "type": "number" },
+                "label": { "type": "string" }
+              }
+            }
+          },
+          "loot": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["itemId", "name", "rarity"],
+              "properties": {
+                "itemId": { "type": "string" },
+                "name": { "type": "string" },
+                "rarity": { "enum": ["common", "rare", "epic", "legendary"] }
+              }
+            }
+          },
+          "durationMs": { "type": "integer", "minimum": 1 },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["eventId", "ruleId", "evidence"],
+            "properties": {
+              "eventId": { "type": "string" },
+              "ruleId": { "type": "string" },
+              "evidence": { "enum": ["verified", "attested", "self_reported", "simulated"] }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["xp", "stamina", "spellsLearned", "fogChanges", "tomorrow"],
+      "properties": {
+        "xp": { "type": "number" },
+        "stamina": { "type": "number" },
+        "spellsLearned": { "type": "integer", "minimum": 0 },
+        "fogChanges": { "type": "array", "items": { "type": "object", "required": ["region", "delta"], "additionalProperties": false, "properties": { "region": { "type": "string" }, "delta": { "type": "number" } } } },
+        "tomorrow": { "type": "object", "required": ["dueCards", "quests"], "additionalProperties": false, "properties": { "dueCards": { "type": "integer", "minimum": 0 }, "quests": { "type": "integer", "minimum": 0 } } }
+      }
+    }
+  }
+}

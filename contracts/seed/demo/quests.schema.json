@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/quests.schema.json",
+  "title": "Demo quest log",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "habits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "region": {
+            "enum": [
+              "springs",
+              "forge",
+              "archive",
+              "citadel-road",
+              "wilds"
+            ]
+          },
+          "objective": {
+            "enum": [
+              "checkin",
+              "count",
+              "duration",
+              "event"
+            ]
+          },
+          "target": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "unit": {
+            "type": "string"
+          },
+          "evidence": {
+            "enum": [
+              "verified",
+              "attested",
+              "self_reported",
+              "simulated"
+            ]
+          },
+          "streak": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused",
+              "archived"
+            ]
+          },
+          "progress": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "region",
+          "objective",
+          "target",
+          "evidence",
+          "streak",
+          "status",
+          "progress"
+        ]
+      },
+      "minItems": 0
+    },
+    "main": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "stage": {
+            "enum": [
+              "saved",
+              "applied",
+              "hr_call",
+              "tech_interview",
+              "home_task",
+              "final_interview",
+              "offer",
+              "rejected",
+              "withdrawn"
+            ]
+          },
+          "appliedOn": {
+            "type": "string",
+            "format": "date"
+          },
+          "next": {
+            "type": "string"
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "stage": {
+                  "enum": [
+                    "saved",
+                    "applied",
+                    "hr_call",
+                    "tech_interview",
+                    "home_task",
+                    "final_interview",
+                    "offer",
+                    "rejected",
+                    "withdrawn"
+                  ]
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "required": [
+                "stage",
+                "date"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "company",
+          "role",
+          "stage",
+          "appliedOn",
+          "next",
+          "history"
+        ]
+      },
+      "minItems": 0
+    },
+    "raids": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "quest": {
+            "type": "string"
+          },
+          "stage": {
+            "enum": [
+              "saved",
+              "applied",
+              "hr_call",
+              "tech_interview",
+              "home_task",
+              "final_interview",
+              "offer",
+              "rejected",
+              "withdrawn"
+            ]
+          },
+          "status": {
+            "enum": [
+              "open",
+              "cleared"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "id",
+          "quest",
+          "stage",
+          "status",
+          "date"
+        ]
+      },
+      "minItems": 0
+    },
+    "bosses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "review": {
+            "type": "string"
+          },
+          "tier": {
+            "enum": [
+              "minor",
+              "major",
+              "critical"
+            ]
+          },
+          "maxHp": {
+            "type": "number"
+          },
+          "hp": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "engaged",
+              "defeated"
+            ]
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "severity": {
+                  "enum": [
+                    "critical",
+                    "major",
+                    "minor",
+                    "nit"
+                  ]
+                },
+                "tag": {
+                  "type": "string"
+                },
+                "resolved": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "id",
+                "severity",
+                "tag",
+                "resolved"
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "review",
+          "tier",
+          "maxHp",
+          "hp",
+          "status",
+          "findings"
+        ]
+      },
+      "minItems": 0
+    },
+    "proposed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "objective": {
+            "enum": [
+              "checkin",
+              "count",
+              "duration",
+              "event"
+            ]
+          },
+          "target": {
+            "type": "integer"
+          },
+          "day": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "objective",
+          "target",
+          "day"
+        ]
+      },
+      "minItems": 0
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "completed": {
+            "type": "integer"
+          },
+          "failed": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "date",
+          "completed",
+          "failed"
+        ]
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "habits",
+    "main",
+    "raids",
+    "bosses",
+    "proposed",
+    "history"
+  ]
+}

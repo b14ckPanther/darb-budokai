@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/showcase.schema.json",
+  "title": "Design page showcase",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "character": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer"
+        },
+        "xp": {
+          "type": "number"
+        },
+        "xpNext": {
+          "type": "number"
+        },
+        "stamina": {
+          "type": "number"
+        },
+        "staminaMax": {
+          "type": "number"
+        },
+        "status": {
+          "enum": [
+            "normal",
+            "exhausted"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "level",
+        "xp",
+        "xpNext",
+        "stamina",
+        "staminaMax",
+        "status"
+      ]
+    },
+    "stats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "enum": [
+              "vigor",
+              "craft",
+              "lore",
+              "resolve"
+            ]
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "progress": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "rank",
+          "progress"
+        ]
+      },
+      "minItems": 0
+    },
+    "quests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "evidence": {
+            "enum": [
+              "verified",
+              "attested",
+              "self_reported",
+              "simulated"
+            ]
+          },
+          "progress": {
+            "type": "integer"
+          },
+          "target": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "region",
+          "evidence",
+          "progress",
+          "target"
+        ]
+      },
+      "minItems": 0
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rarity": {
+            "enum": [
+              "common",
+              "rare",
+              "epic",
+              "legendary"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity"
+        ]
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "character",
+    "stats",
+    "quests",
+    "items"
+  ]
+}

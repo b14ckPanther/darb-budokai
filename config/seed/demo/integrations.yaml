@@ -1,0 +1,48 @@
+# Demo producers (Integrations screen). Core producers may award; every other Darb app is cosmetic only (ADR-034).
+producers:
+  - id: darb-scouter
+    name: Darb Scouter
+    kind: core
+    keyId: pk_scouter_7f2a
+    scopes: [job.applied, stage.changed, milestone.earned]
+    status: connected
+    lastEvent: '2026-10-26T16:20:00+02:00'
+    accepted7d: 9
+    rejected: []
+  - id: darb-juryoku
+    name: Darb Juryoku
+    kind: core
+    keyId: pk_juryoku_19c0
+    scopes: [posture.session.recorded]
+    status: connected
+    lastEvent: '2026-10-26T08:40:00+02:00'
+    accepted7d: 23
+    rejected:
+      - { at: '2026-10-25T23:10:00+02:00', type: posture.session.recorded, reason: Dated in the future by 3 hours }
+  - id: darb-sennin
+    name: Darb Sennin
+    kind: core
+    keyId: pk_sennin_b41e
+    scopes: [review.completed, review.finding.resolved]
+    status: connected
+    lastEvent: '2026-10-26T14:10:00+02:00'
+    accepted7d: 7
+    rejected: []
+  - id: darb-kinton
+    name: Darb Kinton
+    kind: cosmetic
+    keyId: pk_kinton_0d93
+    scopes: [kinton.portal.opened]
+    status: connected
+    lastEvent: '2026-10-26T18:05:00+02:00'
+    accepted7d: 4
+    rejected: []
+  - id: darb-kaio
+    name: Darb Kaio
+    kind: cosmetic
+    keyId: null
+    scopes: [plan.week.published]
+    status: off
+    lastEvent: null
+    accepted7d: 0
+    rejected: []

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/decks.schema.json",
+  "title": "Demo Recall decks",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "decks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "school": {
+            "type": "string"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "q": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 0
+                },
+                "sm2": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "reps": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "interval": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "ef": {
+                      "type": "number",
+                      "minimum": 1.3
+                    },
+                    "due": {
+                      "type": "string",
+                      "format": "date"
+                    }
+                  },
+                  "required": [
+                    "reps",
+                    "interval",
+                    "ef",
+                    "due"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "q",
+                "a",
+                "tags",
+                "sm2"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "school",
+          "cards"
+        ]
+      },
+      "minItems": 3
+    }
+  },
+  "required": [
+    "decks"
+  ]
+}

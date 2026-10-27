@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/replays.schema.json",
+  "title": "Demo battle logs",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "days": {
+      "type": "array",
+      "items": {
+        "$ref": "https://github.com/b14ckPanther/darb-budokai/contracts/replay/v1.schema.json"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "days"
+  ]
+}

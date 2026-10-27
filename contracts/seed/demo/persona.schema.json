@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/persona.schema.json",
+  "title": "Demo persona",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "today": {
+      "type": "string",
+      "format": "date"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "character": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer"
+        },
+        "xp": {
+          "type": "number"
+        },
+        "xpLevelStart": {
+          "type": "number"
+        },
+        "xpNext": {
+          "type": "number"
+        },
+        "stamina": {
+          "type": "number"
+        },
+        "staminaMax": {
+          "type": "number"
+        },
+        "status": {
+          "enum": [
+            "normal",
+            "exhausted"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "title",
+        "level",
+        "xp",
+        "xpLevelStart",
+        "xpNext",
+        "stamina",
+        "staminaMax",
+        "status"
+      ]
+    },
+    "stats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "enum": [
+              "vigor",
+              "craft",
+              "lore",
+              "resolve"
+            ]
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "xp": {
+            "type": "number"
+          },
+          "xpNext": {
+            "type": "number"
+          },
+          "week": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "number"
+                },
+                "replay": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "source",
+                "amount"
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "rank",
+          "xp",
+          "xpNext",
+          "week"
+        ]
+      },
+      "minItems": 4
+    },
+    "equipment": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "slot": {
+            "type": "string"
+          },
+          "itemId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "slot",
+          "itemId"
+        ]
+      },
+      "minItems": 0
+    },
+    "inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rarity": {
+            "enum": [
+              "common",
+              "rare",
+              "epic",
+              "legendary"
+            ]
+          },
+          "modifier": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "modifier",
+          "from",
+          "date"
+        ]
+      },
+      "minItems": 0
+    },
+    "titles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "earned": {
+            "type": "string",
+            "format": "date"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "earned",
+          "reason"
+        ]
+      },
+      "minItems": 0
+    },
+    "deeds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "earned": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "earned"
+        ]
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "today",
+    "timezone",
+    "character",
+    "stats",
+    "equipment",
+    "inventory",
+    "titles",
+    "deeds"
+  ]
+}

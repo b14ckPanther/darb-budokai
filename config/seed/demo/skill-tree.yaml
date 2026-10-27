@@ -1,0 +1,15 @@
+# Demo skill tree: structure and state. Names, requirements and effects are copy
+# (config/copy/en/skills.yaml); positions are constellation coordinates for the 3D view.
+nodes:
+  - { id: steady-breath, stat: vigor, at: [-6, 3, 0], requires: [], state: unlocked, progress: [30, 30] }
+  - { id: iron-posture, stat: vigor, at: [-8.5, 5.5, -1], requires: [steady-breath], state: available, progress: [7, 7] }
+  - { id: second-wind, stat: vigor, at: [-10, 2, 1], requires: [iron-posture], state: locked, progress: [0, 14] }
+  - { id: first-strike, stat: craft, at: [6, 3, 0], requires: [], state: unlocked, progress: [1, 1] }
+  - { id: clean-cut, stat: craft, at: [8.5, 5.5, 1], requires: [first-strike], state: unlocked, progress: [20, 20] }
+  - { id: forge-master, stat: craft, at: [10, 1.5, -1], requires: [clean-cut], state: available, progress: [3, 3] }
+  - { id: first-glyph, stat: lore, at: [-6, -3, 0], requires: [], state: unlocked, progress: [1, 1] }
+  - { id: twenty-wards, stat: lore, at: [-8.5, -5.5, 1], requires: [first-glyph], state: unlocked, progress: [20, 20] }
+  - { id: deep-archive, stat: lore, at: [-10.5, -2, -1], requires: [twenty-wards], state: locked, progress: [4, 10] }
+  - { id: first-step, stat: resolve, at: [6, -3, 0], requires: [], state: unlocked, progress: [1, 1] }
+  - { id: gate-walker, stat: resolve, at: [8.5, -5.5, -1], requires: [first-step], state: unlocked, progress: [1, 1] }
+  - { id: open-the-wilds, stat: resolve, at: [0, -7.5, 1.5], requires: [gate-walker, twenty-wards], state: locked, progress: [0, 1] }

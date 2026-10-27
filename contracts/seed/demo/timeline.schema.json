@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/timeline.schema.json",
+  "title": "Demo activity timeline",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "activity": {
+            "type": "object",
+            "propertyNames": {
+              "enum": [
+                "springs",
+                "forge",
+                "archive",
+                "citadel-road",
+                "wilds"
+              ]
+            },
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "missed": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "springs",
+                "forge",
+                "archive",
+                "citadel-road",
+                "wilds"
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "date",
+          "activity",
+          "missed"
+        ]
+      },
+      "minItems": 14
+    }
+  },
+  "required": [
+    "days"
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/map.schema.json",
+  "title": "Demo world map",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "enum": [
+              "springs",
+              "forge",
+              "archive",
+              "citadel-road",
+              "wilds"
+            ]
+          },
+          "stat": {
+            "anyOf": [
+              {
+                "enum": [
+                  "vigor",
+                  "craft",
+                  "lore",
+                  "resolve"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "centre": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "radius": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "tint": {
+            "type": "string",
+            "pattern": "^map-tint-"
+          },
+          "locked": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "stat",
+          "centre",
+          "radius",
+          "tint"
+        ]
+      },
+      "minItems": 5
+    },
+    "markers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "main-quest",
+              "raid",
+              "boss",
+              "portal"
+            ]
+          },
+          "region": {
+            "enum": [
+              "springs",
+              "forge",
+              "archive",
+              "citadel-road",
+              "wilds"
+            ]
+          },
+          "at": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "ref": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "region",
+          "at",
+          "ref"
+        ]
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "regions",
+    "markers"
+  ]
+}

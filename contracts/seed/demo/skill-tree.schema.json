@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/b14ckPanther/darb-budokai/contracts/seed/demo/skill-tree.schema.json",
+  "title": "Demo skill tree",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "stat": {
+            "enum": [
+              "vigor",
+              "craft",
+              "lore",
+              "resolve"
+            ]
+          },
+          "at": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0
+          },
+          "state": {
+            "enum": [
+              "locked",
+              "available",
+              "unlocked"
+            ]
+          },
+          "progress": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "required": [
+          "id",
+          "stat",
+          "at",
+          "requires",
+          "state",
+          "progress"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "nodes"
+  ]
+}

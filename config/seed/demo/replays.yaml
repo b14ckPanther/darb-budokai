@@ -1,0 +1,109 @@
+# Demo battle logs, each a replay script in the contracts/replay/v1 shape. The first is "today";
+# the second is an honest quiet day with nothing to show.
+days:
+  - version: 1
+    date: '2026-10-26'
+    rulebookVersion: 1.0.0
+    encounters:
+      - id: e1
+        at: '2026-10-26T08:40:00+02:00'
+        region: springs
+        kind: training
+        event: Posture session, 52 minutes at the desk, 41 of them good
+        reading: Training at the Springs
+        deltas:
+          - { kind: stamina, amount: 18, label: Stamina }
+          - { kind: stat-xp, stat: vigor, amount: 5, label: Vigor XP }
+        durationMs: 6000
+        source: { eventId: evt-0192f1d2-posture, ruleId: posture-stamina, evidence: verified }
+      - id: e2
+        at: '2026-10-26T09:05:00+02:00'
+        region: springs
+        kind: daily
+        event: Checked in on Stretch for ten minutes
+        reading: Daily quest kept, eighth day in a row
+        deltas:
+          - { kind: xp, amount: 3, label: XP at a quarter for a self-report }
+          - { kind: progress, amount: 1, label: Quest step }
+        durationMs: 5000
+        source: { eventId: evt-0192f1d3-habit, ruleId: habit-checkin, evidence: self_reported }
+      - id: e3
+        at: '2026-10-26T11:30:00+02:00'
+        region: archive
+        kind: study
+        event: Recall session, 14 Spring Security cards, 12 correct
+        reading: Study at the Archive
+        deltas:
+          - { kind: stat-xp, stat: lore, amount: 12, label: Lore XP }
+          - { kind: xp, amount: 12, label: XP }
+        durationMs: 6500
+        source: { eventId: evt-0192f1d4-study, ruleId: recall-correct, evidence: verified }
+      - id: e4
+        at: '2026-10-26T11:42:00+02:00'
+        region: archive
+        kind: spell
+        event: The @Transactional card passed at a 22-day interval
+        reading: 'Spell mastered: the rollback ward'
+        deltas:
+          - { kind: stat-xp, stat: lore, amount: 20, label: Lore XP }
+        durationMs: 6500
+        source: { eventId: evt-0192f1d5-card, ruleId: spell-mastered, evidence: verified }
+      - id: e5
+        at: '2026-10-26T14:10:00+02:00'
+        region: forge
+        kind: boss
+        event: Review of PR 128, the last critical and major findings resolved
+        reading: 'Boss defeated: the cache refactor'
+        deltas:
+          - { kind: boss-hp, amount: -18, label: Boss HP }
+          - { kind: stat-xp, stat: craft, amount: 40, label: Craft XP }
+        loot:
+          - { itemId: i4, name: Forge-tempered sigil, rarity: rare }
+        durationMs: 9000
+        source: { eventId: evt-0192f1d6-review, ruleId: boss-defeated, evidence: verified }
+      - id: e6
+        at: '2026-10-26T16:20:00+02:00'
+        region: citadel-road
+        kind: main-quest
+        event: Cobalt Reach sent the home task
+        reading: A trial opens on the Citadel Road
+        deltas:
+          - { kind: stat-xp, stat: resolve, amount: 15, label: Resolve XP }
+        durationMs: 7000
+        source: { eventId: evt-0192f1d7-stage, ruleId: stage-home-task, evidence: verified }
+      - id: e7
+        at: '2026-10-26T18:05:00+02:00'
+        region: wilds
+        kind: portal
+        event: A Darb Kinton transfer opened between laptop and phone
+        reading: A portal flickers in the Wilds
+        deltas: []
+        durationMs: 4500
+        source: { eventId: evt-0192f1d8-portal, ruleId: kinton-portal-cosmetic, evidence: verified }
+      - id: e8
+        at: '2026-10-26T23:30:00+02:00'
+        region: archive
+        kind: fog
+        event: Study returned to the Archive after two missed days
+        reading: The dust thins over the Archive
+        deltas:
+          - { kind: fog, amount: -0.1, label: Fog }
+        durationMs: 5000
+        source: { eventId: evt-0192f1d4-study, ruleId: region-fog-lift, evidence: verified }
+    summary:
+      xp: 107
+      stamina: 18
+      spellsLearned: 1
+      fogChanges:
+        - { region: archive, delta: -0.1 }
+      tomorrow: { dueCards: 9, quests: 5 }
+  - version: 1
+    date: '2026-10-12'
+    rulebookVersion: 1.0.0
+    encounters: []
+    summary:
+      xp: 0
+      stamina: 0
+      spellsLearned: 0
+      fogChanges: []
+      tomorrow: { dueCards: 0, quests: 4 }

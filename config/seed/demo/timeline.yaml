@@ -1,0 +1,17 @@
+# Fourteen days of demo activity per region (count of real events) and habits missed per region.
+# The map's light and fog are derived from this with the map rules in rulebook.yaml.
+days:
+  - { date: '2026-10-13', activity: { springs: 3, forge: 1, archive: 2, citadel-road: 2 }, missed: [] }
+  - { date: '2026-10-14', activity: { springs: 2, forge: 2, archive: 3, citadel-road: 1 }, missed: [] }
+  - { date: '2026-10-15', activity: { springs: 0, forge: 1, archive: 1, citadel-road: 0 }, missed: [springs] }
+  - { date: '2026-10-16', activity: { springs: 2, forge: 0, archive: 4, citadel-road: 1 }, missed: [] }
+  - { date: '2026-10-17', activity: { springs: 3, forge: 2, archive: 2, citadel-road: 2 }, missed: [] }
+  - { date: '2026-10-18', activity: { springs: 1, forge: 0, archive: 0, citadel-road: 0 }, missed: [archive] }
+  - { date: '2026-10-19', activity: { springs: 3, forge: 1, archive: 3, citadel-road: 1 }, missed: [] }
+  - { date: '2026-10-20', activity: { springs: 4, forge: 2, archive: 2, citadel-road: 1 }, missed: [] }
+  - { date: '2026-10-21', activity: { springs: 3, forge: 1, archive: 5, citadel-road: 2 }, missed: [] }
+  - { date: '2026-10-22', activity: { springs: 2, forge: 3, archive: 3, citadel-road: 0 }, missed: [] }
+  - { date: '2026-10-23', activity: { springs: 3, forge: 1, archive: 1, citadel-road: 1 }, missed: [] }
+  - { date: '2026-10-24', activity: { springs: 2, forge: 0, archive: 0, citadel-road: 3 }, missed: [archive] }
+  - { date: '2026-10-25', activity: { springs: 3, forge: 2, archive: 0, citadel-road: 1 }, missed: [archive] }
+  - { date: '2026-10-26', activity: { springs: 4, forge: 3, archive: 2, citadel-road: 2 }, missed: [] }

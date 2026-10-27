@@ -1,0 +1,88 @@
+# Demo persona. Never real; every screen that shows it carries the "Demo data" banner.
+today: '2026-10-26'
+timezone: Asia/Jerusalem
+character:
+  name: Wanderer
+  title: Gate Walker
+  level: 7
+  xp: 2412
+  xpLevelStart: 2180
+  xpNext: 2840
+  stamina: 58
+  staminaMax: 114
+  status: normal
+stats:
+  - id: vigor
+    rank: 6
+    xp: 312
+    xpNext: 420
+    week:
+      - { source: Posture sessions at the desk, amount: 46, replay: '2026-10-26#e1' }
+      - { source: Morning stretch habit, amount: 12, replay: '2026-10-26#e2' }
+      - { source: Walk outside habit, amount: 6 }
+  - id: craft
+    rank: 9
+    xp: 688
+    xpNext: 760
+    week:
+      - { source: 'Boss defeated: cache refactor review', amount: 90, replay: '2026-10-26#e5' }
+      - { source: Review findings resolved, amount: 38 }
+      - { source: Code kata habit, amount: 9 }
+  - id: lore
+    rank: 4
+    xp: 140
+    xpNext: 330
+    week:
+      - { source: 'Correct recalls: Spring Security', amount: 54, replay: '2026-10-26#e3' }
+      - { source: 'Correct recalls: Kafka', amount: 31 }
+      - { source: Spell mastered, amount: 20, replay: '2026-10-26#e4' }
+  - id: resolve
+    rank: 7
+    xp: 455
+    xpNext: 600
+    week:
+      - { source: 'Raid cleared: Cobalt Reach tech interview', amount: 60 }
+      - { source: 'Trial opened: Cobalt Reach home task', amount: 15, replay: '2026-10-26#e6' }
+      - { source: Applications sent, amount: 24 }
+equipment:
+  - { slot: banner, itemId: i3 }
+  - { slot: trinket, itemId: i2 }
+  - { slot: charm, itemId: null }
+inventory:
+  - id: i1
+    name: Ember-cut whetstone
+    rarity: common
+    modifier: Stamina recovery +2%
+    from: Stretch for ten minutes
+    date: '2026-10-19'
+  - id: i2
+    name: Archive lantern
+    rarity: rare
+    modifier: Lore XP from recalls +4%
+    from: 'Spell mastered: @Transactional'
+    date: '2026-10-22'
+  - id: i3
+    name: Gate warden's banner
+    rarity: epic
+    modifier: Resolve XP from raids +6%
+    from: 'Raid cleared: Cobalt Reach'
+    date: '2026-10-24'
+  - id: i4
+    name: Forge-tempered sigil
+    rarity: rare
+    modifier: Boss damage +5%
+    from: 'Boss defeated: cache refactor'
+    date: '2026-10-26'
+  - id: i5
+    name: Spring water flask
+    rarity: common
+    modifier: None, a keepsake
+    from: Walk outside before noon
+    date: '2026-10-20'
+titles:
+  - { id: t1, name: Gate Walker, earned: '2026-10-24', reason: First tech interview cleared }
+  - { id: t2, name: Keeper of Twenty, earned: '2026-10-21', reason: Twenty spells learned }
+deeds:
+  - { id: d1, name: First application sent, earned: '2026-10-13' }
+  - { id: d2, name: 'Seven-day streak: stretch', earned: '2026-10-25' }
+  - { id: d3, name: First boss defeated, earned: '2026-10-26' }
