@@ -25,9 +25,9 @@ Darb Budokai publicly proves the **Java 21 + Spring Boot 3 + Angular** stack and
 | Services | Spring Boot 3.5.x, Spring Data JPA, Spring Security + JWT, Spring for GraphQL, Spring Kafka, Spring AMQP, STOMP over WebSockets |
 | Data | PostgreSQL 17 (one database per service), Flyway migrations |
 | Messaging | Apache Kafka 4.x (KRaft, no ZooKeeper) for event streams, RabbitMQ 4.x for work queues |
-| Contracts | JSON Schema 2020-12 inside a CloudEvents 1.0 envelope (proposed, confirm with Nour in Phase 1) |
+| Contracts | JSON Schema 2020-12 inside a CloudEvents 1.0 envelope (confirmed in Phase 1) |
 | Frontend | Angular 19 (standalone, signals), NgRx SignalStore, RxJS, Three.js |
-| Tests | JUnit 5, AssertJ, Testcontainers, ArchUnit, Jest (proposed), Playwright + axe-core |
+| Tests | JUnit 5, AssertJ, Testcontainers, ArchUnit, Jest, Playwright + axe-core |
 | Local infra | Docker Compose |
 | Observability | Micrometer, Actuator, OpenTelemetry (OTLP) hooks for Darb Genki |
 
@@ -103,10 +103,11 @@ e2e job on PRs.
 
 ## Status
 
-Phase 0 (bootstrap) is done locally: Maven multi-module skeleton, one placeholder service, shared
+Phase 0 (bootstrap) is done: Maven multi-module skeleton, one placeholder service, shared
 ArchUnit rules and Testcontainers bases, Compose infra, an Angular 19 shell in the approved brand,
-CI and the attribution guards. The GitHub repo is not created yet. Progress lives in
-`docs/PROGRESS.md`.
+CI and the attribution guards. Phase 1 (spec) is done: every open question is answered in
+`docs/specs/2026-10-27-phase-01-budokai-spec.md` (single owner, no money features, no social
+features, optional sibling integrations). Progress lives in `docs/PROGRESS.md`.
 
 ## License and assets
 
