@@ -116,7 +116,7 @@ material:
   scrim-alpha: 0.55
 
 motion:
-  duration: { fast: 120, base: 220, slow: 480, counter: 600 }
+  duration: { fast: 120, base: 220, slow: 480, counter: 600, toast: 4200 }
   ease:
     out: [0.2, 0.7, 0.1, 1]
     in-out: [0.65, 0, 0.35, 1]
@@ -133,7 +133,11 @@ gesture:
   sheet-detents: { medium: 0.52, large: 0.92 }
   sheet-dismiss-fraction: 0.28
   sheet-dismiss-velocity: 0.9
+  # Share of the distance between detents a drag must cover to change detent.
+  sheet-step-fraction: 0.35
   swipe-reveal: 88
+  # Share of the reveal width past which a released row stays open.
+  swipe-open-fraction: 0.5
   swipe-commit-fraction: 0.55
   title-collapse-offset: 44
 

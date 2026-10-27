@@ -2,8 +2,9 @@
 // classes or the matching mixin.
 @use 'sass:list';
 
-$roles: display, large-title, title-1, title-2, title-3, headline, body, callout, subhead, footnote, caption,
-  numeral;
+$roles:
+  display, large-title, title-1, title-2, title-3, headline, body, callout, subhead, footnote,
+  caption, numeral;
 
 @mixin role($name) {
   font-family: var(--type-#{$name}-family);

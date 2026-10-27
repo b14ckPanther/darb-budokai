@@ -1,0 +1,72 @@
+:host {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.actions {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+}
+
+.act {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: var(--touch-target);
+  border: 0;
+  font-size: var(--type-caption-size);
+  font-weight: 600;
+  cursor: pointer;
+  --icon-size: 1.375rem;
+
+  &.tone-accent {
+    background: var(--color-accent);
+    color: var(--color-text-on-accent);
+  }
+  &.tone-neutral {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+  }
+  &.tone-danger {
+    background: var(--color-danger);
+    color: var(--color-text-on-accent);
+  }
+}
+
+.content {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  min-height: 3.75rem;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform var(--spring-snappy-dur) var(--spring-snappy);
+
+  &.dragging {
+    transition: none;
+  }
+}
+
+.title {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+  color: var(--color-text);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--type-footnote-size);
+  color: var(--color-text-secondary);
+}

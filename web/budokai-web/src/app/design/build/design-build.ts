@@ -185,6 +185,11 @@ export function buildTokensCss(m: TokenModel): string {
   return out.join('\n');
 }
 
+/** Sass variables for what CSS custom properties cannot do (media queries). */
+export function buildTokensScss(m: TokenModel): string {
+  return [`// ${HEADER}`, `$desktop-from: ${m.layout['desktop-from']}px;`, ''].join('\n');
+}
+
 export function buildTokensTs(m: TokenModel): string {
   return [
     `/* ${HEADER} */`,

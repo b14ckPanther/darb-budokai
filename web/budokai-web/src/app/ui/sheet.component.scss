@@ -1,0 +1,118 @@
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-scrim);
+  background: color-mix(in srgb, var(--color-scrim) calc(var(--scrim-alpha) * 100%), transparent);
+  animation: fade var(--dur-base) var(--ease-out);
+}
+
+.panel {
+  position: fixed;
+  z-index: var(--layer-sheet);
+  inset: auto 0 0 0;
+  margin-inline: auto;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: color-mix(
+    in srgb,
+    var(--color-surface-raised) calc(var(--sheet-alpha) * 100%),
+    transparent
+  );
+  backdrop-filter: blur(var(--bar-blur));
+  -webkit-backdrop-filter: blur(var(--bar-blur));
+  border: 1px solid var(--color-hairline-strong);
+  border-bottom: 0;
+  box-shadow: var(--elevation-3);
+  padding-bottom: env(safe-area-inset-bottom);
+  outline: none;
+  animation: rise var(--spring-snappy-dur) var(--spring-snappy);
+  transition:
+    height var(--spring-snappy-dur) var(--spring-snappy),
+    transform var(--spring-snappy-dur) var(--spring-snappy);
+
+  &.dragging {
+    transition: none;
+  }
+}
+
+.grab {
+  touch-action: none;
+  cursor: grab;
+  padding: 0 var(--space-5);
+}
+
+.handle {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 1.75rem;
+  border: 0;
+  background: transparent;
+  cursor: inherit;
+
+  span {
+    width: 2.5rem;
+    height: 0.3125rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-hairline-strong);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-hairline);
+
+  h2 {
+    font-family: var(--type-title-2-family);
+    font-size: var(--type-title-2-size);
+    line-height: var(--type-title-2-line);
+    color: var(--color-text-heading);
+  }
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  margin-right: calc(var(--space-2) * -1);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  --icon-size: 1.75rem;
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-4) var(--space-5) var(--space-6);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .panel {
+    background: var(--color-surface-raised);
+    backdrop-filter: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

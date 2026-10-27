@@ -8,6 +8,7 @@ import {
   buildSeedTs,
   buildIconsTs,
   buildTokensCss,
+  buildTokensScss,
   buildTokensTs,
   resolveTokens,
 } from '../src/app/design/build/design-build';
@@ -22,6 +23,7 @@ const model = resolveTokens(
 );
 writeFileSync(join(web, 'src/styles/tokens.generated.css'), buildTokensCss(model));
 writeFileSync(join(web, 'src/app/design/tokens.generated.ts'), buildTokensTs(model));
+writeFileSync(join(web, 'src/styles/_tokens.generated.scss'), buildTokensScss(model));
 
 const icons = parse(read('config/design/icons.yaml'));
 const solar = JSON.parse(

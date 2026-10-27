@@ -6,6 +6,7 @@ import {
   buildIconsTs,
   buildSeedTs,
   buildTokensCss,
+  buildTokensScss,
   buildTokensTs,
   resolveTokens,
 } from './design-build';
@@ -46,6 +47,12 @@ describe('design token pipeline', () => {
   it('committed generated CSS matches the config (run npm run design)', () => {
     const committed = readFileSync(join(web, 'src/styles/tokens.generated.css'), 'utf8');
     expect(committed).toBe(buildTokensCss(model));
+  });
+
+  it('committed Sass breakpoints match the config (run npm run design)', () => {
+    const committed = readFileSync(join(web, 'src/styles/_tokens.generated.scss'), 'utf8');
+    expect(committed).toBe(buildTokensScss(model));
+    expect(committed).toContain(`$desktop-from: ${design.layout['desktop-from']}px;`);
   });
 
   it('committed generated TS tokens match the config (run npm run design)', () => {

@@ -18,19 +18,24 @@ module.exports = tseslint.config(
         'error',
         {
           type: 'attribute',
-          prefix: 'app',
+          prefix: ['app', 'bk'],
           style: 'camelCase',
         },
       ],
       '@angular-eslint/component-selector': [
         'error',
         {
-          type: 'element',
-          prefix: 'app',
+          type: ['element', 'attribute'],
+          prefix: ['app', 'bk'],
           style: 'kebab-case',
         },
       ],
     },
+  },
+  {
+    // Test host components are named for what they host, not suffixed.
+    files: ['**/*.spec.ts'],
+    rules: { '@angular-eslint/component-class-suffix': 'off' },
   },
   {
     files: ['**/*.html'],

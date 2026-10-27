@@ -319,7 +319,8 @@ export const TOKENS = {
       "fast": 120,
       "base": 220,
       "slow": 480,
-      "counter": 600
+      "counter": 600,
+      "toast": 4200
     },
     "ease": {
       "out": [
@@ -491,7 +492,9 @@ export const TOKENS = {
     },
     "sheet-dismiss-fraction": 0.28,
     "sheet-dismiss-velocity": 0.9,
+    "sheet-step-fraction": 0.35,
     "swipe-reveal": 88,
+    "swipe-open-fraction": 0.5,
     "swipe-commit-fraction": 0.55,
     "title-collapse-offset": 44
   },
