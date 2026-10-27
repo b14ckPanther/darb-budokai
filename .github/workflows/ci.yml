@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'phase/**']
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # Never cancel runs on main, so every main commit gets a finished run.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  guard:
+    name: Guard (authors, attribution, emoji, env)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          # Check the PR's own commits, not GitHub's synthetic merge commit.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Guard script tests
+        run: tools/dev/test/guards.test.sh
+      - name: Env and key generator tests
+        run: tools/dev/test/env.test.sh
+      - name: Only Nour, no attribution, no emoji in commit messages
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          if [[ -z "$BASE" || "$BASE" =~ ^0+$ ]] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            tools/dev/check-commits.sh "$HEAD_SHA"
+          else
+            tools/dev/check-commits.sh "$BASE..$HEAD_SHA"
+          fi
+      - name: No attribution or emoji in the PR title and body
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: tools/dev/check-pr-text.sh
+      - name: No emoji in tracked files
+        run: tools/dev/check-no-emoji.sh
+
+  java:
+    name: Java (unit, Testcontainers, ArchUnit, Spotless)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Verify
+        run: ./mvnw -B -ntp verify
+
+  web:
+    name: Web (lint, unit, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web/budokai-web
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: web/budokai-web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/budokai-web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test -- --ci
+      - run: npm run build
+
+  e2e:
+    name: E2E (Playwright + axe)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web/budokai-web
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: web/budokai-web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/budokai-web/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: web/budokai-web/playwright-report
+          retention-days: 7

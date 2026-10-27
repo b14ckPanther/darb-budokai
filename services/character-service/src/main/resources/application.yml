@@ -1,0 +1,35 @@
+# character-service. Connection settings come from the environment (.env, see .env.example).
+# Locally the repo-root .env is imported (missing is fine, e.g. in containers or CI).
+# Override the path with BUDOKAI_ENV_FILE.
+budokai:
+  env-file: ${BUDOKAI_ENV_FILE:../../.env}
+
+spring:
+  application:
+    name: character-service
+  config:
+    import: optional:file:${budokai.env-file}[.properties]
+  datasource:
+    url: ${CHARACTER_DB_URL:jdbc:postgresql://localhost:54320/character_db}
+    username: ${CHARACTER_DB_USER:character_svc}
+    password: ${CHARACTER_DB_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+server:
+  port: ${CHARACTER_SERVICE_PORT:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true

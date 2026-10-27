@@ -31,15 +31,23 @@ Darb Budokai publicly proves the **Java 21 + Spring Boot 3 + Angular** stack and
 | Local infra | Docker Compose |
 | Observability | Micrometer, Actuator, OpenTelemetry (OTLP) hooks for Darb Genki |
 
-Exact patch versions are pinned in Phase 0 and recorded in `docs/DECISIONS.md`.
+Exact versions are pinned in `docs/DECISIONS.md` (ADR-019).
 
-## Folder map (this planning package)
+## Folder map
 
 ```
 Darb Budokai/
 ├── README.md               you are here
 ├── CLAUDE.md               agent operating manual (rules, workflow, commands, push checklist)
 ├── AGENTS.md               short pointer for non-Claude agent tools
+├── pom.xml, mvnw           Maven parent (Spring Boot 3.5) and wrapper
+├── libs/budokai-test-support   shared ArchUnit rules, Testcontainers base classes
+├── services/character-service  first service (skeleton; domain arrives in Phase 4)
+├── web/budokai-web         Angular 19 client (shell; screens arrive in Phases 2 and 3)
+├── deploy/compose          local infra: Postgres, Kafka (KRaft), RabbitMQ, Kafka UI
+├── tools/dev               gen-keys, no-emoji and commit checks, and their tests
+├── brand/                  approved brand: seal, tokens, fonts, exports
+├── .githooks/commit-msg    rejects attribution text in commit messages
 └── docs/
     ├── VISION.md           intent, goals, non-goals, anti-goals
     ├── ARCHITECTURE.md     services, Kafka vs RabbitMQ, data ownership, contracts, compose, observability
@@ -53,7 +61,7 @@ Darb Budokai/
     └── CONVENTIONS.md      code style, layout, tests, commits, branches, PR template
 ```
 
-After Phase 0 the repo grows the code layout described in `docs/ARCHITECTURE.md` (section "Repository layout").
+Later phases fill in the full layout described in `docs/ARCHITECTURE.md` (section "Repository layout").
 
 ## How to start a session
 
@@ -64,10 +72,42 @@ The plan is **UI/UX frontend first**: after bootstrap (Phase 0) and spec confirm
 
 The agent reads `CLAUDE.md`, then `docs/PROGRESS.md`, then `docs/PLAN.md`, and works phase by phase. To continue later, say **"resume"** (or "start Phase N"). The agent asks Nour before anything outward-facing: creating the GitHub repo, pushing to `main`, merging, publishing, deleting.
 
+## Run it
+
+Needs Docker, JDK 21 and Node 22.
+
+```bash
+git config core.hooksPath .githooks                          # attribution guard
+tools/dev/gen-keys.sh                                        # local .env and JWT keys (git-ignored)
+docker compose --env-file .env -f deploy/compose/compose.yml up -d           # Postgres, Kafka, RabbitMQ
+./mvnw -q install -DskipTests                                # once, so services can resolve shared libs
+./mvnw -pl services/character-service spring-boot:run        # http://localhost:8081/actuator/health
+npm --prefix web/budokai-web ci && npm --prefix web/budokai-web start   # http://localhost:4200
+docker compose --env-file .env -f deploy/compose/compose.yml down            # stop (volumes kept)
+```
+
+## Tests and quality
+
+```bash
+./mvnw -q verify                                # unit, Testcontainers ITs, ArchUnit, Spotless
+npm --prefix web/budokai-web run lint           # angular-eslint + Prettier
+npm --prefix web/budokai-web test               # Jest
+npm --prefix web/budokai-web run e2e            # Playwright + axe
+tools/dev/test/guards.test.sh                   # commit-msg hook, commit checker, no-emoji check
+tools/dev/test/env.test.sh                      # key generator and .env.example coverage
+tools/dev/test/compose-smoke.test.sh            # infra up, healthy, isolated roles, down
+```
+
+CI (`.github/workflows/ci.yml`) runs the guard, Java and web jobs on every push and PR, and the
+e2e job on PRs.
+
 ## Status
 
-Planning package only. No code yet. Progress lives in `docs/PROGRESS.md`.
+Phase 0 (bootstrap) is done locally: Maven multi-module skeleton, one placeholder service, shared
+ArchUnit rules and Testcontainers bases, Compose infra, an Angular 19 shell in the approved brand,
+CI and the attribution guards. The GitHub repo is not created yet. Progress lives in
+`docs/PROGRESS.md`.
 
 ## License and assets
 
-All art, sound and fonts are original or properly licensed (Google Fonts are fine). No official game or anime IP. License is chosen in Phase 0 (MIT proposed, confirm with Nour in Phase 1).
+All art, sound and fonts are original or properly licensed (Google Fonts are fine). No official game or anime IP. Licensed under MIT (`LICENSE`).

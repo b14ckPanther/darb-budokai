@@ -111,7 +111,7 @@ Schedulers use ShedLock on the owning service's database so that only one instan
 
 ## 5. Data ownership
 
-- One PostgreSQL 17 server locally, **one logical database and one login role per service** (`character_db` / `character_svc`, and so on), created by `deploy/compose/postgres/init.sql`. A service's role has no grants on another service's database. In Darb Genki these can become separate instances without code changes.
+- One PostgreSQL 17 server locally, **one logical database and one login role per service** (`character_db` / `character_svc`, and so on), created by `deploy/compose/postgres/init.sh` (passwords from `.env`, ADR-031). A service's role has no grants on another service's database. In Darb Genki these can become separate instances without code changes.
 - Schema migrations: Flyway, `src/main/resources/db/migration/V<N>__<desc>.sql`, per service. `spring.jpa.hibernate.ddl-auto=validate`.
 - Optimistic locking (`@Version`) on aggregates that receive concurrent updates (character, quest progress).
 - Every row that belongs to a player has `user_id UUID NOT NULL`.
@@ -174,7 +174,7 @@ budokai/
 ├── contracts/events/<type>/v1.schema.json + examples/
 ├── contracts/graphql/schema.graphqls   public schema (gateway serves it)
 ├── config/rulebook/v1/  config/copy/en/  config/seed/demo/  config/simulator/scenarios/
-├── deploy/compose/compose.yml, compose.observability.yml, postgres/init.sql
+├── deploy/compose/compose.yml, compose.observability.yml, postgres/init.sh
 ├── tools/dev/gen-keys.sh
 ├── .github/workflows/ci.yml
 ├── .githooks/commit-msg
@@ -186,18 +186,18 @@ Each service package root: `dev.zangeel.budokai.<service>` (see `CONVENTIONS.md`
 
 ## 10. Local development with Docker Compose
 
-`deploy/compose/compose.yml` (proposed images; pin exact tags in Phase 0):
+`deploy/compose/compose.yml` (tags pinned in ADR-019; host ports in ADR-031, all overridable in `.env`):
 
 | Container | Image | Ports | Notes |
 |---|---|---|---|
-| postgres | `postgres:17` | 5432 | `init.sql` creates per-service DBs and roles |
-| kafka | `apache/kafka:4.x` | 9092 | KRaft single node |
-| kafka-ui | `ghcr.io/kafbat/kafka-ui` | 8089 | profile `tools` |
-| rabbitmq | `rabbitmq:4-management` | 5672, 15672 | definitions file declares exchange, queues, DLX |
+| postgres | `postgres:17.11-alpine` | 54320 (host) | `init.sh` creates per-service DBs and roles |
+| kafka | `apache/kafka:4.3.2` | 9092 | KRaft single node |
+| kafka-ui | `kafbat/kafka-ui:v1.5.0` | 18090 | profile `tools` |
+| rabbitmq | `rabbitmq:4.3.7-management-alpine` | 55672, 15672 | definitions file declares exchange, queues, DLX |
 | services | built from each service's Dockerfile (or `spring-boot:build-image`) | 8080 to 8088 | profile `apps` |
 | simulator | built | 8090 | profile `sim` |
 
-Typical loop: `docker compose -f deploy/compose/compose.yml up -d` for infra, run the one service you are working on with `./mvnw ... spring-boot:run -Dspring-boot.run.profiles=local`, others in containers with `--profile apps`. Angular dev server proxies `/graphql` to 8080 and `/ws` to 8088 (`proxy.conf.json`).
+Typical loop: `docker compose --env-file .env -f deploy/compose/compose.yml up -d` for infra, run the one service you are working on with `./mvnw ... spring-boot:run -Dspring-boot.run.profiles=local`, others in containers with `--profile apps`. Angular dev server proxies `/graphql` to 8080 and `/ws` to 8088 (`proxy.conf.json`).
 
 Health: every service exposes `/actuator/health/liveness` and `/actuator/health/readiness`; compose healthchecks use them.
 
