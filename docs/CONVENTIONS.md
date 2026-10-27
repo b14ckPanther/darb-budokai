@@ -1,6 +1,6 @@
 # Conventions
 
-Items not fixed by the roadmap or Nour's rules are proposed, confirm with Nour in Phase 1.
+Items not fixed by the roadmap or Nour's rules are confirmed in Phase 1.
 
 ## 1. Java and Spring
 
@@ -65,7 +65,7 @@ web/budokai-web/src/app/
 
 ## 3. Testing
 
-- Java: JUnit 5 + AssertJ. Unit tests `*Test.java` (Surefire), integration tests `*IT.java` (Failsafe, Testcontainers with `@ServiceConnection`, containers reused per JVM via `budokai-test-support` base classes). Property tests with jqwik (proposed).
+- Java: JUnit 5 + AssertJ. Unit tests `*Test.java` (Surefire), integration tests `*IT.java` (Failsafe, Testcontainers with `@ServiceConnection`, containers reused per JVM via `budokai-test-support` base classes). Property tests with jqwik.
 - Test names describe behaviour: `awardsStaminaPerGoodMinuteUpToDailyCap()`.
 - Arrange data with builders in `budokai-test-support` (`aPostureSession().withGoodMinutes(30).build()`), not with production config numbers copied into tests: tests load a test rulebook fixture (`src/test/resources/rulebook/`) so they don't break when Nour rebalances the real one. One `RealRulebookValidTest` covers the real config.
 - No `Thread.sleep`; use Awaitility for async assertions.

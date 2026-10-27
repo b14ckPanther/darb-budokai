@@ -2,14 +2,14 @@
 
 Agents update this file after **every** task (one row) and at every phase boundary. It is the first thing read after a context reset. `git log` is the truth if they ever disagree; fix this file first.
 
-**Overall:** 5% · **Current phase:** 0 done (merged locally into `main`; not pushed) · next: Phase 1 · **Current branch:** `main` · **Last updated:** 2026-10-27
+**Overall:** 9% · **Current phase:** 1 done (merged into `main`) · next: Phase 2 · **Current branch:** `phase/01-spec` · **Last updated:** 2026-10-27
 
 ## Phases
 
 | Phase | Name | Weight | Status | Branch | Commit range | Merged (Nour OK) |
 |---|---|---|---|---|---|---|
-| 0 | Repo bootstrap, CI, conventions | 5% | done (local) | `phase/00-bootstrap` | 1077924..d7a0c02 | Decided by the agent under Nour's delegation (2026-10-26); repo not created, nothing pushed |
-| 1 | Brainstorm and spec confirmation | 4% | not started | `phase/01-spec` | | |
+| 0 | Repo bootstrap, CI, conventions | 5% | done | `phase/00-bootstrap` | 1077924..d7a0c02 | Decided by the agent under Nour's delegation (2026-10-26); repo created and `main` pushed after Phase 0 |
+| 1 | Brainstorm and spec confirmation | 4% | done | `phase/01-spec` | see task rows 1.x | Decided under Nour's delegation (2026-10-27) |
 | 2 | Design system | 6% | not started | `phase/02-design-system` | | |
 | 3 | Frontend prototype on seed data | 12% | not started | `phase/03-ui-prototype` | | |
 | 4 | Core domain + rules engine | 13% | not started | `phase/04-core-domain` | | |
@@ -43,10 +43,15 @@ Overall % = sum of weights of `done` phases + (weight × completed tasks / total
 | 0.12 | 0 | .env.example, gen-keys.sh | done | superpowers:test-driven-development, superpowers:verification-before-completion | 7fcee19, 08ab71c | tools/dev/test/env.test.sh → 15 passed (macOS and Ubuntu) | |
 | 0.13 | 0 | CI workflow (guard, java, web, e2e) | done | superpowers:test-driven-development, superpowers:verification-before-completion | d991511, 9754e89, d7a0c02 | YAML valid; scripts pass on Ubuntu container | Not yet run on GitHub (no repo) |
 | 0.14 | 0 | LICENSE, CONTRIBUTING, PR template | done | | d328c32 | | |
-| 0.15 | 0 | Create GitHub repo and push | waiting on Nour | | | | No remote action taken |
+| 0.15 | 0 | Create GitHub repo and push | done | | | | Repo `b14ckPanther/darb-budokai` (private) exists; `main` and `phase/00-bootstrap` pushed |
 | 0.16 | 0 | ADR-019 versions, ledger | done | | 884cd2c | | |
 | 0.R | 0 | Whole-branch review | done | superpowers:requesting-code-review, superpowers:receiving-code-review | 08ab71c..d7a0c02 | 1 critical, 4 important fixed; rest ledgered below | |
 | 0.Q | 0 | docs/REVIEW_FOR_NOUR.md for Phase 1 | done | | ec507a0 | | 22 questions with recommendations |
+| 1.1 | 1 | Answer Q1 to Q22 (delegated) | done | superpowers:brainstorming, writing-guidelines | phase/01-spec | n/a (docs) | 22 answered in OPEN_QUESTIONS.md; changes from the review sheet: Q8, Q9, Q14, Q17, Q22 |
+| 1.2 | 1 | Direction mood boards in words + static swatch page | done | frontend-design, design-first-ui-prompting, design-taste-frontend, playwright-cli | phase/01-spec | page rendered at 1440 and 390 px, reviewed | `docs/specs/assets/directions.html` (+ two PNGs); tokens from brand file only |
+| 1.3 | 1 | ADRs: accept 016, 020 to 027, 029, 030; add 032 to 037 | done | | phase/01-spec | n/a | ADR-034 no social tournament and cosmetic-only non-core apps; ADR-035 no money |
+| 1.4 | 1 | Update GAME_DESIGN, UI_DESIGN, EVENT_CONTRACTS, VISION, ARCHITECTURE, README, CONVENTIONS | done | writing-guidelines | phase/01-spec | check-no-emoji.sh clean | "proposed" labels removed where confirmed |
+| 1.5 | 1 | Consolidated spec | done | superpowers:brainstorming | phase/01-spec | n/a | `docs/specs/2026-10-27-phase-01-budokai-spec.md`, approved under delegation |
 
 Example row:
 `| 4.5 | 4 | RuleEvaluator for posture/review/quest | done | superpowers:test-driven-development, superpowers:verification-before-completion | a1b2c3d..e4f5a6b | ./mvnw -pl libs/budokai-rules-core verify → 42 passed | rate values from rulebook v1.0.0 |`
@@ -63,6 +68,8 @@ Every time an agent decides something Nour has not decided. If "cost if wrong" i
 | 2026-10-26 | 0 | Host ports 54320 / 55672 / 18090 | Other Darb stacks hold 5432 / 5672 / 8090 | low: change in `.env` | Delegated |
 | 2026-10-26 | 0 | `init.sh` not `init.sql`; CONNECT revoked from PUBLIC | Passwords from `.env`, never committed | low | Delegated |
 | 2026-10-26 | 0 | Latin WOFF2 subsets of brand fonts in the web shell | 5 MB TTF too heavy | low: add subsets later (e.g. CJK for the seal font) | Delegated |
+| 2026-10-27 | 1 | Dark theme only in v1 (ADR-036) | The world is a night arena; halves the contrast matrix | low: add a daylight token block later | Delegated |
+| 2026-10-27 | 1 | Non-core Darb apps are cosmetic-only integrations (ADR-034) | Keeps the economy honest as the universe grows | low: promote one app by ADR | Delegated |
 | 2026-10-27 | 0 | Merges into `main` are local only (no GitHub merge button) | GitHub as committer would fail the guard | low | Delegated |
 
 ## UI approvals
@@ -75,8 +82,8 @@ Every time an agent decides something Nour has not decided. If "cost if wrong" i
 
 | Since | What | Asked how | Status |
 |---|---|---|---|
-| 2026-10-26 | Create GitHub repo `b14ckPanther/darb-budokai` (private) and push `main` + `phase/00-bootstrap`; first CI run | docs/REVIEW_FOR_NOUR.md | waiting |
-| 2026-10-26 | Phase 1 answers (22 questions, recommendations ready) | docs/REVIEW_FOR_NOUR.md | waiting |
+| 2026-10-26 | Create GitHub repo `b14ckPanther/darb-budokai` (private) and push | docs/REVIEW_FOR_NOUR.md | done |
+| 2026-10-26 | Phase 1 answers (22 questions) | docs/REVIEW_FOR_NOUR.md | done 2026-10-27 under delegation |
 
 ### Review findings accepted for later (Phase 0 review, not fixed)
 
@@ -91,3 +98,4 @@ Every time an agent decides something Nour has not decided. If "cost if wrong" i
 Short notes per session (2 to 4 lines): what was done, where it stopped, next step.
 
 - 2026-10-26/27: Phase 0 built TDD-first on `phase/00-bootstrap` (19 commits), reviewed in a fresh context, fixes applied, merged into `main` locally under Nour's delegation. Nothing pushed. Next: Nour answers docs/REVIEW_FOR_NOUR.md (or "yes to all") and approves creating the GitHub repo; then Phase 1. 
+- 2026-10-27: Phase 1 closed under Nour's delegation on `phase/01-spec`: 22 answers, ADR-032 to ADR-037, spec `docs/specs/2026-10-27-phase-01-budokai-spec.md`, direction swatch page. Next: Phase 2 design system.

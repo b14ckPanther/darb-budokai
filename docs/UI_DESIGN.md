@@ -2,13 +2,17 @@
 
 Fixed by Nour's roadmap: Angular + Three.js world map, character sheet, skill tree, nightly battle-log replay. Quality bar: "jaw-dropping", cinematic, never childish or template-looking.
 
-The art direction, palette, fonts, region names and screen layouts below are **proposed, confirm with Nour in Phase 1** (the art direction is the most important Phase 1 question after the core events). Phase 2 turns the approved direction into a design system; Phase 3 builds every screen as a clickable prototype on seed data, approved one screen at a time. Both come before any backend work.
+The art direction, palette, fonts, region names and screen layouts below are **confirmed in Phase 1 (2026-10-27, under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`)** (the art direction is the most important Phase 1 question after the core events). Phase 2 turns the approved direction into a design system; Phase 3 builds every screen as a clickable prototype on seed data, approved one screen at a time. Both come before any backend work.
 
 ## 1. Art direction
 
 Phase 1 shows Nour three candidate directions side by side; Phase 2 builds the chosen one. "Ember Atlas" is the recommended default and is described in full below.
 
-### Candidate directions (proposed, Nour picks in Phase 1)
+### Phase 1 outcome (2026-10-27, ADR-032, ADR-036)
+
+The approved brand ("The Seal") fixes the fonts and palette, so the candidates below were rebuilt as brand-faithful variants in `docs/specs/assets/directions.html`: **A. Seal Stone** (Ember Atlas on the brand; chosen for the world), **B. Gold Orrery** (kept for the skill tree), **C. Ink and Ki** (kept for a possible daylight theme). The palette and type sections further down are the pre-brand drafts and are **superseded**: colours come from `brand/src/tokens.json` plus contrast-tested semantic additions in `config/design/tokens.yaml`; type is Zen Antique (display), Geist (interface and numbers) and Yuji Boku (seal only). v1 is dark only. Icons: Solar Bold Duotone (ADR-033).
+
+### Candidate directions (original drafts)
 
 | Direction | One line | Map look | Risk |
 |---|---|---|---|
@@ -26,10 +30,10 @@ A night-time cartographer's table brought to life. The world is a dark relief ma
 - **Map:** low-poly terrain generated from a heightmap (procedural, in repo), rendered with contour-line shading (a custom shader that draws iso-lines on the terrain) over deep ink. Regions are subtle tints, never bright fills. Landmarks are simple sculpted silhouettes (forge, archive tower, springs, citadel) built from primitives or original low-poly models made for this repo.
 - **Light and fog:** each region has a light level (recent activity) and a fog density (missed days), both from `region.fog.changed` and live effects. Embers drift up from active regions.
 - **UI chrome:** thin brass hairlines, engraved-style section labels, generous dark space. Panels are near-opaque ink with a faint paper grain, not glassmorphism.
-- **Iconography:** one modern SVG icon set for UI controls (Solar duotone via Iconify, or Lucide; picked in Phase 1) plus original line glyphs (spell sigils, stat marks) drawn as SVG in repo. No icon packs that look like a known game, no raster clip-art, no mixed styles.
+- **Iconography:** one modern SVG icon set for UI controls (Solar Bold Duotone via Iconify, ADR-033) plus original line glyphs (spell sigils, stat marks) drawn as SVG in repo. No icon packs that look like a known game, no raster clip-art, no mixed styles.
 - **What to avoid:** cartoon characters, chibi avatars, rounded bubbly buttons, rainbow rarity colours, confetti, default Material/Bootstrap look, anything resembling a known game or anime.
 
-### Palette (proposed tokens, contrast checked in Phase 2)
+### Palette (pre-brand draft, superseded by ADR-036)
 
 | Token | Hex | Use |
 |---|---|---|
@@ -46,7 +50,7 @@ A night-time cartographer's table brought to life. The world is a dark relief ma
 
 Every text/background pair must meet WCAG AA (4.5:1 body, 3:1 large text and UI components). Phase 2 adds an automated contrast test over the token pairs.
 
-### Type (Google Fonts, proposed)
+### Type (pre-brand draft, superseded by ADR-036)
 
 - Display: **Cormorant** (engraved, cinematic headings; used large only).
 - UI and body: **Inter Tight** or **IBM Plex Sans**.
@@ -54,7 +58,7 @@ Every text/background pair must meet WCAG AA (4.5:1 body, 3:1 large text and UI 
 
 Self-host the font files (downloaded once, licences recorded in `ASSETS.md`).
 
-### Sound (optional, proposed)
+### Sound (off by default, confirmed in Phase 1)
 
 Off by default. Procedurally generated in repo (Web Audio): a low ember crackle, a soft chime for a spell, a struck-metal hit for boss damage. Respect a mute toggle and never autoplay.
 
@@ -95,7 +99,7 @@ All copy comes from `config/copy/en/*.yaml` via the gateway, not from component 
 
 ### 2.2 Character Sheet
 
-- Left: the character's title, level, a portrait plate (an original abstract sigil, not a drawn person; proposed), stamina and status.
+- Left: the character's title, level, a portrait plate (an original abstract sigil, not a drawn person), stamina and status.
 - Centre: four stats as engraved dials with rank, stat-XP to next rank, and "where it came from this week" (top three sources, links to battle-log entries).
 - Right: equipment slots and inventory grid; each item shows its exact modifier and the event that dropped it.
 - Bottom: titles and deeds (milestones).
@@ -114,7 +118,7 @@ All copy comes from `config/copy/en/*.yaml` via the gateway, not from component 
 - Side panel: the full text log, every line linked to its source event and the rule id that produced it (honesty).
 - End card: the day's totals, stamina change, spells learned, fog changes, and tomorrow's due cards and quests.
 - Empty day: a single quiet pan across a dim map with "The budokai was quiet today."
-- Shareable: export the replay as a short WebM via `MediaRecorder` (proposed, later phase) for the README GIF.
+- Shareable: export the replay as a short WebM via `MediaRecorder` (later phase) for the README GIF.
 
 ### 2.5 Quest Log
 
@@ -163,6 +167,6 @@ Login screen on the map's dim backdrop. No sign-up flow unless Nour wants multi-
 - Angular 19, standalone components, `ChangeDetectionStrategy.OnPush`, signals for local state, `input()`/`output()` APIs, control flow (`@if`, `@for`).
 - State: NgRx SignalStore per feature (`CharacterStore`, `QuestStore`, `SpellbookStore`, `BattleLogStore`, `MapStore`).
 - Data: GraphQL via Apollo Angular (version compatible with Angular 19, verify peer deps in Phase 0) with types generated by `@graphql-codegen/cli` from `contracts/graphql/schema.graphqls`. Live updates via `@stomp/rx-stomp`; incoming effects patch the stores.
-- Three.js isolated in `features/world/engine/` (plain TypeScript classes, no Angular inside), driven by a signal-based facade and run outside Angular's zone (`NgZone.runOutsideAngular`) or zoneless change detection (proposed).
+- Three.js isolated in `features/world/engine/` (plain TypeScript classes, no Angular inside), driven by a signal-based facade and run outside Angular's zone (`NgZone.runOutsideAngular`); zone.js stays in Angular 19 (ADR-036).
 - Seed mode: an `environment.demo.ts` that swaps the GraphQL link for a fixture link reading `config/seed/demo` JSON, with a visible "Demo data" banner. Used in Phase 3 before the backend exists.
 - Folder layout in `CONVENTIONS.md`.
