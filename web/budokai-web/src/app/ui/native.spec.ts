@@ -50,6 +50,15 @@ describe('bk-sheet', () => {
     expect(d.contains(document.activeElement)).toBe(true);
   });
 
+  it('makes the page behind it inert while open, and restores it', async () => {
+    const f = await opened();
+    const opener = f.nativeElement.querySelector('#opener') as HTMLButtonElement;
+    expect(opener.inert).toBe(true);
+    f.componentInstance.open.set(false);
+    await f.whenStable();
+    expect(opener.inert).toBe(false);
+  });
+
   it('closes on Escape and returns focus to the opener', async () => {
     const f = await opened();
     const d = f.nativeElement.querySelector('[role=dialog]') as HTMLElement;

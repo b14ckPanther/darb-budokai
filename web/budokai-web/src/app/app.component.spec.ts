@@ -1,37 +1,29 @@
 import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { Title } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import messages from '../locale/messages.en.json';
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   async function render() {
-    await TestBed.configureTestingModule({ imports: [AppComponent] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [AppComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('shows the product name from the locale messages as the only h1', async () => {
+  it('hosts the router outlet and the toast region', async () => {
     const el = await render();
-    const headings = el.querySelectorAll('h1');
-    expect(headings).toHaveLength(1);
-    expect(headings[0].textContent?.trim()).toBe(messages['app.name']);
+    expect(el.querySelector('router-outlet')).not.toBeNull();
+    expect(el.querySelector('bk-toast-host [role=status]')).not.toBeNull();
   });
 
-  it('renders the tagline from the locale messages', async () => {
-    const el = await render();
-    expect(el.textContent).toContain(messages['app.tagline']);
-  });
-
-  it('wraps content in a main landmark', async () => {
-    const el = await render();
-    expect(el.querySelector('main')).not.toBeNull();
-  });
-
-  it('shows the brand seal as a decorative SVG image', async () => {
-    const el = await render();
-    const seal = el.querySelector('img.seal') as HTMLImageElement | null;
-    expect(seal).not.toBeNull();
-    expect(seal!.getAttribute('src')).toMatch(/\.svg$/);
-    expect(seal!.getAttribute('alt')).toBe('');
+  it('sets the document title and the motion attribute', async () => {
+    await render();
+    expect(TestBed.inject(Title).getTitle()).toBe(messages['app.name']);
+    expect(document.documentElement.dataset['motion']).toMatch(/^(full|reduced)$/);
   });
 });

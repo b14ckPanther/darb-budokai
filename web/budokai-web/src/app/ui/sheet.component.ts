@@ -84,6 +84,8 @@ export class SheetComponent {
   readonly heightCss = computed(() => `${TOKENS.gesture['sheet-detents'][this.detent()] * 100}dvh`);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private opener: HTMLElement | null = null;
+  private restoreInert: (() => void) | null = null;
+  private readonly host = inject(ElementRef<HTMLElement>);
   private startY = 0;
   private lastY = 0;
   private lastT = 0;
@@ -94,6 +96,7 @@ export class SheetComponent {
       const p = this.panel();
       if (p) {
         this.opener ??= this.doc.activeElement as HTMLElement | null;
+        this.restoreInert ??= inertOthers(this.host.nativeElement);
         p.nativeElement.focus();
         this.doc.body.style.overflow = 'hidden';
       }
@@ -101,6 +104,8 @@ export class SheetComponent {
     effect(() => {
       if (!this.open()) {
         this.doc.body.style.overflow = '';
+        this.restoreInert?.();
+        this.restoreInert = null;
         this.opener?.focus?.();
         this.opener = null;
       }
@@ -168,4 +173,18 @@ export class SheetComponent {
     if (outcome === 'dismiss') this.close();
     else this.detent.set(outcome);
   }
+}
+
+/** Makes everything outside `el` inert (like a native modal) and returns a function that undoes it. */
+export function inertOthers(el: HTMLElement): () => void {
+  const changed: HTMLElement[] = [];
+  for (let node: HTMLElement | null = el; node && node.parentElement; node = node.parentElement) {
+    for (const sib of Array.from(node.parentElement.children) as HTMLElement[]) {
+      if (sib !== node && !sib.inert && !['SCRIPT', 'STYLE'].includes(sib.tagName)) {
+        sib.inert = true;
+        changed.push(sib);
+      }
+    }
+  }
+  return () => changed.forEach((s) => (s.inert = false));
 }

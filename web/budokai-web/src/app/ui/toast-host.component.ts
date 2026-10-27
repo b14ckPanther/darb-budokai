@@ -45,7 +45,7 @@ import { ToastService } from './toast.service';
       box-shadow: var(--elevation-2);
       color: var(--color-text);
       font-size: var(--type-subhead-size);
-      animation: drop var(--spring-bouncy-dur) var(--spring-bouncy);
+      animation: drop var(--spring-snappy-dur) var(--spring-snappy);
       --icon-size: 1.25rem;
     }
     .toast > bk-icon {

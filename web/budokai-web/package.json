@@ -10,7 +10,8 @@
     "lint": "ng lint && prettier --check .",
     "format": "prettier --write .",
     "e2e": "playwright test",
-    "design": "esbuild scripts/build-design.mts --bundle --platform=node --format=esm --packages=external --log-level=warning --outfile=.design-build/build.mjs && node .design-build/build.mjs"
+    "design": "esbuild scripts/build-design.mts --bundle --platform=node --format=esm --packages=external --log-level=warning --outfile=.design-build/build.mjs && node .design-build/build.mjs",
+    "screenshots": "node scripts/capture-screens.mjs"
   },
   "private": true,
   "dependencies": {

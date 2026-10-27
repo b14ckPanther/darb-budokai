@@ -46,7 +46,7 @@ export interface SegmentOption {
       max-width: 100%;
     }
     .seg {
-      min-height: calc(var(--touch-target) - 6px);
+      min-height: var(--touch-target);
       padding: 0 var(--space-4);
       border: 0;
       border-radius: calc(var(--radius-md) - 3px);

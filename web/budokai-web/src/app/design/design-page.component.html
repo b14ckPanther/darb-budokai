@@ -1,0 +1,269 @@
+<bk-nav [label]="page.title" [items]="nav" />
+
+<main class="page">
+  <bk-large-title [title]="page.title">
+    <span barAction class="demo">{{ ui['demo-banner'] }}</span>
+  </bk-large-title>
+
+  <header class="intro">
+    <img class="seal" src="brand/mark-on-night.svg" alt="" width="88" height="88" />
+    <div class="intro-text">
+      <p class="t-body lede">{{ page.lede }}</p>
+      <div class="motion-pref">
+        <span class="t-footnote muted">{{ sample['motion-label'] }}</span>
+        <bk-segmented
+          [label]="sample['motion-label']"
+          [options]="motionOptions"
+          [value]="motionValue()"
+          (valueChange)="setMotion($event)"
+        />
+      </div>
+    </div>
+  </header>
+
+  <section aria-labelledby="s-colour">
+    <h2 id="s-colour" class="t-title-1">{{ page.sections.colour.title }}</h2>
+    <p class="t-callout muted">{{ page.sections.colour.body }}</p>
+    <ul class="swatches">
+      @for (s of swatches; track s.role) {
+        <li>
+          <span class="chip" [style.background]="s.hex"></span>
+          <span class="t-subhead">{{ s.role }}</span>
+          <span class="t-caption muted"
+            >{{ s.hex }}
+            @if (s.ratio) {
+              , {{ s.ratio }}
+            }
+          </span>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="s-type">
+    <h2 id="s-type" class="t-title-1">{{ page.sections.type.title }}</h2>
+    <p class="t-callout muted">{{ page.sections.type.body }}</p>
+    <div class="type-specimen">
+      <p class="t-seal seal-glyph" lang="ja">武</p>
+      @for (t of typeRoles; track t.role) {
+        <div class="type-row">
+          <span class="t-caption muted">{{ t.role }}, {{ t.spec }}</span>
+          <p [class]="'t-' + t.role">
+            {{ t.role === 'numeral' ? sample['numeral-sample'] : typeSample }}
+          </p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section aria-labelledby="s-shape">
+    <h2 id="s-shape" class="t-title-1">{{ page.sections.shape.title }}</h2>
+    <p class="t-callout muted">{{ page.sections.shape.body }}</p>
+    <div class="shape">
+      <ul class="space">
+        @for (s of space; track s[0]) {
+          <li>
+            <span class="bar" [style.width]="'var(--space-' + s[0] + ')'"></span
+            ><span class="t-caption muted">{{ s[0] }}</span>
+          </li>
+        }
+      </ul>
+      <ul class="radii">
+        @for (r of radii; track r[0]) {
+          <li [style.border-radius]="'var(--radius-' + r[0] + ')'">
+            <span class="t-caption">{{ r[0] }}</span>
+          </li>
+        }
+      </ul>
+      <ul class="elev">
+        @for (e of elevations; track e) {
+          <li [style.box-shadow]="'var(--elevation-' + e + ')'">
+            <span class="t-caption">{{ e }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-motion">
+    <h2 id="s-motion" class="t-title-1">{{ page.sections.motion.title }}</h2>
+    <p class="t-callout muted">{{ page.sections.motion.body }}</p>
+    <ul class="springs">
+      @for (s of springs; track s.name) {
+        <li>
+          <svg viewBox="0 0 200 80" aria-hidden="true">
+            <line x1="0" y1="20" x2="200" y2="20" class="target" />
+            <polyline [attr.points]="s.points" />
+          </svg>
+          <div class="track" [class.on]="played()[s.name]">
+            <span
+              class="puck"
+              [style.transition]="
+                'transform var(--spring-' + s.name + '-dur) var(--spring-' + s.name + ')'
+              "
+            ></span>
+          </div>
+          <div class="spring-foot">
+            <span class="t-subhead">{{ s.name }}, {{ s.ms }} ms</span>
+            <button bk-button variant="quiet" icon="play" type="button" (click)="play(s.name)">
+              {{ s.play }}
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="s-icons">
+    <h2 id="s-icons" class="t-title-1">{{ page.sections.icons.title }}</h2>
+    <p class="t-callout muted">{{ page.sections.icons.body }}</p>
+    <ul class="icons">
+      @for (i of uiIcons; track i) {
+        <li>
+          <bk-icon [name]="i" /><span class="t-caption muted">{{ i }}</span>
+        </li>
+      }
+    </ul>
+    <ul class="icons sigils">
+      @for (i of sigils; track i) {
+        <li>
+          <bk-icon [name]="i" /><span class="t-caption muted">{{ i }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="s-components">
+    <h2 id="s-components" class="t-title-1">{{ page.sections.components.title }}</h2>
+    <p class="t-callout muted">{{ page.sections.components.body }}</p>
+
+    <div class="row wrap">
+      <button bk-button variant="primary" icon="check" type="button" (click)="toast()">
+        {{ sample.primary }}
+      </button>
+      <button
+        bk-button
+        variant="secondary"
+        icon="quests"
+        type="button"
+        (click)="sheetOpen.set(true)"
+      >
+        {{ sample['open-sheet'] }}
+      </button>
+      <button bk-button variant="quiet" icon="link" type="button">{{ sample.quiet }}</button>
+      <button
+        bk-button
+        variant="danger"
+        icon="archive"
+        type="button"
+        (click)="dialogOpen.set(true)"
+      >
+        {{ sample.danger }}
+      </button>
+      <button bk-button variant="primary" type="button" [loading]="true">
+        {{ sample.loading }}
+      </button>
+      <button bk-button variant="secondary" icon="locked" type="button" [disabled]="true">
+        {{ sample.disabled }}
+      </button>
+    </div>
+
+    <bk-segmented [label]="sample['tabs-label']" [options]="tabs" [(value)]="tab" />
+
+    <div class="split">
+      <div class="panel character">
+        <h3 class="t-title-2">{{ character.name }}</h3>
+        <p class="t-subhead gold">{{ levelText }}</p>
+        <bk-meter
+          [label]="charCopy.xp"
+          [value]="character.xp"
+          [max]="character.xpNext"
+          [valueText]="xpText"
+          tone="xp"
+        />
+        <bk-meter
+          [label]="charCopy.stamina"
+          [value]="character.stamina"
+          [max]="character.staminaMax"
+          [valueText]="staminaText"
+          tone="stamina"
+        />
+      </div>
+      <ul class="panel dials">
+        @for (s of stats; track s.id) {
+          <li><bk-stat-dial [stat]="s.id" [rank]="s.rank" [progress]="s.progress" /></li>
+        }
+      </ul>
+    </div>
+
+    <div class="split">
+      <div>
+        <h3 class="t-headline list-title">{{ sample.rows }}</h3>
+        <ul class="list">
+          @for (q of quests; track q.id) {
+            <li>
+              <bk-swipe-row [title]="q.title" [actions]="rowActions" (action)="toast()">
+                <span>{{ q.region }}</span>
+                <bk-evidence [tier]="q.evidence" />
+                <span>{{ q.progress }} / {{ q.target }}</span>
+              </bk-swipe-row>
+            </li>
+          }
+        </ul>
+      </div>
+      <div>
+        <h3 class="t-headline list-title">{{ sample.items }}</h3>
+        <ul class="list items">
+          @for (i of items; track i.id) {
+            <li>
+              <span class="t-body">{{ i.name }}</span
+              ><bk-rarity [rarity]="i.rarity" />
+            </li>
+          }
+        </ul>
+        <div class="row wrap badges">
+          @for (t of tiers; track t) {
+            <bk-evidence [tier]="t" />
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-map">
+    <h2 id="s-map" class="t-title-1">{{ page.sections.map.title }}</h2>
+    <p class="t-callout muted">{{ page.sections.map.body }}</p>
+    <div class="maps">
+      @for (l of levels; track l) {
+        <figure>
+          <bk-map-look [level]="l" />
+          <figcaption class="t-subhead">{{ levelName(l) }}</figcaption>
+        </figure>
+      }
+    </div>
+  </section>
+</main>
+
+<bk-sheet [(open)]="sheetOpen" [title]="quests[0].title">
+  <p class="t-body">{{ sample['sheet-body'] }}</p>
+  <div class="row wrap sheet-actions">
+    <bk-evidence [tier]="quests[0].evidence" />
+    <button
+      bk-button
+      variant="primary"
+      icon="check"
+      type="button"
+      (click)="sheetOpen.set(false); toast()"
+    >
+      {{ sample.primary }}
+    </button>
+  </div>
+</bk-sheet>
+
+<bk-dialog
+  [(open)]="dialogOpen"
+  [title]="sample['dialog-title']"
+  [confirmLabel]="sample['dialog-confirm']"
+>
+  <p>{{ sample['dialog-body'] }}</p>
+</bk-dialog>
