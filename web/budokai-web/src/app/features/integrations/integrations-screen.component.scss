@@ -94,13 +94,15 @@ code {
 }
 
 .muted {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-1);
+  display: block;
   font-size: var(--type-footnote-size);
   color: var(--color-text-secondary);
   --icon-size: 1rem;
+  bk-icon {
+    display: inline-flex;
+    vertical-align: -0.15em;
+    margin-right: var(--space-1);
+  }
 }
 
 h3 {

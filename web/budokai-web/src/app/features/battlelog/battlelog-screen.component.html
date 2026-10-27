@@ -3,6 +3,7 @@
     <h1>{{ b.title }}</h1>
     @if (dayOptions().length > 1) {
       <bk-segmented
+        [fit]="true"
         [label]="b.days"
         [options]="dayOptions()"
         [value]="store.date()"

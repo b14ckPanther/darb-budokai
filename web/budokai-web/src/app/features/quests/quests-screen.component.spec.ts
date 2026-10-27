@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { COPY } from '../../copy/copy.generated';
-import { DEMO_SEED } from '../../demo/seed.generated';
+import { DEMO_DATA as DEMO_SEED } from '../../data/game-data';
 import { GAME_DATA } from '../../data/game-data';
 import { QuestStore } from '../../data/quest.store';
 import { ToastService } from '../../ui/toast.service';

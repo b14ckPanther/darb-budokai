@@ -52,6 +52,7 @@ const REVEAL = TOKENS.gesture['swipe-reveal'];
   `,
   host: {
     '[class.open]': 'isOpen()',
+    '[style.--reveal]': "-actionsWidth() + 'px'",
     '(focusin)': 'onFocusIn($event)',
     '(focusout)': 'onFocusOut($event)',
   },

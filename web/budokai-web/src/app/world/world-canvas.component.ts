@@ -27,16 +27,44 @@ export interface Pulse {
 @Component({
   selector: 'bk-world-canvas',
   template: `<canvas
-    #canvas
-    role="img"
-    [attr.aria-label]="label()"
-    (click)="onClick($event)"
-  ></canvas>`,
+      #canvas
+      role="img"
+      [attr.aria-label]="label()"
+      (click)="onClick($event)"
+    ></canvas>
+    <div class="labels" aria-hidden="true">
+      @for (l of labels(); track l.id) {
+        <span class="label" [attr.data-label]="l.id">{{ l.name }}</span>
+      }
+    </div>`,
   styles: `
     :host {
       display: block;
       position: relative;
       background: var(--color-bg-deep);
+    }
+    .labels {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .label {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding: 0.125rem 0.625rem;
+      border-radius: var(--radius-pill);
+      background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+      border: 1px solid var(--color-hairline-strong);
+      font-family: var(--type-headline-family);
+      font-size: var(--type-footnote-size);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--color-text-heading);
+      white-space: nowrap;
+      opacity: 0;
+      will-change: transform;
     }
     canvas {
       display: block;
@@ -56,6 +84,8 @@ export class WorldCanvasComponent {
   readonly focus = input<readonly number[] | null>(null);
   readonly pulse = input<Pulse | null>(null);
   readonly drift = input(false);
+  /** Region names to float over the map (decorative; the screen's list is the accessible twin). */
+  readonly labels = input<{ id: string; name: string }[]>([]);
   readonly picked = output<Pick>();
   readonly ready = signal(false);
   private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
@@ -92,6 +122,15 @@ export class WorldCanvasComponent {
           document.removeEventListener('visibilitychange', sync);
           s.dispose();
         });
+        // Labels move every frame, so they are written straight to the DOM, outside change detection.
+        s.onLabels = (ls) => {
+          for (const l of ls) {
+            const el = host.querySelector<HTMLElement>(`[data-label="${l.id}"]`);
+            if (!el) continue;
+            el.style.transform = `translate(${l.x}px, ${l.y}px) translate(-50%, -50%)`;
+            el.style.opacity = l.visible ? '1' : '0';
+          }
+        };
         s.setAnimate(!this.motion.reduced());
         s.setRegions(this.regions());
         s.setMarkers(this.markers(), this.selected());

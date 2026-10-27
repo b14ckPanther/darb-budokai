@@ -63,7 +63,7 @@
   }
 }
 
-html[data-motion='reduced'] .caption {
+:host-context(html[data-motion='reduced']) .caption {
   // Reduced motion: a plain crossfade instead of the rise.
   animation: caption-fade var(--dur-base) linear;
 }

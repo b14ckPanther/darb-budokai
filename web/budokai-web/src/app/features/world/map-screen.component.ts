@@ -57,6 +57,7 @@ export class MapScreenComponent {
   readonly sceneMarkers = computed(() =>
     this.map.markers().map((m) => ({ id: m.id, kind: m.kind, at: [...m.at] })),
   );
+  readonly labelNames = computed(() => this.map.regions().map((r) => ({ id: r.id, name: r.name })));
   readonly label = computed(() =>
     format(this.copy['canvas-label'], { summary: this.map.summary() }),
   );
@@ -87,10 +88,6 @@ export class MapScreenComponent {
 
   markerIcon(kind: string): IconName {
     return MARKER_ICON[kind] ?? 'target';
-  }
-
-  regionLabel(name: string): string {
-    return format(this.copy['open-region'], { name });
   }
 
   open(id: string): void {

@@ -9,7 +9,6 @@ recent: Today here
 quests-here: Quests here
 nothing-here: Nothing happened here today.
 locked: Locked. A skill in the tree opens it.
-open-region: Open {name}
 fallback: The 3D map needs WebGL. This flat map shows the same places.
 canvas-label: 'World map. {summary}'
 summary-region: '{name}: light {light}%, dust {fog}%'

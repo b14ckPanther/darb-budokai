@@ -61,6 +61,14 @@ export interface SceneMarker {
   at: readonly number[];
 }
 
+/** Screen position (CSS px) of each region centre; visible false when behind the camera. */
+export interface LabelPosition {
+  id: string;
+  x: number;
+  y: number;
+  visible: boolean;
+}
+
 export interface Pick {
   marker: string | null;
   region: string | null;
@@ -94,6 +102,8 @@ export class WorldScene {
   private readonly disposables: { dispose(): void }[] = [];
   private readonly raycaster = new Raycaster();
   private readonly base: Orbit;
+  private overview: Orbit;
+  private framed = false;
   private orbit: Orbit;
   private goal: Orbit;
   private regions: SceneRegion[] = [];
@@ -101,6 +111,9 @@ export class WorldScene {
   private drift = false;
   private lastT = 0;
   private selected: string | null = null;
+  /** Called after each frame with projected region label positions. */
+  onLabels: ((labels: LabelPosition[]) => void) | null = null;
+  private readonly tmp = new Vector3();
 
   constructor(private readonly canvas: HTMLCanvasElement) {
     this.renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: 'low-power' });
@@ -115,6 +128,7 @@ export class WorldScene {
       elevationDeg: cam['elevation-deg'],
       distance: cam.distance,
     };
+    this.overview = { ...this.base };
     this.orbit = { ...this.base };
     this.goal = { ...this.base };
 
@@ -155,6 +169,8 @@ export class WorldScene {
         uFloor: { value: M['light-floor'] },
         uTintStrength: { value: W['region-tint-strength'] },
         uFogStrength: { value: W['fog-strength'] },
+        uRingWidth: { value: W['ring-width'] },
+        uRingStrength: { value: W['ring-strength'] },
         uCount: { value: 0 },
         uCentre: { value: Array.from({ length: max }, () => new Vector2()) },
         uRadius: { value: new Array(max).fill(1) },
@@ -224,6 +240,21 @@ export class WorldScene {
 
   setRegions(regions: SceneRegion[]): void {
     this.regions = regions.slice(0, W['max-regions']);
+    // With regions this is the world map, not the look test: frame the whole arena.
+    if (this.regions.length && !this.framed) {
+      this.framed = true;
+      const o = W.overview;
+      const off = W['target-offset'];
+      this.overview = {
+        target: [off[0], this.base.target[1], off[1]],
+        distance: o.distance,
+        elevationDeg: o['elevation-deg'],
+        azimuthDeg: o['azimuth-deg'],
+      };
+      this.terrain.uniforms['uFogDensity'].value = W['depth-fog'];
+      this.goal = { ...this.overview };
+      this.orbit = { ...this.overview };
+    }
     const u = this.terrain.uniforms;
     u['uCount'].value = this.regions.length;
     this.regions.forEach((r, i) => {
@@ -275,7 +306,7 @@ export class WorldScene {
 
   /** Move the camera to a point on the map (null returns to the overview). */
   focus(centre: readonly number[] | null, snap = false): void {
-    this.goal = centre ? focusPose(this.base, centre, W['focus-zoom']) : { ...this.base };
+    this.goal = centre ? focusPose(this.overview, centre, W['focus-zoom']) : { ...this.overview };
     if (snap || !this.animate) this.orbit = { ...this.goal };
     this.scheduler.requestRender();
   }
@@ -341,6 +372,25 @@ export class WorldScene {
     this.renderer.forceContextLoss();
   }
 
+  private emitLabels(): void {
+    if (!this.onLabels) return;
+    const w = this.canvas.clientWidth;
+    const h = this.canvas.clientHeight;
+    this.onLabels(
+      this.regions.map((r) => {
+        this.tmp
+          .set(r.centre[0], heightAt(r.centre[0], r.centre[1], M) + 0.5, r.centre[1])
+          .project(this.camera);
+        return {
+          id: r.id,
+          x: ((this.tmp.x + 1) / 2) * w,
+          y: ((1 - this.tmp.y) / 2) * h,
+          visible: this.tmp.z < 1 && Math.abs(this.tmp.x) < 1.1 && Math.abs(this.tmp.y) < 1.1,
+        };
+      }),
+    );
+  }
+
   private placeEmbers(x: number, z: number): void {
     this.emberPoints.position.set(x, heightAt(x, z, M) + 0.2, z);
   }
@@ -364,6 +414,7 @@ export class WorldScene {
     this.terrain.uniforms['uTime'].value = time;
     this.embers.uniforms['uTime'].value = time;
     this.renderer.render(this.scene, this.camera);
+    this.emitLabels();
     const moving = !orbitSettled(this.orbit, this.goal, W['settle-epsilon']);
     if (!moving) this.lastT = 0;
     const emberOn = this.embers.uniforms['uEmber'].value > 0;

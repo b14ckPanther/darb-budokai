@@ -69,6 +69,7 @@ export class ConstellationScene {
   private animate = true;
   private angle = 0;
   private last = 0;
+  private readonly extent: [number, number];
 
   constructor(canvas: HTMLCanvasElement, nodes: StarNode[]) {
     this.renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: 'low-power' });
@@ -80,6 +81,11 @@ export class ConstellationScene {
     const size = new Float32Array(nodes.length);
     const col = new Float32Array(nodes.length * 3);
     const tone = { locked: rgb(C['fog']), available: rgb(C['ki-hot']), unlocked: rgb(C['accent']) };
+    const pad = K['frame-padding'];
+    this.extent = [
+      Math.max(...nodes.map((n) => Math.abs(n.at[0]))) + pad,
+      Math.max(...nodes.map((n) => Math.abs(n.at[1]))) + pad,
+    ];
     nodes.forEach((n, i) => {
       pos.set(n.at as number[], i * 3);
       size[i] = K['node-size'][n.state];
@@ -159,10 +165,11 @@ export class ConstellationScene {
     this.renderer.setPixelRatio(r);
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
-    // Keep the whole constellation in view on narrow screens.
-    this.camera.position.z = w < h ? 24 * Math.min(1.9, h / w) : 24;
+    // Fit the constellation's width and height (its extent comes from the node positions).
+    const halfV = Math.tan(((this.camera.fov / 2) * Math.PI) / 180);
+    this.camera.position.z = Math.max(this.extent[1] / halfV, this.extent[0] / (halfV * (w / h)));
     this.camera.updateProjectionMatrix();
-    this.stars.uniforms['uPx'].value = h * r * 0.9;
+    this.stars.uniforms['uPx'].value = h * r * K['star-px'];
     this.scheduler.requestRender();
   }
 

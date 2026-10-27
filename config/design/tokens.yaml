@@ -157,13 +157,22 @@ gesture:
 
 # World map (Phase 3). Camera focus and marker sizes; light and fog come from the rulebook.
 world:
-  focus-zoom: 0.55
+  # Overview framing for the whole map (the look test keeps map.camera).
+  overview: { distance: 60, elevation-deg: 56, azimuth-deg: 16 }
+  # Aerial haze for the whole-map view (the look test uses map.levels fog).
+  depth-fog: 0.009
+  # Shift the view target toward the far side so the HUD does not cover the near regions.
+  target-offset: [2, -3]
+  # Engraved ring at each region's edge: width in world units and strength.
+  ring-width: 0.18
+  ring-strength: 0.7
+  focus-zoom: 0.45
   camera-stiffness: 3.2
   settle-epsilon: 0.002
   idle-drift-deg-per-s: 1.2
   marker-height: 0.9
-  marker-size: 0.55
-  region-tint-strength: 0.45
+  marker-size: 0.6
+  region-tint-strength: 0.7
   fog-strength: 0.75
   max-regions: 8
   phone-canvas-ratio: 0.62
@@ -175,6 +184,8 @@ battlelog:
 skilltree:
   orbit-deg-per-s: 4
   node-size: { locked: 0.35, available: 0.6, unlocked: 0.8 }
+  star-px: 2.4
+  frame-padding: 2
 
 layers: { base: 0, rail: 10, bar: 20, tab-bar: 30, scrim: 40, sheet: 50, dialog: 60, toast: 70 }
 

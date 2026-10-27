@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DEMO_SEED } from '../demo/seed.generated';
-import { DEMO_MODE, GAME_DATA } from './game-data';
+import { DEMO_DATA as DEMO_SEED, DEMO_MODE, GAME_DATA } from './game-data';
 
 describe('game data source', () => {
   it('serves the demo seed when the build is in demo mode', () => {

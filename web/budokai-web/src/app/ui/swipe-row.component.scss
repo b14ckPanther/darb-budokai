@@ -70,3 +70,11 @@
   font-size: var(--type-footnote-size);
   color: var(--color-text-secondary);
 }
+
+// With a mouse there is no swipe: hovering or focusing a row slides its actions into view.
+@media (hover: hover) and (pointer: fine) {
+  :host(:hover) .content:not(.dragging),
+  :host(:focus-within) .content:not(.dragging) {
+    transform: translateX(var(--reveal)) !important;
+  }
+}

@@ -17,7 +17,7 @@ export function terrainFrag(maxRegions: number): string {
   #define MAX_REGIONS ${maxRegions}
   uniform vec3 uStone, uStoneLit, uContour, uKi, uKiHot, uFog, uKey, uDust;
   uniform float uInterval, uWidth, uLight, uFogDensity, uEmber, uTime, uHeight, uTile, uFalloff, uFloor;
-  uniform float uTintStrength, uFogStrength;
+  uniform float uTintStrength, uFogStrength, uRingWidth, uRingStrength;
   uniform int uCount;
   uniform vec2 uCentre[MAX_REGIONS];
   uniform float uRadius[MAX_REGIONS];
@@ -36,6 +36,7 @@ export function terrainFrag(maxRegions: number): string {
     float glow = 0.0;
     vec3 tint = vec3(0.0);
     float cover = 0.0;
+    float ring = 0.0;
     if (uCount > 0) {
       float wsum = 0.0;
       float l = 0.0;
@@ -47,6 +48,8 @@ export function terrainFrag(maxRegions: number): string {
         l += w * uRLight[i];
         dust += w * uRFog[i];
         tint += w * uTint[i];
+        float rw = max(fwidth(d), uRingWidth);
+        ring = max(ring, (1.0 - smoothstep(0.0, rw, abs(d - uRadius[i]))) * (0.35 + 0.65 * uRLight[i]));
         glow += uRLight[i] * uEmber * exp(-d * d * uFalloff);
       }
       cover = clamp(wsum, 0.0, 1.0);
@@ -79,6 +82,7 @@ export function terrainFrag(maxRegions: number): string {
     col = mix(col, ink, line * (0.5 + 0.5 * light) * (1.0 - dust * 0.6));
     col = mix(col, uContour * 0.55, tile * 0.1 * (0.4 + light));
     col = mix(col, uDust, clamp(dust * uFogStrength, 0.0, 1.0));
+    col = mix(col, uContour, ring * uRingStrength);
     float fogF = 1.0 - exp(-uFogDensity * uFogDensity * vDepth * vDepth);
     gl_FragColor = vec4(mix(col, uFog, clamp(fogF, 0.0, 1.0)), 1.0);
   }

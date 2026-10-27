@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { COPY } from '../../copy/copy.generated';
 import { GAME_DATA } from '../../data/game-data';
-import { DEMO_SEED } from '../../demo/seed.generated';
+import { DEMO_DATA as DEMO_SEED } from '../../data/game-data';
 import { SkillsScreenComponent } from './skills-screen.component';
 
 const K = COPY.skills;

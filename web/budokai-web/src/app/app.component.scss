@@ -46,6 +46,14 @@ main {
     color: var(--color-text-gold);
     font-weight: 600;
   }
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
+  }
+  flex-wrap: nowrap;
 }
 
 .no-data {
@@ -68,13 +76,16 @@ main {
 }
 
 @media (min-width: t.$desktop-from) {
+  // Docked at the foot of the side rail, clear of every screen's own controls.
   .demo {
     position: fixed;
-    top: var(--space-3);
-    right: var(--space-4);
+    bottom: var(--space-4);
+    left: var(--space-2);
+    width: calc(var(--rail-width) - 2 * var(--space-2));
+    justify-content: center;
     z-index: var(--layer-toast);
-    max-width: 22rem;
-    padding: var(--space-1) var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    text-align: center;
     border: 1px solid var(--color-hairline-strong);
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--color-bar) calc(var(--bar-alpha) * 100%), transparent);

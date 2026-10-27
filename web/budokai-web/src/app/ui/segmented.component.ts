@@ -45,6 +45,9 @@ export interface SegmentOption {
       border: 1px solid var(--color-hairline);
       max-width: 100%;
     }
+    :host(.fit) .track {
+      grid-auto-columns: max-content;
+    }
     .seg {
       min-height: var(--touch-target);
       padding: 0 var(--space-4);
@@ -68,10 +71,13 @@ export interface SegmentOption {
         inset 0 0 0 1px var(--color-hairline);
     }
   `,
+  host: { '[class.fit]': 'fit()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SegmentedComponent {
   readonly label = input.required<string>();
+  /** Size segments to their labels (long or many options) instead of equal widths. */
+  readonly fit = input(false);
   readonly options = input.required<SegmentOption[]>();
   readonly value = model.required<string>();
   private readonly buttons = viewChildren<ElementRef<HTMLButtonElement>>('seg');

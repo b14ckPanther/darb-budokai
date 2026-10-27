@@ -57,6 +57,8 @@ export class BattleLogScreenComponent {
     label: format(B['speed-value'], { speed: s }),
   }));
   readonly player = this.store.player;
+  /** Only the play state drives the clock, not every tick. */
+  private readonly playing = computed(() => this.player().playing);
   readonly day = this.store.day;
   readonly enc = this.store.encounter;
   readonly current = computed(() => (this.enc() ? [this.enc()!] : []));
@@ -122,7 +124,7 @@ export class BattleLogScreenComponent {
     });
     // The clock runs only while playing; the reducer decides everything else.
     effect(() => {
-      const playing = this.player().playing;
+      const playing = this.playing();
       cancelAnimationFrame(frame);
       if (!playing || typeof requestAnimationFrame === 'undefined') return;
       last = 0;
@@ -130,7 +132,8 @@ export class BattleLogScreenComponent {
         const step = (t: number) => {
           const dt = last ? Math.min(t - last, 100) : 0;
           last = t;
-          this.store.dispatch({ type: 'tick', dt });
+          // Ticks change what is on screen, so they run inside the zone.
+          zone.run(() => this.store.dispatch({ type: 'tick', dt }));
           if (this.player().playing) frame = requestAnimationFrame(step);
         };
         frame = requestAnimationFrame(step);

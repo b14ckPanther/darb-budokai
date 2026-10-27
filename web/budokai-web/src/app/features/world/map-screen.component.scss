@@ -27,12 +27,12 @@
 
 .hud {
   position: absolute;
-  top: var(--space-3);
+  bottom: var(--space-3);
   left: max(var(--space-3), env(safe-area-inset-left));
   right: max(var(--space-3), env(safe-area-inset-right));
   display: grid;
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-hairline);
   background: color-mix(in srgb, var(--color-bar) calc(var(--bar-alpha) * 100%), transparent);
@@ -45,12 +45,19 @@
   }
 }
 
+.hud .hud-stamina,
+.hud .today {
+  display: none;
+}
+
 .who {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   img {
     flex: none;
+    width: 2rem;
+    height: auto;
   }
 }
 
@@ -237,8 +244,16 @@ h3 {
   .hud {
     right: auto;
     width: 22rem;
-    top: var(--space-5);
+    bottom: var(--space-5);
     left: var(--space-5);
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+  .hud .hud-stamina {
+    display: grid;
+  }
+  .hud .today {
+    display: inline-flex;
   }
   .places {
     padding: var(--space-5);

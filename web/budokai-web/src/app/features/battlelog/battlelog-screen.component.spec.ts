@@ -4,7 +4,7 @@ import { COPY } from '../../copy/copy.generated';
 import { format } from '../../copy/format';
 import { BattleLogStore } from '../../data/battlelog.store';
 import { GAME_DATA } from '../../data/game-data';
-import { DEMO_SEED } from '../../demo/seed.generated';
+import { DEMO_DATA as DEMO_SEED } from '../../data/game-data';
 import { BattleLogScreenComponent } from './battlelog-screen.component';
 
 const B = COPY.battlelog;

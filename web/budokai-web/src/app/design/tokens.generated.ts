@@ -576,13 +576,25 @@ export const TOKENS = {
     }
   },
   "world": {
-    "focus-zoom": 0.55,
+    "overview": {
+      "distance": 60,
+      "elevation-deg": 56,
+      "azimuth-deg": 16
+    },
+    "depth-fog": 0.009,
+    "target-offset": [
+      2,
+      -3
+    ],
+    "ring-width": 0.18,
+    "ring-strength": 0.7,
+    "focus-zoom": 0.45,
     "camera-stiffness": 3.2,
     "settle-epsilon": 0.002,
     "idle-drift-deg-per-s": 1.2,
     "marker-height": 0.9,
-    "marker-size": 0.55,
-    "region-tint-strength": 0.45,
+    "marker-size": 0.6,
+    "region-tint-strength": 0.7,
     "fog-strength": 0.75,
     "max-regions": 8,
     "phone-canvas-ratio": 0.62
@@ -602,7 +614,9 @@ export const TOKENS = {
       "locked": 0.35,
       "available": 0.6,
       "unlocked": 0.8
-    }
+    },
+    "star-px": 2.4,
+    "frame-padding": 2
   }
 } as const;
 

@@ -9,6 +9,7 @@
       [selected]="map.selected()"
       [focus]="focus()"
       [drift]="!sheetOpen()"
+      [labels]="labelNames()"
       (picked)="onPick($event)"
     />
   } @else {
@@ -56,12 +57,7 @@
   <ul class="regions">
     @for (r of map.regions(); track r.id) {
       <li>
-        <button
-          type="button"
-          class="place"
-          [attr.aria-label]="regionLabel(r.name)"
-          (click)="open(r.id)"
-        >
+        <button type="button" class="place" (click)="open(r.id)">
           <span class="swatch" [style.background]="r.tint" aria-hidden="true"></span>
           <span class="place-text">
             <span class="place-name">{{ r.name }}</span>

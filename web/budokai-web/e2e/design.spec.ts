@@ -55,7 +55,7 @@ test('the tab bar sits in the safe area on phones and becomes a rail on desktop'
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/design');
-  const nav = page.getByRole('navigation', { name: D.title });
+  const nav = page.getByRole('navigation', { name: COPY.shell['nav-label'] });
   const phone = await nav.boundingBox();
   expect(Math.round(phone!.y + phone!.height)).toBe(844);
   expect(Math.round(phone!.width)).toBe(390);

@@ -198,3 +198,11 @@ kbd {
     padding-top: var(--space-8);
   }
 }
+
+// Key hints mean nothing without a keyboard.
+@media (hover: none) {
+  kbd,
+  .hint {
+    display: none;
+  }
+}

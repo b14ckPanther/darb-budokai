@@ -3,10 +3,11 @@ import { expect, test } from '@playwright/test';
 import messages from '../src/locale/messages.en.json';
 
 test.describe('home page smoke', () => {
-  test('loads and shows the product name', async ({ page }) => {
+  test('opens on the world map with the product name in the title', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(messages['app.name']);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(messages['app.name']);
+    await expect(page).toHaveURL(/\/map$/);
+    await expect(page).toHaveTitle(new RegExp(`\\| ${messages['app.name']}$`));
+    await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   });
 
   test('has no serious or critical accessibility violations', async ({ page }) => {

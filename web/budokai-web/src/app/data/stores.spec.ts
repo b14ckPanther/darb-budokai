@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DEMO_SEED } from '../demo/seed.generated';
+import { DEMO_DATA as DEMO_SEED } from './game-data';
 import { regionFog, regionLight } from '../game/map-rules';
 import { GAME_DATA, GameData } from './game-data';
 import { CharacterStore } from './character.store';
