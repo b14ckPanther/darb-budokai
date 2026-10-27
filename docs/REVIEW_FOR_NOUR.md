@@ -1,5 +1,7 @@
 # Phase 1 review for Nour
 
+**Closed 2026-10-27.** Decided under Nour's delegation; answers in `docs/OPEN_QUESTIONS.md`, the spec in `docs/specs/2026-10-27-phase-01-budokai-spec.md`, and the changed items (Q8, Q9, Q14, Q17, Q22) in `docs/DECISIONS.md` (ADR-032 to ADR-037).
+
 Every open question from `docs/OPEN_QUESTIONS.md` that Phase 1 must settle, with a recommended
 answer and one line of why. Reply **"yes to all"**, or name the numbers you want to change.
 Nothing here is final until you answer; Phase 1 then records each answer as an ADR.

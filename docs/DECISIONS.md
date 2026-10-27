@@ -2,13 +2,15 @@
 
 Short architecture decision records. Newest at the bottom. Never delete an ADR; supersede it with a new one and mark the old one `Superseded by ADR-NNN`.
 
+Phase 1 closed on 2026-10-27: every Proposed ADR was accepted under Nour's delegation ("any choice by u will be approved from my side"), and ADR-032 to ADR-037 record the answers, including each place the Phase 1 review sheet's recommendation changed. Outward actions (visibility, deploy, publishing, spending) still need Nour's yes.
+
 Status values: `Accepted` (fixed by Nour's roadmap or rules), `Proposed` (decided by the planning agent, **confirm with Nour in Phase 1**), `Superseded`.
 
 Template:
 
 ```
 ## ADR-NNN: Title
-- Status: Proposed | Accepted | Superseded by ADR-MMM
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md` | Accepted | Superseded by ADR-MMM
 - Date: YYYY-MM-DD
 - Context: why a decision is needed (2 to 4 lines)
 - Decision: what we do
@@ -99,7 +101,7 @@ Template:
 - Decision: brainstorming → spec → writing-plans → executing-plans (native) with `docs/PROGRESS.md` → whole-branch review → finish, per phase.
 
 ## ADR-016: Event contracts are JSON Schema 2020-12 in a CloudEvents 1.0 envelope
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Context: the roadmap requires versioned contracts (JSON Schema or Avro). Producers will be Python, Dart, Go/.NET-adjacent, TypeScript and a LangGraph agent.
 - Decision: JSON Schema per type and major version in `contracts/events/`; CloudEvents envelope with Darb Budokai extensions; no Schema Registry. Avro stays an option for Darb Genki.
 - Consequences: readable, polyglot, simple locally; no binary compactness or registry-enforced compatibility (replaced by a compat test in CI).
@@ -150,36 +152,36 @@ Template:
 - Phase 0 merges into `main` locally after the self-review; nothing is pushed.
 
 ## ADR-020: Choreography with causation and correlation ids
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Decision: no orchestrator. Services react to events and emit effects carrying `causationid` and `correlationid`; battlelog reconstructs encounters from them.
 - Cost if wrong: medium.
 
 ## ADR-021: Transactional outbox and idempotent inbox
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Decision: every service publishes via an `outbox_events` table and relay; consumers record `processed_events` in the same transaction.
 - Cost if wrong: low (internal to `libs/budokai-platform`).
 
 ## ADR-022: One Postgres server locally, one logical database and role per service
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Decision: `init.sh` (ADR-031) creates `<service>_db` and `<service>_svc` per service with no cross grants. Separate instances later in Darb Genki.
 - Cost if wrong: low.
 
 ## ADR-023: Rules engine is declarative YAML with a restricted predicate language
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Decision: typed effect specs and amount specs from YAML; `when` predicates evaluated with SpEL `SimpleEvaluationContext` (read-only data binding); closed set of curve types.
 - Cost if wrong: medium.
 
 ## ADR-024: Gateway calls services over internal REST (no GraphQL federation)
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Cost if wrong: medium (federation could be added later per service).
 
 ## ADR-025: Battle-log narration from copy templates, no LLM
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Decision: narration lines from `config/copy/en/battlelog.yaml`; deterministic. Darb Kaio could add LLM flavour later as an optional producer.
 - Cost if wrong: low.
 
 ## ADR-026: Deterministic loot and replay
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Decision: loot RNG seeded by SHA-256(causationId + rulebookVersion + tableId); replay scripts byte-identical for identical inputs.
 - Cost if wrong: low.
 
@@ -192,12 +194,48 @@ Template:
 - Decision: agents check the skill list before every task, invoke matching skills first, and record them in the ledger. Mapping in CLAUDE.md §2a and each phase's "Skills:" line.
 
 ## ADR-029: Web unit tests with Jest; e2e with Playwright and axe
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Context: Karma is deprecated upstream; Darb Budokai needs fast unit tests and accessible e2e.
 - Decision: `jest-preset-angular` for unit tests, Playwright + `@axe-core/playwright` for e2e.
 - Cost if wrong: low.
 
 ## ADR-030: SCSS design tokens, no Tailwind
-- Status: Proposed
+- Status: Accepted (Phase 1, 2026-10-27). Decided under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`
 - Decision: hand-built SCSS tokens and components for a non-template look; Angular CDK for overlays, focus and a11y primitives.
 - Cost if wrong: low.
+
+---
+
+## ADR-032: Art direction is Seal Stone, the brand grown into a map
+- Status: Accepted. Decided under Nour's delegation (2026-10-27). **Changed from the review sheet** (Q9 recommended "Ember Atlas re-tuned to the brand").
+- Context: the approved brand ("The Seal") fixes fonts and palette, so UI_DESIGN's three candidates cannot keep their own fonts and colours.
+- Decision: the three candidates become brand-faithful variants (`docs/specs/assets/directions.html`). **Seal Stone** (dark tiled stone in relief, gold contour lines, forest panels, ki light only where real events landed, pale stone-dust fog for neglect) is the world. Gold Orrery is kept as the skill tree's look; Ink and Ki is kept as a possible later daylight theme. Phase 2 confirms on screen.
+- Consequences: the map, the mark and the UI share one material story (stone, gold, ki).
+- Cost if wrong: low; one token block and the map material.
+
+## ADR-033: Icons are Solar Bold Duotone, bundled at build time
+- Status: Accepted. Decided under Nour's delegation (2026-10-27). Same as the review sheet (Q10), with the delivery detail added.
+- Decision: Solar Bold Duotone from `@iconify-json/solar`, extracted at build time into a typed registry (no runtime CDN, no tracker), plus original SVG sigils. Components may reference only registry names (`icons.spec.ts`). Solar is CC BY 4.0, credited in `ASSETS.md`.
+- Cost if wrong: low; the registry is the single swap point.
+
+## ADR-034: No social tournament; sibling integrations are optional, and non-core apps are cosmetic only
+- Status: Accepted. Decided under Nour's delegation (2026-10-27). **Changed from the review sheet** (Q14 and Q22 added these constraints).
+- Context: "Budokai" means a tournament, which invites leaderboards and PvP; and every new Darb app could otherwise bend the economy.
+- Decision: one owner, no other players, leaderboards, rankings, PvP, friends, guilds, chat or brackets; the tournament is the brand metaphor (each good day is a round won against yesterday). Budokai is complete with only the Quest Log and Recall. The roadmap's core producers (Darb Scouter, Darb Juryoku, Darb Sennin) may award through the rulebook; every other Darb app integrates only through optional cosmetic events that change how the world looks and never award XP, stamina, loot or quest progress. `kinton.portal.opened` v1 is the template. Each producer can be switched off in Integrations.
+- Consequences: the economy stays honest as the universe grows; a new app needs one cosmetic contract, not a rulebook change.
+- Cost if wrong: low; a later ADR can promote one app to a core producer.
+
+## ADR-035: No money features; loot is never bought
+- Status: Accepted. Decided under Nour's delegation (2026-10-27). **Changed from the review sheet** (Q8 kept capped modifiers but said nothing about currency).
+- Decision: no in-game currency, coins, shop, prices, trading, purchases, budgets, savings, revenue or finance tracking, and no producer that sends financial data. Items drop only from real events and can only be equipped. Item modifiers stay capped at `max_item_modifier` (0.10).
+- Cost if wrong: low.
+
+## ADR-036: Brand type and palette; dark theme only in v1; zone.js stays
+- Status: Accepted. Decided under Nour's delegation (2026-10-27).
+- Decision: Zen Antique (display), Geist (interface and numbers, tabular figures), Yuji Boku (seal only), all self-hosted subsets; colours come from `brand/src/tokens.json`, with only the missing semantic colours (danger, fog, verified and similar) added in `config/design/tokens.yaml` and contrast-tested. The UI_DESIGN draft palette and fonts are superseded. v1 ships one dark theme (the night arena); tokens are grouped by theme so a daylight theme is one block later. Angular keeps zone.js (zoneless is experimental in 19); Three.js runs outside the zone.
+- Cost if wrong: low.
+
+## ADR-037: Phase 1 answers kept as recommended
+- Status: Accepted. Decided under Nour's delegation (2026-10-27).
+- Decision: Q1 to Q7, Q11 to Q13, Q15, Q16 and Q18 to Q21 are answered as `docs/REVIEW_FOR_NOUR.md` recommended (spec sections 3, 4 and 6). Q17 is unchanged except that the repo now exists and `main` was pushed after Phase 0.
+- Cost if wrong: low to medium per item; each lives in config or one ADR.
