@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
 import {
   buildCopyTs,
+  buildSeedTs,
   buildIconsTs,
   buildTokensCss,
   buildTokensTs,
@@ -31,12 +32,16 @@ const sigils = Object.fromEntries(
 );
 writeFileSync(join(web, 'src/app/design/icons.generated.ts'), buildIconsTs(icons, solar, sigils));
 
-const copyDir = join(repo, 'config/copy/en');
-const copy = Object.fromEntries(
-  readdirSync(copyDir)
-    .filter((f) => f.endsWith('.yaml'))
-    .sort()
-    .map((f) => [f.replace(/\.yaml$/, ''), parse(readFileSync(join(copyDir, f), 'utf8'))]),
+const yamlDir = (dir: string) =>
+  Object.fromEntries(
+    readdirSync(join(repo, dir))
+      .filter((f) => f.endsWith('.yaml'))
+      .sort()
+      .map((f) => [f.replace(/\.yaml$/, ''), parse(read(`${dir}/${f}`))]),
+  );
+writeFileSync(join(web, 'src/app/copy/copy.generated.ts'), buildCopyTs(yamlDir('config/copy/en')));
+writeFileSync(
+  join(web, 'src/app/demo/seed.generated.ts'),
+  buildSeedTs(yamlDir('config/seed/demo')),
 );
-writeFileSync(join(web, 'src/app/copy/copy.generated.ts'), buildCopyTs(copy));
 console.log('design files written');

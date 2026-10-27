@@ -4,6 +4,7 @@ import { parse } from 'yaml';
 import {
   buildCopyTs,
   buildIconsTs,
+  buildSeedTs,
   buildTokensCss,
   buildTokensTs,
   resolveTokens,
@@ -67,16 +68,23 @@ describe('design token pipeline', () => {
     expect(committed).toBe(buildIconsTs(icons, solar, sigils));
   });
 
-  it('committed copy matches config/copy/en (run npm run design)', () => {
-    const dir = join(repo, 'config/copy/en');
-    const copy = Object.fromEntries(
-      readdirSync(dir)
+  const yamlDir = (dir: string) =>
+    Object.fromEntries(
+      readdirSync(join(repo, dir))
         .filter((f) => f.endsWith('.yaml'))
         .sort()
-        .map((f) => [f.replace(/\.yaml$/, ''), parse(readFileSync(join(dir, f), 'utf8'))]),
+        .map((f) => [f.replace(/\.yaml$/, ''), parse(readFileSync(join(repo, dir, f), 'utf8'))]),
     );
+
+  it('committed copy matches config/copy/en (run npm run design)', () => {
     expect(readFileSync(join(web, 'src/app/copy/copy.generated.ts'), 'utf8')).toBe(
-      buildCopyTs(copy),
+      buildCopyTs(yamlDir('config/copy/en')),
+    );
+  });
+
+  it('committed demo seed matches config/seed/demo (run npm run design)', () => {
+    expect(readFileSync(join(web, 'src/app/demo/seed.generated.ts'), 'utf8')).toBe(
+      buildSeedTs(yamlDir('config/seed/demo')),
     );
   });
 

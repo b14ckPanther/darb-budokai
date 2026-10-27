@@ -1,0 +1,9 @@
+level: Level {level}
+xp: Experience
+xp-value: '{value} of {max} XP'
+stamina: Stamina
+stamina-value: '{value} of {max}'
+rank: Rank {rank}
+status:
+  normal: Rested
+  exhausted: Exhausted

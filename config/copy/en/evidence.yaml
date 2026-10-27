@@ -1,0 +1,13 @@
+# Evidence tiers (GAME_DESIGN section 8). Shown as sigil plus word, never colour alone.
+verified:
+  label: Verified
+  hint: Signed by the app that saw it happen
+attested:
+  label: Attested
+  hint: Backed by a link or a file
+self_reported:
+  label: Self-reported
+  hint: Your word alone, counted lightly
+simulated:
+  label: Simulated
+  hint: Made by the simulator, never real
