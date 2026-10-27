@@ -1,6 +1,6 @@
 # Architecture
 
-Status: the service split, the brokers and the tech stack come from Nour's approved roadmap. Service names, topic names, ports, the choreography style and the contract format are **proposed, confirm with Nour in Phase 1**.
+Status: the service split, the brokers and the tech stack come from Nour's approved roadmap. Service names, topic names, ports, the choreography style and the contract format are **confirmed in Phase 1 (2026-10-27, under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`)**.
 
 ## 1. Shape in one paragraph
 
@@ -65,7 +65,7 @@ This is **choreography**, not orchestration: no central service tells others wha
 | `gateway-service` | 8080 | none (stateless) | internal REST of all services | GraphQL responses | Public GraphQL API (`/graphql`, GraphiQL in `local` only). JWT resource server. DataLoader batching, max depth 10 and complexity limits (values in config). Resilience4j timeouts and circuit breakers on downstream calls. |
 | `identity-service` | 8081 | `identity_db`: users, refresh_tokens, producer_credentials | none | `identity.user.registered` (Kafka, optional) | Login, refresh-token rotation (httpOnly cookie), RS256 JWT issuing, `/.well-known/jwks.json`. Issues producer API keys and HMAC secrets for ingest. Service-to-service tokens (client credentials). |
 | `ingest-service` | 8082 | `ingest_db`: received_events (idempotency), quarantine, producer_cursors | HTTP, RabbitMQ `ingest.poll-darb` | Kafka `budokai.life-events.v1`, `budokai.ingest.rejected.v1` | Single door for real-world events. Verifies HMAC + timestamp, validates the CloudEvents envelope and the JSON Schema for the `type` and version, dedupes by `id` and natural key, checks evidence and backdating window (config), normalises, publishes. Darb Scouter poller connector. |
-| `character-service` | 8083 | `character_db`: characters, stat_values, stamina_ledger, xp_ledger, levels | `budokai.life-events.v1`, `budokai.quest.effects.v1`, `budokai.spellbook.effects.v1` | `budokai.character.effects.v1` | Stats (Vigor, Craft, Lore, Resolve; proposed), stamina pool, XP and level curve, skill-tree unlocks. Applies `character` rules from the rulebook. |
+| `character-service` | 8083 | `character_db`: characters, stat_values, stamina_ledger, xp_ledger, levels | `budokai.life-events.v1`, `budokai.quest.effects.v1`, `budokai.spellbook.effects.v1` | `budokai.character.effects.v1` | Stats (Vigor, Craft, Lore, Resolve), stamina pool, XP and level curve, skill-tree unlocks. Applies `character` rules from the rulebook. |
 | `quest-service` | 8084 | `quest_db`: quest_templates (seeded from config), quests, quest_progress, main_quests, raids, bosses | `budokai.life-events.v1`, RabbitMQ `quest.generate-daily`, `quest.evaluate-missed-day` | `budokai.quest.effects.v1` | Quest Log (daily quests, habits), main quests from job applications, raids from interviews, boss fights from code reviews, final boss from offers, missed-day consequences. |
 | `inventory-service` | 8085 | `inventory_db`: items (catalogue seeded from config), inventory_entries, equipment, loot_rolls | `budokai.quest.effects.v1`, `budokai.character.effects.v1` | `budokai.inventory.effects.v1` | Loot tables, deterministic loot rolls, equipment slots and the small modifiers items give. |
 | `spellbook-service` | 8086 | `spellbook_db`: decks, cards, reviews, schedules, spells | `budokai.life-events.v1` (external study events), GraphQL-originated review commands via REST | `budokai.spellbook.effects.v1`, and `study.*` life events back through ingest's internal endpoint | Recall: decks, cards, SM-2 scheduling, review sessions. A card becomes a spell when first recalled correctly; mastery and fading follow its SM-2 state. |
@@ -74,7 +74,7 @@ This is **choreography**, not orchestration: no central service tells others wha
 | `simulator` (tools) | 8090 | none | scenario YAML | HTTP to ingest | Dev-only. Emits realistic events for a simulated persona. Refuses to start unless profile `sim` is active and `REALM_SIMULATOR_ENABLED=true`. |
 | `budokai-web` | 4200 | none | GraphQL, STOMP | GraphQL mutations | Angular 19 client. |
 
-Why the gateway calls services over REST instead of querying their databases: data ownership. No service reads another's tables. Why not GraphQL federation: one gateway with typed HTTP interface clients is simpler to run locally and still shows schema design; federation can come later (proposed, confirm with Nour in Phase 1).
+Why the gateway calls services over REST instead of querying their databases: data ownership. No service reads another's tables. Why not GraphQL federation: one gateway with typed HTTP interface clients is simpler to run locally and still shows schema design; federation can come later (confirmed in Phase 1).
 
 ## 4. Kafka vs RabbitMQ
 
@@ -128,7 +128,7 @@ Details and every event: `EVENT_CONTRACTS.md`.
 
 - **Envelope:** CloudEvents 1.0, structured JSON mode, plus Darb Budokai extensions (`budokaiuserid`, `budokaievidence`, `budokaimode`, `causationid`, `correlationid`, `rulebookversion` on effects).
 - **Payload schema:** JSON Schema 2020-12, one file per type and major version: `contracts/events/<type>/v<N>.schema.json`, with valid and invalid examples in `contracts/events/<type>/examples/`.
-- **Why JSON Schema over Avro** (proposed, confirm with Nour in Phase 1): producers are polyglot (Python, Dart, TypeScript, a LangGraph agent); JSON is readable in Kafka UI; no Schema Registry to run locally. Avro + Schema Registry stays an option for Darb Genki. Recorded as ADR-016.
+- **Why JSON Schema over Avro** (confirmed in Phase 1): producers are polyglot (Python, Dart, TypeScript, a LangGraph agent); JSON is readable in Kafka UI; no Schema Registry to run locally. Avro + Schema Registry stays an option for Darb Genki. Recorded as ADR-016.
 - **Versioning rules:**
   - Additive, optional fields: same major version. Consumers ignore unknown fields.
   - Removing or renaming a field, changing a type, or adding a required field: new major version (`v2.schema.json`), new `dataschema` URI. Topic names keep `.v1` until the envelope itself breaks.

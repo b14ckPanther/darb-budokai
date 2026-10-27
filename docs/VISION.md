@@ -48,10 +48,11 @@ Nour's public GitHub is about 90% Next.js / Supabase / TypeScript. Israeli junio
 
 - Building the sibling projects (Darb Scouter, Darb Juryoku, Darb Sennin, Darb Kinton, Darb Kaio, Darb Capsule, Darb Genki, Darb Enmacho). Darb Budokai only defines their contracts and an ingest path, plus a simulator.
 - Kubernetes, Helm, Grafana dashboards. That is Darb Genki. Darb Budokai only exposes the hooks (health probes, metrics, OTLP traces).
-- Multiplayer, guilds, chat, leaderboards (unless Nour decides otherwise in Phase 1).
+- Multiplayer, guilds, chat, leaderboards, rankings or PvP. The "tournament" is a metaphor for one person's days (ADR-034).
+- Money: no currency, shop, budgets, revenue or finance tracking (ADR-035).
 - Monetisation of any kind.
 - A mobile app (that is Darb Capsule). The web client must still work well on a phone.
-- An LLM in the core loop. Battle-log narration is template-driven from config (proposed, confirm with Nour in Phase 1).
+- An LLM in the core loop. Battle-log narration is template-driven from config (confirmed in Phase 1).
 
 ## Anti-goals (these mean failure)
 

@@ -2,7 +2,7 @@
 
 Every event that crosses a service or project boundary is listed here. The JSON Schema files in `contracts/events/<type>/v<N>.schema.json` are the source of truth once Phase 5 creates them; this file is the human index and must be updated in the same commit as any schema change.
 
-Format (JSON Schema 2020-12 inside CloudEvents 1.0) is **proposed, confirm with Nour in Phase 1** (ADR-016). Field names and the non-Darb event types are proposed too.
+Format (JSON Schema 2020-12 inside CloudEvents 1.0) is **confirmed in Phase 1 (2026-10-27, under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`)** (ADR-016). Field names and the non-Darb event types are proposed too.
 
 ## 1. Envelope (all events)
 
@@ -120,6 +120,16 @@ Opens a boss (HP from findings) or updates it if `reviewId` was seen.
 { "reviewId": "string", "findingId": "string", "resolvedAt": "date-time", "commitSha": "string?" }
 ```
 Deals boss damage. Natural key: `reviewId + findingId`.
+
+### 3.3b Cosmetic events from other Darb apps (ADR-034)
+
+Every Darb app other than the core producers (Darb Scouter, Darb Juryoku, Darb Sennin) integrates through **optional cosmetic events**. Rules for these contracts:
+
+- Their rulebook mapping may only produce map-visual effects (marker, banner, light). XP, stamina, quest, loot, boss and raid effects are rejected for them by `RealRulebookValidTest` (Phase 4).
+- Producer keys are scoped to the app's own types, as for every producer.
+- No content payloads (file names, messages, amounts); identifiers and timestamps only.
+- No money or financial data in any contract (ADR-035).
+- `kinton.portal.opened` v1 below is the template.
 
 ### 3.4 Darb Kinton (later)
 

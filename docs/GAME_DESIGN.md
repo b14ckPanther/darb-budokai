@@ -2,7 +2,7 @@
 
 Fixed by Nour's roadmap: posture sets stamina, Darb Sennin reviews are boss fights, study sessions teach spells, job applications are main quests, an interview is a raid, an offer is the final boss, Quest Log and Recall merge into Darb Budokai, the nightly battle-log replay, and Spring Boot running stats, XP, loot and consequences.
 
-Everything else in this file (stat names, region names, exact mappings, evidence tiers, the shape of the rulebook) is **proposed, confirm with Nour in Phase 1**. Every number in this file is an **example default for the config file**, never a constant in code.
+Everything else in this file (stat names, region names, exact mappings, evidence tiers, the shape of the rulebook) is **confirmed in Phase 1 (2026-10-27, under Nour's delegation; see `docs/specs/2026-10-27-phase-01-budokai-spec.md`)**. Every number in this file is an **example default for the config file**, never a constant in code.
 
 ## 1. Core loop
 
@@ -21,7 +21,7 @@ Two loops run in parallel:
 
 ## 2. The character
 
-### Stats (proposed)
+### Stats
 
 | Stat | Fed by | Meaning |
 |---|---|---|
@@ -73,7 +73,7 @@ All mappings below live in `config/rulebook/v1/*.yaml`. The "Effect" column is t
 | `milestone.earned` | Darb Scouter | Deed | Title or badge from `milestones` table in config; XP only if the milestone maps to a real stage outcome. |
 | `habit.checked` | Darb Budokai (Quest Log UI) or Darb Capsule | Daily quest step | Quest progress. Reward scaled by evidence tier (section 8). |
 | `plan.week.published` | Darb Kaio | Prophecy | Proposes quests for the week; Nour accepts or rejects them in the Quest Log. No XP for planning. |
-| `kinton.portal.opened` | Darb Kinton | Portal | Cosmetic: a portal marker between the device regions on the map. No XP. |
+| `kinton.portal.opened` | Darb Kinton | Portal | Cosmetic: a portal marker between the device regions on the map. No XP. The template for every non-core Darb app (ADR-034). |
 
 Quest effects consumed by other services: `quest.completed` → character awards XP, inventory rolls loot. `boss.defeated` → inventory rolls `boss_<tier>`. `spell.mastered` → character Lore XP and skill-tree checks.
 
@@ -90,11 +90,19 @@ Quest effects consumed by other services: `quest.completed` → character awards
   - Streak resets for that habit.
   - Stamina takes the configured `missed_day_penalty`.
   - The habit's region on the map loses light: **fog returns** in proportion to consecutive misses. Fog lifts as quests are completed again.
-  - No XP is ever removed and levels never go down (proposed). The world shows neglect; the character keeps what was earned.
+  - No XP is ever removed and levels never go down. The world shows neglect; the character keeps what was earned.
+
+### Optional integrations and cosmetic events (ADR-034)
+
+- Every sibling producer is optional. With none running, the Quest Log and Recall still drive every kind of effect.
+- Only the roadmap's core producers (Darb Scouter, Darb Juryoku, Darb Sennin) award XP, stamina, loot or quest progress through the rulebook.
+- Every other Darb app sends **cosmetic events only**: markers, banners and light on the map, never rewards. `kinton.portal.opened` v1 is the template. Darb Kaio's weekly plan is a proposal list and awards nothing.
+- There is no social layer: no other players, leaderboards, rankings or PvP. The "tournament" is the brand metaphor for one person's days.
 
 ## 4. Loot and items
 
-- Items are mostly **cosmetic or informational** (titles, map banners, character sheet trinkets) with small, capped modifiers (e.g. +5% stamina recovery). Proposed: no item may change XP by more than the cap in `loot.yaml` (`max_item_xp_modifier: 0.10`).
+- Items are **cosmetic or informational** (titles, map banners, character sheet trinkets) with small, capped modifiers (e.g. +5% stamina recovery). No item may change any rate by more than the cap in `loot.yaml` (`max_item_modifier: 0.10`).
+- **No money, ever (ADR-035).** There is no currency, coin, shop, price, trade or purchase. Items drop only from real events and can only be equipped. No producer sends financial data.
 - Loot tables are weighted lists in `config/rulebook/v1/loot.yaml`. Items and their names live in config + `config/copy/en/items.yaml`.
 - **Deterministic rolls:** seed = SHA-256(`causationId` + `rulebookVersion` + table id). The same day replays to the same loot. Tested.
 - No loot for app opens, logins, check-ins without evidence, or saving a job listing.
@@ -131,7 +139,7 @@ Update per review with quality q (0 to 5):
 - EF' = EF + (0.1 − (5 − q) × (0.08 + (5 − q) × 0.02)), clamped to min_easiness.
 - next_due = review date + interval (in the user's timezone).
 
-Property tests (jqwik, proposed) check: EF never below the minimum, intervals never decrease on consecutive passes, a fail always resets.
+Property tests (jqwik) check: EF never below the minimum, intervals never decrease on consecutive passes, a fail always resets.
 
 ### Cards to spells
 
@@ -151,9 +159,9 @@ When a Darb Sennin boss has findings tagged (e.g. `concurrency`), each mastered 
 ## 6. The nightly battle log
 
 1. During the day, battlelog-service appends every effect to the user's `day_timeline`, grouped by `causationId` into **encounters** (one real event and everything it caused).
-2. At `battlelog.compile_at` (config, default `23:30`, user timezone; proposed), a `battlelog.compile-night` job is enqueued per user.
+2. At `battlelog.compile_at` (config, default `23:30`, user timezone), a `battlelog.compile-night` job is enqueued per user.
 3. The worker produces a **replay script**: an ordered list of encounters, each with a map region, a camera path id, effect deltas, loot, and narration lines.
-4. Narration comes from templates in `config/copy/en/battlelog.yaml`, selected by effect type and outcome, with variables (`{company}`, `{deck}`, `{findings}`). No LLM (proposed).
+4. Narration comes from templates in `config/copy/en/battlelog.yaml`, selected by effect type and outcome, with variables (`{company}`, `{deck}`, `{findings}`). No LLM.
 5. `battlelog.compiled` is published; the client gets a STOMP notice: "Tonight's battle log is ready."
 6. The web client plays the script on the Three.js map (UI_DESIGN.md). A text-only version is always available.
 
@@ -189,7 +197,7 @@ rules:
 
 The game only rewards real, evidence-backed events.
 
-### Evidence tiers (`config/rulebook/v1/evidence.yaml`, proposed)
+### Evidence tiers (`config/rulebook/v1/evidence.yaml`)
 
 | Tier | Example | Reward multiplier | Daily cap |
 |---|---|---|---|
@@ -216,10 +224,10 @@ The game only rewards real, evidence-backed events.
 2. **Outcomes over effort-padding.** Reward correct recalls, resolved findings and stage changes, not minutes logged or buttons pressed.
 3. **Big moments are rare and real.** Final boss (offer) is the largest single reward and cannot be farmed.
 4. **Diminishing returns** via daily caps, not hidden decay.
-5. **No permanent punishment.** Fog and stamina loss show neglect; earned XP and levels stay (proposed).
+5. **No permanent punishment.** Fog and stamina loss show neglect; earned XP and levels stay.
 6. **Every number is tunable.** Balancing = editing YAML + running `simulator --scenario=typical-month --report` to see the curve, never a code change.
 7. **Inspectable.** If Nour can't explain why they got 37 XP by reading the battle log line and the rulebook, the design is wrong.
 
 ## 10. The map (game view)
 
-Regions (proposed names, original, config in `map.yaml`): **The Springs** (Vigor), **The Forge** (Craft), **The Archive** (Lore), **The Citadel Road** (Resolve, job quests leading to the Citadel), and **The Wilds** (unclaimed, revealed by skill-tree unlocks). Each region has a light level driven by recent activity, and fog driven by neglect.
+Regions (original names, config in `map.yaml`): **The Springs** (Vigor), **The Forge** (Craft), **The Archive** (Lore), **The Citadel Road** (Resolve, job quests leading to the Citadel), and **The Wilds** (unclaimed, revealed by skill-tree unlocks). Each region has a light level driven by recent activity, and fog driven by neglect.
