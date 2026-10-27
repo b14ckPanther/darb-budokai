@@ -8,7 +8,7 @@ Agents update this file after **every** task (one row) and at every phase bounda
 
 | Phase | Name | Weight | Status | Branch | Commit range | Merged (Nour OK) |
 |---|---|---|---|---|---|---|
-| 0 | Repo bootstrap, CI, conventions | 5% | done (local) | `phase/00-bootstrap` | 1077924..d7a0c02 | Decided by Claude under Nour's delegation (2026-10-26); repo not created, nothing pushed |
+| 0 | Repo bootstrap, CI, conventions | 5% | done (local) | `phase/00-bootstrap` | 1077924..d7a0c02 | Decided by the agent under Nour's delegation (2026-10-26); repo not created, nothing pushed |
 | 1 | Brainstorm and spec confirmation | 4% | not started | `phase/01-spec` | | |
 | 2 | Design system | 6% | not started | `phase/02-design-system` | | |
 | 3 | Frontend prototype on seed data | 12% | not started | `phase/03-ui-prototype` | | |
