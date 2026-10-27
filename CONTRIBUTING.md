@@ -25,5 +25,11 @@ tools/dev/check-no-emoji.sh
 tools/dev/check-commits.sh            # only Nour as author and committer, no attribution, no emoji
 ```
 
+## Merging into main
+
+Merge locally as Nour (`git merge --no-ff phase/NN-name` on `main`), then push. Do not use
+GitHub's merge, squash or rebase buttons: they record GitHub as the committer, and the CI guard
+(`tools/dev/check-commits.sh`) rejects any committer other than Nour.
+
 Test first, keep game rules and copy in `config/`, keep secrets in `.env`, and open a PR from a
 `phase/NN-name` branch using the template.

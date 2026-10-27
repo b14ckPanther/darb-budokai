@@ -85,7 +85,7 @@ web/budokai-web/src/app/
 
 ## 5. Branches
 
-- `main`: always green, only updated by merging a finished phase branch with Nour's approval.
+- `main`: always green, only updated by merging a finished phase branch with Nour's approval. Merge locally as Nour and push; never use GitHub's merge buttons (they make GitHub the committer, which the CI guard rejects).
 - Phase branches: `phase/NN-short-name` (two-digit phase number), e.g. `phase/05-eventing`.
 - Optional sub-branches for parallel work inside a phase: `phase/05-eventing--ingest`, merged back into the phase branch.
 - Delete merged branches only after asking Nour.

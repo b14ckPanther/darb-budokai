@@ -12,3 +12,11 @@ if grep -v '^#' "$msg_file" | grep -qiE "$pattern"; then
   echo "commit-msg: no attribution text in commits; refer to the agent manual by that name." >&2
   exit 1
 fi
+
+# No emoji in commit messages either (same ranges as CI).
+stripped="$(mktemp)"; trap 'rm -f "$stripped"' EXIT
+grep -v '^#' "$msg_file" > "$stripped" || true
+if ! "$(cd "$(dirname "$0")/.." && pwd)/tools/dev/check-no-emoji.sh" "$stripped" >/dev/null 2>&1; then
+  echo "commit-msg: rejected. Emoji are forbidden in commit messages." >&2
+  exit 1
+fi

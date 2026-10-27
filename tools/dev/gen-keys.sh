@@ -26,6 +26,10 @@ else
   chmod 600 "$tmp"
   mv "$tmp" "$env_file"
   echo "gen-keys: wrote $env_file"
+  if [[ "$FORCE" == true ]]; then
+    echo "gen-keys: note: Postgres and RabbitMQ only read passwords when their volumes are empty." >&2
+    echo "gen-keys: if the stack ran before, reset it: docker compose --env-file .env -f deploy/compose/compose.yml down -v" >&2
+  fi
 fi
 
 mkdir -p "$secrets_dir"

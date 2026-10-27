@@ -31,6 +31,7 @@ expect fail "hook rejects lowercase co-authored"     "$HOOK" "$(msg 'co-authored
 expect fail "hook rejects the assistant name"        "$HOOK" "$(msg 'Update CLAUDE notes')"
 expect fail "hook rejects the vendor name"           "$HOOK" "$(msg 'Thanks Anthropic')"
 expect fail "hook rejects a generated-with footer"   "$HOOK" "$(msg 'Generated with some tool')"
+expect fail "hook rejects an emoji in the message"   "$HOOK" "$(msg $'Add streak flame \xf0\x9f\x94\xa5')"
 expect ok   "hook ignores git comment lines"         "$HOOK" "$(msg $'Add hook\n# Please enter the commit message (claude)')"
 
 # A real commit in a scratch repo wired to the hook must be refused.
@@ -61,6 +62,13 @@ expect fail "commit check rejects attribution in a message" bash -c "cd '$H' && 
 git -C "$H" reset -q --hard HEAD~1
 nour commit -q --allow-empty -m $'Add a step with an emoji \xf0\x9f\x94\xa5'
 expect fail "commit check rejects emoji in a message"       bash -c "cd '$H' && '$AUTHORS' '$base..HEAD'"
+
+# --- PR title and body check (CI guard) -------------------------------------
+PRTEXT="$ROOT/tools/dev/check-pr-text.sh"
+expect ok   "PR text check passes a clean description"   env PR_TITLE="Phase 0: bootstrap" PR_BODY="## What"$'\n'"Repo skeleton." "$PRTEXT"
+expect fail "PR text check rejects a generated-with footer" env PR_TITLE="Phase 0" PR_BODY="Done."$'\n'"Generated with some tool" "$PRTEXT"
+expect fail "PR text check rejects attribution in the title" env PR_TITLE="Co-Authored-By x" PR_BODY="" "$PRTEXT"
+expect fail "PR text check rejects emoji in the body"      env PR_TITLE="Phase 0" PR_BODY=$'Ship it \xf0\x9f\x9a\x80' "$PRTEXT"
 
 # --- no-emoji check --------------------------------------------------------
 printf 'Quest complete \xf0\x9f\x94\xa5\n' > "$SCRATCH/fire.txt"          # U+1F525

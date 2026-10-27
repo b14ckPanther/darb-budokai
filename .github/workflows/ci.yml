@@ -10,7 +10,8 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Never cancel runs on main, so every main commit gets a finished run.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   guard:
@@ -36,6 +37,12 @@ jobs:
           else
             tools/dev/check-commits.sh "$BASE..$HEAD_SHA"
           fi
+      - name: No attribution or emoji in the PR title and body
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: tools/dev/check-pr-text.sh
       - name: No emoji in tracked files
         run: tools/dev/check-no-emoji.sh
 
