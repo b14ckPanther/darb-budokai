@@ -25,7 +25,10 @@ export const TOKENS = {
       "danger-soft": "#29241C",
       "focus": "#FFD27A",
       "bar": "#04150F",
-      "scrim": "#03110C"
+      "scrim": "#03110C",
+      "map-stone": "#051811",
+      "map-stone-lit": "#1F4132",
+      "map-dust": "#323A30"
     }
   },
   "contrast": [
@@ -510,16 +513,34 @@ export const TOKENS = {
   },
   "map": {
     "seed": 7,
-    "size": 24,
-    "segments": 160,
-    "height": 3.2,
-    "octaves": 5,
-    "contour-interval": 0.32,
+    "size": 44,
+    "segments": 220,
+    "height": 4.6,
+    "octaves": 4,
+    "frequency": 4.2,
+    "persistence": 0.5,
+    "terrace": 1.6,
+    "tile-size": 2,
+    "key-light": [
+      -0.6,
+      0.55,
+      0.45
+    ],
+    "light-floor": 0.4,
+    "glow-falloff": 0.18,
+    "embers": {
+      "count": 90,
+      "radius": 3,
+      "rise": 0.00045,
+      "height": 4.5,
+      "size": 0.05
+    },
+    "contour-interval": 0.42,
     "contour-width": 1.1,
     "camera": {
       "fov": 34,
-      "distance": 25,
-      "elevation-deg": 42,
+      "distance": 18.5,
+      "elevation-deg": 46,
       "azimuth-deg": 28
     },
     "dpr-cap": 2,
@@ -530,19 +551,19 @@ export const TOKENS = {
     },
     "levels": {
       "quiet": {
-        "light": 0.18,
-        "fog": 0.085,
+        "light": 0.3,
+        "fog": 0.05,
         "ember": 0
       },
       "active": {
-        "light": 0.55,
-        "fog": 0.05,
-        "ember": 0.9
+        "light": 0.62,
+        "fog": 0.03,
+        "ember": 1
       },
       "blazing": {
         "light": 1,
-        "fog": 0.025,
-        "ember": 2.2
+        "fog": 0.016,
+        "ember": 2
       }
     }
   }

@@ -24,6 +24,9 @@
   --color-focus: #FFD27A;
   --color-bar: #04150F;
   --color-scrim: #03110C;
+  --color-map-stone: #051811;
+  --color-map-stone-lit: #1F4132;
+  --color-map-dust: #323A30;
   --font-display: 'Zen Antique', 'Hiragino Mincho ProN', serif;
   --font-ui: 'Geist', system-ui, sans-serif;
   --font-seal: 'Yuji Boku', serif;

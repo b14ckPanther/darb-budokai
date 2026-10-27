@@ -37,6 +37,18 @@ samples:
   dialog-body: Its history stays in the battle log. You can restore it from Settings.
   dialog-confirm: Archive
   toast: Stamina restored by 6
+  archive: Archive
+  tab-today: Today
+  tab-main: Main quests
+  tab-raids: Raids
+  tabs-label: Quest tabs
+  motion-label: Motion preference
+  sheet-body: Ten minutes of stretching at the Springs. Check in now, or add a link to raise the evidence tier.
+  meters: Character
+  rows: Today's quests
+  items: Inventory
+  type-sample: '{name} reached {level}'
+  numeral-sample: 412 / 660
   scroll-title: Quests
   level-quiet: Quiet
   level-active: Active
