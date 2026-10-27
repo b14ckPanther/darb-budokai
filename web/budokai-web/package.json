@@ -9,10 +9,12 @@
     "test": "jest",
     "lint": "ng lint && prettier --check .",
     "format": "prettier --write .",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "design": "esbuild scripts/build-design.mts --bundle --platform=node --format=esm --packages=external --log-level=warning --outfile=.design-build/build.mjs && node .design-build/build.mjs"
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "19.2.19",
     "@angular/common": "^19.2.0",
     "@angular/compiler": "^19.2.0",
     "@angular/core": "^19.2.0",
@@ -21,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
     "rxjs": "~7.8.0",
+    "three": "0.180.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
@@ -29,8 +32,10 @@
     "@angular/cli": "^19.2.27",
     "@angular/compiler-cli": "^19.2.0",
     "@axe-core/playwright": "^4.14.0",
+    "@iconify-json/solar": "1.2.13",
     "@playwright/test": "^1.64.1",
     "@types/jest": "^29.5.14",
+    "@types/three": "0.180.0",
     "angular-eslint": "19.8.1",
     "eslint": "^9.28.0",
     "jest": "^29.7.0",
@@ -38,7 +43,8 @@
     "jest-preset-angular": "^14.6.2",
     "prettier": "^3.9.10",
     "typescript": "~5.7.2",
-    "typescript-eslint": "8.33.1"
+    "typescript-eslint": "8.33.1",
+    "yaml": "2.9.1"
   },
   "engines": {
     "node": ">=22.12.0"

@@ -1,0 +1,157 @@
+# Darb Budokai design tokens (Phase 2, ADR-036, ADR-038).
+# Colours reference the approved brand palette by name (brand:<key> from brand/src/tokens.json)
+# or mix two references: { mix: [a, b, weightOfA] }. Only colours the brand lacks get a hex here,
+# and every text or control pair below is contrast-tested (contrast.spec.ts).
+# Generated outputs: web/budokai-web/src/styles/tokens.generated.css and
+# web/budokai-web/src/app/design/tokens.generated.ts (npm run design). Never edit those by hand.
+version: 1
+
+themes:
+  dark:
+    bg: brand:night
+    bg-deep: { mix: [brand:night, '#000000', 0.7] }
+    surface: { mix: [brand:forest, brand:night, 0.42] }
+    surface-raised: { mix: [brand:forest, brand:night, 0.78] }
+    surface-sunken: { mix: [brand:night, brand:forest, 0.82] }
+    hairline: { mix: [brand:gold, brand:night, 0.26] }
+    hairline-strong: { mix: [brand:gold, brand:night, 0.62] }
+    text: brand:ivory
+    text-secondary: brand:muted
+    text-heading: brand:goldLight
+    text-gold: brand:gold
+    text-on-accent: brand:ink
+    accent: brand:gold
+    accent-pressed: { mix: [brand:gold, brand:goldDeep, 0.72] }
+    accent-soft: { mix: [brand:gold, brand:night, 0.16] }
+    ki: brand:ki
+    ki-hot: brand:kiHot
+    stone: brand:stone
+    fog: { mix: [brand:stone, brand:night, 0.34] }
+    danger: '#F2876F'
+    danger-soft: { mix: ['#F2876F', brand:night, 0.16] }
+    focus: brand:kiHot
+    bar: { mix: [brand:night, brand:forest, 0.9] }
+    scrim: brand:night
+
+# Every pair a component draws. min: 4.5 body text, 3 large text and UI components.
+# The focus ring sits 2px outside its control, so it is tested against the surfaces around
+# controls, not the control fill.
+contrast:
+  - { fg: text, bg: bg, min: 4.5 }
+  - { fg: text, bg: surface, min: 4.5 }
+  - { fg: text, bg: surface-raised, min: 4.5 }
+  - { fg: text, bg: surface-sunken, min: 4.5 }
+  - { fg: text, bg: bar, min: 4.5 }
+  - { fg: text-secondary, bg: bg, min: 4.5 }
+  - { fg: text-secondary, bg: surface, min: 4.5 }
+  - { fg: text-secondary, bg: surface-raised, min: 4.5 }
+  - { fg: text-secondary, bg: bar, min: 4.5 }
+  - { fg: text-heading, bg: bg, min: 4.5 }
+  - { fg: text-heading, bg: surface, min: 4.5 }
+  - { fg: text-gold, bg: bg, min: 4.5 }
+  - { fg: text-gold, bg: surface, min: 4.5 }
+  - { fg: text-gold, bg: surface-raised, min: 4.5 }
+  - { fg: text-gold, bg: accent-soft, min: 4.5 }
+  - { fg: text-on-accent, bg: accent, min: 4.5 }
+  - { fg: text-on-accent, bg: accent-pressed, min: 4.5 }
+  - { fg: danger, bg: bg, min: 4.5 }
+  - { fg: danger, bg: surface, min: 4.5 }
+  - { fg: danger, bg: danger-soft, min: 4.5 }
+  - { fg: stone, bg: surface, min: 4.5 }
+  - { fg: text-on-accent, bg: danger, min: 4.5 }
+  - { fg: accent, bg: surface-sunken, min: 3 }
+  - { fg: ki, bg: surface-sunken, min: 3 }
+  - { fg: hairline-strong, bg: bg, min: 3 }
+  - { fg: focus, bg: bg, min: 3 }
+  - { fg: focus, bg: surface-raised, min: 3 }
+  - { fg: focus, bg: surface, min: 3 }
+  - { fg: hairline-strong, bg: surface, min: 3 }
+
+type:
+  families:
+    display: { name: brand:display, fallback: ['Hiragino Mincho ProN', 'serif'] }
+    ui: { name: brand:ui, fallback: ['system-ui', 'sans-serif'] }
+    seal: { name: brand:seal, fallback: ['serif'] }
+  # Sizes in rem. fluid: [min, max] grows between layout.fluid-min and layout.fluid-max.
+  scale:
+    display: { family: display, fluid: [2.5, 4.25], line: 1.04, tracking: -0.01, weight: 400 }
+    large-title: { family: display, size: 2.125, line: 1.12, tracking: 0, weight: 400 }
+    title-1: { family: display, size: 1.75, line: 1.15, tracking: 0, weight: 400 }
+    title-2: { family: display, size: 1.375, line: 1.2, tracking: 0, weight: 400 }
+    title-3: { family: ui, size: 1.25, line: 1.3, tracking: -0.01, weight: 600 }
+    headline: { family: ui, size: 1.0625, line: 1.35, tracking: -0.005, weight: 600 }
+    body: { family: ui, size: 1.0625, line: 1.5, tracking: 0, weight: 400 }
+    callout: { family: ui, size: 1, line: 1.45, tracking: 0, weight: 400 }
+    subhead: { family: ui, size: 0.9375, line: 1.4, tracking: 0, weight: 400 }
+    footnote: { family: ui, size: 0.8125, line: 1.38, tracking: 0.005, weight: 400 }
+    caption: { family: ui, size: 0.75, line: 1.33, tracking: 0.01, weight: 500 }
+    numeral: { family: ui, size: 1.5, line: 1, tracking: -0.02, weight: 600 }
+
+space: { 0: 0, 1: 0.25, 2: 0.5, 3: 0.75, 4: 1, 5: 1.25, 6: 1.5, 8: 2, 10: 2.5, 12: 3, 16: 4, 20: 5 }
+
+radius: { xs: 0.375, sm: 0.625, md: 0.875, lg: 1.25, xl: 1.75, pill: 999 }
+
+# Offset and soft blur, tinted with night (never neutral grey).
+elevation:
+  1: { y: 1, blur: 2, spread: 0, alpha: 0.5, color: brand:night }
+  2: { y: 8, blur: 24, spread: -6, alpha: 0.6, color: brand:night }
+  3: { y: 24, blur: 64, spread: -12, alpha: 0.75, color: brand:night }
+
+layout:
+  fluid-min: 22.5
+  fluid-max: 80
+  content-max: 68
+  measure: 38
+  rail-width: 5.75
+  tab-bar-height: 3.5
+  bar-height: 3
+  desktop-from: 900
+  touch-target: 2.75
+  gutter: 1
+
+material:
+  bar-alpha: 0.78
+  bar-blur: 22
+  sheet-alpha: 0.9
+  scrim-alpha: 0.55
+
+motion:
+  duration: { fast: 120, base: 220, slow: 480, counter: 600 }
+  ease:
+    out: [0.2, 0.7, 0.1, 1]
+    in-out: [0.65, 0, 0.35, 1]
+  # Damped springs (mass 1). Converted to CSS linear() curves and used by JS gestures.
+  springs:
+    snappy: { stiffness: 520, damping: 40 }
+    gentle: { stiffness: 190, damping: 26 }
+    bouncy: { stiffness: 340, damping: 20 }
+  spring-samples: 40
+  press-scale: 0.97
+  max-flashes-per-second: 3
+
+gesture:
+  sheet-detents: { medium: 0.52, large: 0.92 }
+  sheet-dismiss-fraction: 0.28
+  sheet-dismiss-velocity: 0.9
+  swipe-reveal: 88
+  swipe-commit-fraction: 0.55
+  title-collapse-offset: 44
+
+layers: { base: 0, rail: 10, bar: 20, tab-bar: 30, scrim: 40, sheet: 50, dialog: 60, toast: 70 }
+
+# Map look test (Phase 2 task 7). World-unit and light values for the single terrain patch.
+map:
+  seed: 7
+  size: 24
+  segments: 160
+  height: 3.2
+  octaves: 5
+  contour-interval: 0.32
+  contour-width: 1.1
+  camera: { fov: 34, distance: 25, elevation-deg: 42, azimuth-deg: 28 }
+  dpr-cap: 2
+  ember: { x: 2.5, z: -1.5, height: 2.2 }
+  levels:
+    quiet: { light: 0.18, fog: 0.085, ember: 0 }
+    active: { light: 0.55, fog: 0.05, ember: 0.9 }
+    blazing: { light: 1, fog: 0.025, ember: 2.2 }
