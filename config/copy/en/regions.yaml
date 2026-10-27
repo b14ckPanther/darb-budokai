@@ -1,0 +1,15 @@
+springs:
+  name: The Springs
+  about: Body and rest. Posture sessions and movement habits light it.
+forge:
+  name: The Forge
+  about: Building things. Code reviews are fought here as bosses.
+archive:
+  name: The Archive
+  about: Study. Recall sessions and spells light its towers.
+citadel-road:
+  name: The Citadel Road
+  about: The job hunt. Each application is a banner on the road to the Citadel.
+wilds:
+  name: The Wilds
+  about: Unclaimed land, opened by the skill tree. Portals from other Darb apps appear here.

@@ -1,0 +1,25 @@
+title: World map
+today-quests: '{done} of {total} daily quests'
+battle-log: Tonight's battle log
+places: Places
+light: Light
+fog: Dust
+percent: '{value}%'
+recent: Today here
+quests-here: Quests here
+nothing-here: Nothing happened here today.
+locked: Locked. A skill in the tree opens it.
+open-region: Open {name}
+fallback: The 3D map needs WebGL. This flat map shows the same places.
+canvas-label: 'World map. {summary}'
+summary-region: '{name}: light {light}%, dust {fog}%'
+markers:
+  main-quest: Main quest
+  raid: Raid
+  boss: Boss
+  portal: Portal
+marker-detail:
+  main-quest: '{company}, {stage}'
+  raid: '{company} tech interview, {status}'
+  boss: '{title}, {status}'
+  portal: Darb Kinton transfer

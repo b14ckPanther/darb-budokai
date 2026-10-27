@@ -1,0 +1,21 @@
+title: Integrations
+lede: Apps that send real events. Core apps can award; the rest only change how the world looks.
+kinds:
+  core: Core
+  cosmetic: Cosmetic only
+status:
+  connected: Connected
+  idle: Idle
+  off: Off
+key: Key {id}
+no-key: No key
+scopes: Sends
+last-event: Last event {when}
+never: No events yet
+accepted: '{count} accepted this week'
+rejected: Rejected
+rotate: Rotate key
+create: Create key
+key-dialog-title: Keys come with the backend
+key-dialog-body: In this prototype keys are not created. From Phase 6 a new key is shown once here and never stored in the browser.
+ok: OK

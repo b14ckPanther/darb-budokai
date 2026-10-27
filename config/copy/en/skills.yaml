@@ -1,0 +1,58 @@
+title: Skill tree
+lede: Skills open as real progress meets their requirements. Nothing here can be bought.
+states:
+  locked: Locked
+  available: Ready to open
+  unlocked: Open
+progress: '{value} of {target}'
+requires: Needs {names}
+canvas-label: Skill tree constellation. The list below has every skill.
+nodes:
+  steady-breath:
+    name: Steady breath
+    requirement: Thirty good-posture minutes in one day
+    effect: Stamina recovers a little faster
+  iron-posture:
+    name: Iron posture
+    requirement: Seven days in a row with good posture
+    effect: Exhaustion starts later
+  second-wind:
+    name: Second wind
+    requirement: Fourteen days in a row with good posture
+    effect: One missed day costs less stamina
+  first-strike:
+    name: First strike
+    requirement: Defeat your first boss
+    effect: Boss fights show their weak findings
+  clean-cut:
+    name: Clean cut
+    requirement: Resolve twenty review findings
+    effect: Resolved findings deal a little more damage
+  forge-master:
+    name: Forge master
+    requirement: Defeat three bosses of major tier
+    effect: Craft XP from bosses rises
+  first-glyph:
+    name: First glyph
+    requirement: Learn your first spell
+    effect: The Spellbook opens
+  twenty-wards:
+    name: Twenty wards
+    requirement: Learn twenty spells
+    effect: Mastered spells help in boss fights
+  deep-archive:
+    name: Deep archive
+    requirement: Master ten spells
+    effect: Fading spells fade more slowly
+  first-step:
+    name: First step
+    requirement: Send your first application
+    effect: The Citadel Road appears
+  gate-walker:
+    name: Gate walker
+    requirement: Clear your first tech interview raid
+    effect: Raids show their stage on the road
+  open-the-wilds:
+    name: Open the Wilds
+    requirement: Clear a final interview and learn twenty spells
+    effect: The Wilds are revealed

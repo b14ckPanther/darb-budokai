@@ -1,9 +1,32 @@
+title: Character
 level: Level {level}
 xp: Experience
 xp-value: '{value} of {max} XP'
 stamina: Stamina
 stamina-value: '{value} of {max}'
 rank: Rank {rank}
+rank-xp: '{value} of {max} to the next rank'
 status:
   normal: Rested
   exhausted: Exhausted
+stats: Stats
+this-week: This week
+plus: '+{amount}'
+in-log: See it in the battle log
+equipment: Equipment
+inventory: Inventory
+empty-slot: Empty
+slots:
+  banner: Banner
+  trinket: Trinket
+  charm: Charm
+dropped: '{from}, {date}'
+equipped: Equipped
+equip: Equip
+titles: Titles
+deeds: Deeds
+earned: Earned {date}
+skills-link: Skill tree
+rulebook-link: Rulebook
+integrations-link: Integrations
+portrait: Seal of {name}

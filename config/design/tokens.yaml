@@ -35,6 +35,11 @@ themes:
     map-stone: { mix: [brand:night, brand:forest, 0.8] }
     map-stone-lit: { mix: [brand:forest, brand:stone, 0.9] }
     map-dust: { mix: [brand:stone, brand:night, 0.26] }
+    map-tint-springs: { mix: [brand:forest, brand:ivory, 0.82] }
+    map-tint-forge: { mix: [brand:goldDeep, brand:forest, 0.62] }
+    map-tint-archive: { mix: [brand:stone, brand:forest, 0.34] }
+    map-tint-citadel: { mix: [brand:gold, brand:forest, 0.4] }
+    map-tint-wilds: { mix: [brand:night, brand:stone, 0.86] }
 
 # Every pair a component draws. min: 4.5 body text, 3 large text and UI components.
 # The focus ring sits 2px outside its control, so it is tested against the surfaces around
@@ -149,6 +154,27 @@ gesture:
   swipe-open-fraction: 0.5
   swipe-commit-fraction: 0.55
   title-collapse-offset: 44
+
+# World map (Phase 3). Camera focus and marker sizes; light and fog come from the rulebook.
+world:
+  focus-zoom: 0.55
+  camera-stiffness: 3.2
+  settle-epsilon: 0.002
+  idle-drift-deg-per-s: 1.2
+  marker-height: 0.9
+  marker-size: 0.55
+  region-tint-strength: 0.45
+  fog-strength: 0.75
+  max-regions: 8
+  phone-canvas-ratio: 0.62
+
+battlelog:
+  speeds: [0.5, 1, 2, 4]
+  caption-fade-ms: 320
+
+skilltree:
+  orbit-deg-per-s: 4
+  node-size: { locked: 0.35, available: 0.6, unlocked: 0.8 }
 
 layers: { base: 0, rail: 10, bar: 20, tab-bar: 30, scrim: 40, sheet: 50, dialog: 60, toast: 70 }
 

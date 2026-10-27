@@ -1,0 +1,25 @@
+title: Battle log
+date: '{date}'
+play: Play
+pause: Pause
+next: Next encounter
+previous: Previous encounter
+speed: Speed
+speed-value: '{speed}x'
+scrubber: Position in the day
+summary: Skip to summary
+replay: Replay
+encounter-of: Encounter {index} of {total}
+quiet: The arena was quiet today.
+quiet-note: Nothing real happened, so nothing is shown.
+full-log: Full log
+source: 'Event {eventId}, rule {ruleId}'
+end-title: The day in sum
+end-xp: '{value} XP'
+end-stamina: Stamina {value}
+end-spells: '{value} spells learned'
+end-fog: Dust {region} {value}
+end-tomorrow: 'Tomorrow: {cards} cards due, {quests} quests'
+loot: 'Loot: {name}'
+days: Days
+keyboard: Space plays or pauses. Arrow keys move between encounters.

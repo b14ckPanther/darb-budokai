@@ -113,8 +113,8 @@ bosses:
       - { id: f4, severity: minor, tag: naming, resolved: true }
       - { id: f5, severity: nit, tag: style, resolved: false }
 proposed:
-  - { id: p1, title: Three Recall sessions this week, objective: count, target: 3, day: '2026-10-27' }
-  - { id: p2, title: Finish the Cobalt Reach home task, objective: event, target: 1, day: '2026-10-29' }
+  - { id: p1, title: Three Recall sessions this week, region: archive, objective: count, target: 3, day: '2026-10-27' }
+  - { id: p2, title: Finish the Cobalt Reach home task, region: citadel-road, objective: event, target: 1, day: '2026-10-29' }
 history:
   - { date: '2026-10-20', completed: 5, failed: 0 }
   - { date: '2026-10-21', completed: 5, failed: 0 }

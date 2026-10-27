@@ -1,0 +1,31 @@
+title: Spellbook
+lede: Decks are schools; cards you learn become spells.
+due: '{count} due'
+mastered: '{count} mastered'
+fading: '{count} fading'
+learned: '{count} learned'
+cards: '{count} cards'
+review: Review
+nothing-due: Nothing due. Come back tomorrow.
+session-title: '{school}: review'
+card-of: Card {index} of {total}
+reveal: Show answer
+reveal-hint: Space
+grade-hint: Keys 1 to 4
+grades:
+  again: Again
+  hard: Hard
+  good: Good
+  easy: Easy
+next-in: '{days} d'
+next-in-label: 'Next review in {days} days'
+spell-learned: 'Spell learned: {school}'
+session-done: Session done
+session-summary: '{reviewed} reviewed, {correct} correct'
+back: Back to the Spellbook
+end-session: End session
+states:
+  unlearned: Unlearned
+  learned: Learned
+  mastered: Mastered
+  fading: Fading

@@ -1,0 +1,9 @@
+title: Rulebook
+lede: Every number the game uses, read-only. Version {version}.
+tables:
+  stamina: Stamina
+  evidence: Evidence
+  curves: Curves
+  bosses: Boss fights
+  loot: Loot tables
+  limits: Limits

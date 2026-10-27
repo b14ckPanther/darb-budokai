@@ -1,0 +1,72 @@
+title: Quests
+tabs:
+  label: Quest lists
+  today: Today
+  main: Main quests
+  raids: Raids and bosses
+  proposed: Proposed
+  history: History
+progress: '{value} of {target}'
+progress-unit: '{value} of {target} {unit}'
+streak: '{days}-day streak'
+no-streak: No streak yet
+paused: Paused
+done: Done
+check-in: Check in
+checked-in: 'Checked in: {title}'
+pause: Pause
+resume: Resume
+archive: Archive
+archived: 'Archived: {title}'
+paused-toast: 'Paused: {title}'
+resumed-toast: 'Resumed: {title}'
+new-habit: New habit
+edit-habit: Edit habit
+habit-form:
+  title: Name
+  title-hint: What you will do, in a few words
+  region: Region
+  objective: Kind
+  target: Target
+  save: Save habit
+  saved: 'Saved: {title}'
+  error-title: Give the habit a name.
+  error-target: The target must be 1 or more.
+objectives:
+  checkin: A check-in
+  count: A count
+  duration: Minutes
+  event: An event from another app
+evidence-note: Check-ins count at a quarter until you add a link.
+stages:
+  saved: Saved
+  applied: Applied
+  hr_call: HR call
+  tech_interview: Tech interview
+  home_task: Home task
+  final_interview: Final interview
+  offer: Offer
+  rejected: Fallen
+  withdrawn: Set aside
+applied-on: Applied {date}
+fallen-note: Closed by the company. Resolve XP for facing it, no penalty.
+raid-status:
+  open: Open
+  cleared: Cleared
+boss-status:
+  engaged: Engaged
+  defeated: Defeated
+boss-hp: '{hp} of {max} HP'
+findings: '{resolved} of {total} findings resolved'
+severity:
+  critical: Critical
+  major: Major
+  minor: Minor
+  nit: Nit
+proposed-note: Plans from Darb Kaio. Accepting one adds a quest; plans themselves award nothing.
+accept: Accept
+dismiss: Dismiss
+accepted: 'Accepted: {title}'
+dismissed: 'Dismissed: {title}'
+history-row: '{completed} done, {failed} missed'
+empty-proposed: No proposals right now.

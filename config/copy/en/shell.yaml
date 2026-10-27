@@ -1,0 +1,7 @@
+demo-banner: Demo data
+demo-note: Invented data for the prototype. Nothing here is real.
+skip-link: Skip to content
+nav-label: Main
+more: More
+no-data-title: No data source yet
+no-data-body: This build has no data source. Run the demo build, or wait for the backend in a later phase.
