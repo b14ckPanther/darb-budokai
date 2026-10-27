@@ -1,0 +1,16 @@
+{
+  "shots": [
+    { "name": "design-desktop-full", "path": "/design", "viewport": "desktop", "full": true, "wait": 2500 },
+    { "name": "design-desktop-components", "path": "/design", "viewport": "desktop", "scrollTo": "#s-components" },
+    { "name": "design-desktop-map-look", "path": "/design", "viewport": "desktop", "scrollTo": "#s-map", "wait": 2500 },
+    { "name": "design-desktop-dialog", "path": "/design", "viewport": "desktop", "scrollTo": "#s-components", "click": [{ "role": "button", "name": "Archive habit" }] },
+    { "name": "design-390-top", "path": "/design", "viewport": "phone" },
+    { "name": "design-390-colour", "path": "/design", "viewport": "phone", "scrollTo": "#s-colour" },
+    { "name": "design-390-type", "path": "/design", "viewport": "phone", "scrollTo": "#s-type" },
+    { "name": "design-390-components", "path": "/design", "viewport": "phone", "scrollTo": "#s-components" },
+    { "name": "design-390-character", "path": "/design", "viewport": "phone", "scrollTo": ".split" },
+    { "name": "design-390-quests", "path": "/design", "viewport": "phone", "scrollTo": ".list-title" },
+    { "name": "design-390-sheet", "path": "/design", "viewport": "phone", "click": [{ "role": "button", "name": "Open quest sheet" }] },
+    { "name": "design-390-map-look", "path": "/design", "viewport": "phone", "scrollTo": "#s-map", "wait": 2500 }
+  ]
+}
