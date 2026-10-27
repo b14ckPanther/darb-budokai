@@ -297,6 +297,15 @@
           "title": {
             "type": "string"
           },
+          "region": {
+            "enum": [
+              "springs",
+              "forge",
+              "archive",
+              "citadel-road",
+              "wilds"
+            ]
+          },
           "objective": {
             "enum": [
               "checkin",
@@ -316,6 +325,7 @@
         "required": [
           "id",
           "title",
+          "region",
           "objective",
           "target",
           "day"
