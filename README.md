@@ -107,7 +107,11 @@ Phase 0 (bootstrap) is done: Maven multi-module skeleton, one placeholder servic
 ArchUnit rules and Testcontainers bases, Compose infra, an Angular 19 shell in the approved brand,
 CI and the attribution guards. Phase 1 (spec) is done: every open question is answered in
 `docs/specs/2026-10-27-phase-01-budokai-spec.md` (single owner, no money features, no social
-features, optional sibling integrations). Progress lives in `docs/PROGRESS.md`.
+features, optional sibling integrations). Phase 2 (design system) is done: tokens generated from
+`config/design/tokens.yaml` and the brand file, Solar Bold Duotone icons plus original sigils, native-feeling
+base components (tab bar and rail, sheets with detents, swipe rows, large titles, springs) and a Three.js
+map look test, all on the `/design` page in development builds (`docs/screenshots/phase-02/`). Progress
+lives in `docs/PROGRESS.md`.
 
 ## License and assets
 

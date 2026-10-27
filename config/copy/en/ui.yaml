@@ -1,0 +1,15 @@
+# Interface labels used by the base components.
+close: Close
+done: Done
+cancel: Cancel
+sheet-handle: Resize sheet
+sheet-expand: Expand sheet
+sheet-collapse: Collapse sheet
+toast-dismiss: Dismiss
+more-actions: Actions for {title}
+demo-banner: Demo data
+motion:
+  label: Motion
+  system: System
+  reduced: Reduced
+  full: Full

@@ -1,0 +1,27 @@
+// Type roles from the token scale. One class per role; components @extend nothing, they use these
+// classes or the matching mixin.
+@use 'sass:list';
+
+$roles:
+  display, large-title, title-1, title-2, title-3, headline, body, callout, subhead, footnote,
+  caption, numeral;
+
+@mixin role($name) {
+  font-family: var(--type-#{$name}-family);
+  font-size: var(--type-#{$name}-size);
+  line-height: var(--type-#{$name}-line);
+  letter-spacing: var(--type-#{$name}-tracking);
+  font-weight: var(--type-#{$name}-weight);
+}
+
+@each $r in $roles {
+  .t-#{$r} {
+    @include role($r);
+  }
+}
+
+.t-seal {
+  font-family: var(--font-seal);
+  font-weight: 400;
+  line-height: 1;
+}

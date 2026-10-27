@@ -1,0 +1,6 @@
+# Navigation labels shared by the tab bar (phone) and the side rail (desktop).
+map: Map
+quests: Quests
+spellbook: Spellbook
+character: Character
+log: Battle log

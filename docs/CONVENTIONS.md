@@ -46,7 +46,7 @@ ArchUnit enforces: `domain` depends on nothing in `adapter`/`config`/Spring web;
 - State: signals locally; NgRx SignalStore per feature (`withState`, `withComputed`, `withMethods`, `rxMethod` for streams). Components never call Apollo directly; stores do.
 - RxJS only at the edges (GraphQL, STOMP, timers); convert to signals with `toSignal` in stores.
 - Three.js code lives in `features/world/engine/` as plain TypeScript classes with explicit `dispose()`; no Angular imports there.
-- Styles: SCSS with design tokens (`styles/tokens.scss`); no hard-coded colours or durations in component styles; no Tailwind (ADR-030, proposed).
+- Styles: SCSS reading generated design tokens (`src/styles/tokens.generated.css`, `_tokens.generated.scss`, `src/app/design/tokens.generated.ts`, built from `config/design/tokens.yaml` and `brand/src/tokens.json` by `npm run design`); no hard-coded colours or durations in component styles; no Tailwind (ADR-030).
 - Lint: angular-eslint + Prettier (`printWidth: 100`, single quotes). `npm run lint` must be clean.
 - Copy: user-facing game copy comes from the API (config); structural UI labels in `src/locale/messages.en.json`. No emoji.
 - Icons: only through the icon registry (`shared/icons/`), one set plus custom SVG.

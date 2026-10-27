@@ -1,0 +1,62 @@
+# The only icons budokai-web may draw (ADR-033). UI controls use Solar Bold Duotone
+# (solar:<name>, bundled at build time from @iconify-json/solar, CC BY 4.0).
+# Game marks are original sigils drawn in config/design/sigils/<name>.svg.
+# Components reference the left-hand names only; icons.spec.ts fails on anything else.
+ui:
+  map: solar:map-bold-duotone
+  quests: solar:checklist-bold-duotone
+  spellbook: solar:book-bookmark-bold-duotone
+  character: solar:user-bold-duotone
+  log: solar:history-bold-duotone
+  settings: solar:settings-bold-duotone
+  close: solar:close-circle-bold-duotone
+  back: solar:alt-arrow-left-bold-duotone
+  forward: solar:alt-arrow-right-bold-duotone
+  play: solar:play-bold-duotone
+  pause: solar:pause-bold-duotone
+  next: solar:skip-next-bold-duotone
+  previous: solar:skip-previous-bold-duotone
+  check: solar:check-circle-bold-duotone
+  warning: solar:danger-triangle-bold-duotone
+  info: solar:info-circle-bold-duotone
+  link: solar:link-bold-duotone
+  sound-on: solar:volume-loud-bold-duotone
+  sound-off: solar:volume-cross-bold-duotone
+  add: solar:add-circle-bold-duotone
+  edit: solar:pen-bold-duotone
+  archive: solar:archive-bold-duotone
+  delete: solar:trash-bin-trash-bold-duotone
+  pause-habit: solar:hourglass-bold-duotone
+  calendar: solar:calendar-bold-duotone
+  time: solar:clock-circle-bold-duotone
+  locked: solar:lock-bold-duotone
+  unlocked: solar:lock-unlocked-bold-duotone
+  stamina: solar:bolt-bold-duotone
+  ember: solar:fire-bold-duotone
+  boss: solar:shield-bold-duotone
+  raid: solar:flag-bold-duotone
+  loot: solar:box-bold-duotone
+  title: solar:crown-bold-duotone
+  deed: solar:medal-ribbon-bold-duotone
+  rulebook: solar:document-text-bold-duotone
+  integrations: solar:plug-circle-bold-duotone
+  key: solar:key-bold-duotone
+  refresh: solar:refresh-bold-duotone
+  stats: solar:graph-bold-duotone
+  route: solar:route-bold-duotone
+  target: solar:target-bold-duotone
+  reveal: solar:eye-bold-duotone
+  motion: solar:tuning-bold-duotone
+sigil:
+  - vigor
+  - craft
+  - lore
+  - resolve
+  - verified
+  - attested
+  - self-reported
+  - simulated
+  - rarity-common
+  - rarity-rare
+  - rarity-epic
+  - rarity-legendary

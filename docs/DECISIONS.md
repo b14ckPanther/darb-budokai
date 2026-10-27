@@ -139,6 +139,10 @@ Template:
 | Jest / jest-preset-angular | 29.7.0 / 14.6.2 | ADR-029 |
 | angular-eslint / ESLint / Prettier | 19.8.1 / 9.39.5 / 3.9.10 | Matching Angular 19 |
 | Playwright / @axe-core/playwright | 1.64.1 / 4.14.0 | Latest at bootstrap |
+| Three.js / @types/three | 0.180.0 / 0.180.0 | Phase 2 map look test; stable WebGL line older than two weeks |
+| @angular/cdk | 19.2.19 | Matches Angular 19 |
+| yaml | 2.9.1 | Reads config in the design build (dev only) |
+| @iconify-json/solar | 1.2.13 | Solar icon data, copied into a registry at build time (dev only) |
 
 ## ADR-031: Phase 0 rulings under Nour's delegation
 - Status: Accepted. Decided by the agent under Nour's delegation (2026-10-26: "any choice by u will be approved from my side"). Nour can overturn any of these; each is cheap to change.
@@ -239,3 +243,15 @@ Template:
 - Status: Accepted. Decided under Nour's delegation (2026-10-27).
 - Decision: Q1 to Q7, Q11 to Q13, Q15, Q16 and Q18 to Q21 are answered as `docs/REVIEW_FOR_NOUR.md` recommended (spec sections 3, 4 and 6). Q17 is unchanged except that the repo now exists and `main` was pushed after Phase 0.
 - Cost if wrong: low to medium per item; each lives in config or one ADR.
+
+## ADR-038: Design system: Seal Stone confirmed, tokens generated from config and the brand file
+- Status: Accepted. Decided under Nour's delegation (2026-10-27), on the `/design` page and the screenshots in `docs/screenshots/phase-02/`.
+- Decision:
+  - **Seal Stone** is confirmed as the world (ADR-032): night and forest surfaces, gold for earned things and contour lines, ki orange only as light (embers, the stamina fill, focus is ki-hot), stone dust for neglect. Gold Orrery stays reserved for the skill tree in Phase 3; Ink and Ki is not built.
+  - Tokens live in `config/design/tokens.yaml`. Colours are references to `brand/src/tokens.json` (`brand:gold`) or mixes of them; the only new hex is `danger`. `npm run design` writes `src/styles/tokens.generated.css`, `_tokens.generated.scss` (breakpoint), `src/app/design/tokens.generated.ts`, the icon registry, the copy module and the demo seed module. Drift tests fail when a committed generated file falls behind its config. This replaces the earlier `styles/tokens.scss` name in PLAN and CONVENTIONS.
+  - Springs are stiffness and damping in config, integrated once and emitted as CSS `linear()` easings with their settle time, so CSS transitions and JS gestures share one curve. Three presets: snappy (UI), gentle (meters, dials), bouncy (tab icon press only; the design detector flags bounce elsewhere).
+  - The focus ring sits 2px outside its control, so contrast is tested against surrounding surfaces, not the control fill. `hairline-strong` was raised to pass 3:1 for control borders.
+  - The map look test renders without tone mapping or output conversion so WebGL shows the exact token colours; the map stone, lit stone and dust colours are their own token roles.
+  - The `/design` route exists only in development builds (`environment.designPage`).
+- Consequences: changing a brand colour in `brand/src/tokens.json` and running `npm run design` restyles the whole app and the map; no component holds a colour, duration or threshold.
+- Cost if wrong: low; each choice is one block in `tokens.yaml`.
